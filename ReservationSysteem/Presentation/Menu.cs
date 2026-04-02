@@ -14,9 +14,8 @@ public static class Menu
         }
         else if(selectedIndex == 1)
         {
-            Console.WriteLine("Account Login");
-            AccountRegistration accountRegistration = new AccountRegistration();
-            accountRegistration.Start();
+            AccountLogin accountLogin = new AccountLogin();
+            accountLogin.Start();
         }
     }
 }
