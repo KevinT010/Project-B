@@ -35,12 +35,12 @@ public class AccountRegistration
             Console.WriteLine("Account successfully registered.");
             int waitTime = 2000;
             Thread.Sleep(waitTime);
-            Menu.Start();
+            StartMenu.Start();
         }
         else
         {
             Console.WriteLine("Account registration failed. Please try again.");
-            Menu.Start();
+            StartMenu.Start();
         }
 
     }
