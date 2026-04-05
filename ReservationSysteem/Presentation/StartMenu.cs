@@ -25,6 +25,7 @@ public static class StartMenu
         }
         else if(selectedIndex == 3)
         {
+            Console.WriteLine("Thank you for using the reservation system");
             Environment.Exit(0);
         }
     }

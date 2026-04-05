@@ -67,8 +67,7 @@ public class Menu
                     if (allergens.Contains("Egg")) emojiList.Add("🥚");
                     if (allergens.Contains("Shellfish")) emojiList.Add("🦐");
                     if (allergens.Contains("Fish")) emojiList.Add("🐟");
-                    if (allergens.Contains("Tree nut")) emojiList.Add("🌰");
-                    if (allergens.Contains("Peanut")) emojiList.Add("🥜");
+                    if (allergens.Contains("Nuts")) emojiList.Add("🥜");
                     if (allergens.Contains("Wheat") || allergens.Contains("Gluten")) emojiList.Add("🌾");
                     if (allergens.Contains("Soy")) emojiList.Add("🫘");
                     if (allergens.Contains("Sesame")) emojiList.Add("🌱");
