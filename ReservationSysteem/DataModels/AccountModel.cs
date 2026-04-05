@@ -1,7 +1,7 @@
 public class AccountModel
 {
 
-    public int Id { get; set; }
+    public Int64 Id { get; set; }
 
     public string FullName { get; set; }
     public string Email { get; set; }
@@ -16,7 +16,7 @@ public class AccountModel
     {
     }
 
-    public AccountModel( string fullname, string email, string phoneNumber, string password, int accountLevel)
+    public AccountModel(string fullname, string email, string phoneNumber, string password, int accountLevel)
     {
         FullName = fullname;
         Email = email;
