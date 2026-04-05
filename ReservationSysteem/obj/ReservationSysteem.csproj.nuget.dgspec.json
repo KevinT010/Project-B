@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kevin\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {}
+    "C:\\Users\\31620\\OneDrive - Hogeschool Rotterdam\\Documenten\\Hogeschool Rotterdam\\ODP\\Project-B\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kevin\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {
+    "C:\\Users\\31620\\OneDrive - Hogeschool Rotterdam\\Documenten\\Hogeschool Rotterdam\\ODP\\Project-B\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kevin\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
+        "projectUniqueName": "C:\\Users\\31620\\OneDrive - Hogeschool Rotterdam\\Documenten\\Hogeschool Rotterdam\\ODP\\Project-B\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
         "projectName": "ReservationSysteem",
-        "projectPath": "C:\\Users\\kevin\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
-        "packagesPath": "C:\\Users\\kevin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kevin\\Documents\\GitHub\\Project-B\\ReservationSysteem\\obj\\",
+        "projectPath": "C:\\Users\\31620\\OneDrive - Hogeschool Rotterdam\\Documenten\\Hogeschool Rotterdam\\ODP\\Project-B\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
+        "packagesPath": "C:\\Users\\31620\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\31620\\OneDrive - Hogeschool Rotterdam\\Documenten\\Hogeschool Rotterdam\\ODP\\Project-B\\Project-B\\ReservationSysteem\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\kevin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\31620\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -73,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.104/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
