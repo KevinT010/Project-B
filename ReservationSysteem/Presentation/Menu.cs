@@ -14,13 +14,23 @@ public class Menu
             Console.WriteLine("No menu items found in the database.");
             return;
         }
-        string[] options = allMenuItems.Select(menu => menu.MenuName).Distinct().ToArray();
+        var optionsList = allMenuItems.Select(m => m.MenuName).Distinct().ToList();
+        optionsList.Add("Return to start");
+
+        string[] options = optionsList.ToArray();
 
         Ui Menu = new Ui(prompt, options);
         int selectedIndex = Menu.Run();
 
+        if (options[selectedIndex] == "Return to start")
+        {
+            StartMenu.Start();
+            return;
+        }
+
         if (selectedIndex >= 0 && selectedIndex < options.Length)
         {
+            
             string selectedMenuName = options[selectedIndex];
 
             var categoryOrder = new List<string> { "Starter", "Main Course", "Dessert", "Drink" };
@@ -73,11 +83,13 @@ public class Menu
                 
             }
 
-            Console.WriteLine("Press any key to return to the start menu...");
+            Console.WriteLine("Press any key to return to the other menus...");
             Console.ReadKey();
-            StartMenu.Start();
+            Start();
             return;
+
         }
+
 
     }
 }
