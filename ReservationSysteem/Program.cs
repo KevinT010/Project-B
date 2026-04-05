@@ -1,1 +1,1 @@
-﻿Menu.Start();
+﻿StartMenu.Start();
