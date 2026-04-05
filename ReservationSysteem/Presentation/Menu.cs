@@ -68,7 +68,7 @@ public class Menu
                     Console.WriteLine($"Allergens:{emoji}");
                 }
 
-                Console.WriteLine(new string('-', 30));
+                Console.WriteLine("-----------------------------");
 
                 
             }
