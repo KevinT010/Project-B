@@ -1,11 +1,16 @@
 public class AccountLogin
 {
-  protected string ValidateInput(string text, string errorMessage, Func<string, bool> validationFunction)
+    private string ValidateInput(string text, string errorMessage, Func<string, bool> validationFunction)
     {
         while (true)
         {
-            Console.WriteLine(text);
+            Console.WriteLine($"{text} (or type 'back' to return to the main menu)");
             string input = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(input) && input.Trim().ToLower() == "back")
+            {
+                return null;
+            }
 
             if (validationFunction(input))
             {
@@ -18,13 +23,22 @@ public class AccountLogin
 
     public void Start()
     {
+        Console.Clear();
         Console.WriteLine("Account-Login");
 
         var logic = new AccountLoginLogic();
 
         string email = ValidateInput("Enter your email:", "Email must contain a @ or email is not registered.", logic.EmailValidation);
+        if (email == null)
+        {
+            StartMenu.Start();
+        }
 
         string password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
+        if (password == null)
+        {
+            StartMenu.Start();
+        }
 
         while (logic.AccountLoginValidation(email, password) == null)
         {
@@ -51,7 +65,7 @@ public class AccountLogin
         }
 
     }
-    
 
-    
+
+
 }
