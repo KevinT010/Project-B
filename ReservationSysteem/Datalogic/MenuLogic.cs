@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public class MenuLogic
 {
     private MenuAccess _access = new();
