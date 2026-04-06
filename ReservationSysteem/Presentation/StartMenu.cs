@@ -3,7 +3,7 @@ public static class StartMenu
     public static void Start()
     {
         string prompt = "Welcome to Reservation System";
-        string[] options = { "Account Registration", "Account Login","Menu's","Exit" };
+        string[] options = { "Account Registration", "Account Login","Menu's", "Reservations", "Exit" };
         Ui StartMenu = new Ui(prompt, options);
         int selectedIndex = StartMenu.Run();
 
@@ -24,6 +24,11 @@ public static class StartMenu
             menu.Start();
         }
         else if(selectedIndex == 3)
+        {
+            Reservation reservation = new();
+            reservation.Start(Session.CurrentUser);
+        }
+        else if(selectedIndex == 4)
         {
             Console.WriteLine("Thank you for using the reservation system");
             Environment.Exit(0);
