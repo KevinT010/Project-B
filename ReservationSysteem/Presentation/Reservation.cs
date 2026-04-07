@@ -42,7 +42,7 @@ public class Reservation
 
             if (requestedDateTime < DateTime.Now)
             {
-                Console.WriteLine("You cannot make a reservation in the past. Press any key to go back.");
+                Console.WriteLine("You can't make a reservation in the past. Press any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
@@ -95,16 +95,16 @@ public class Reservation
             {
                 Console.WriteLine($"\n✅ Reservation confirmed!");
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
-                Console.WriteLine($"   Date/time: {requestedDateTime:dd-MM-yyyy HH:mm}");
+                Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm}");
                 Console.WriteLine($"   Guests:    {numberOfGuests}");
                 Console.WriteLine($"   Duration:  2 hours");
             }
             else
             {
-                Console.WriteLine("❌ Reservation failed — the table was just taken. Please try again.");
+                Console.WriteLine("❌ Reservation failed. The table was just taken. Please try again.");
             }
 
-            Console.WriteLine("\nPress any key to return...");
+            Console.WriteLine("\nPress any key to return.");
             Console.ReadKey();
             StartMenu.Start();
         }
