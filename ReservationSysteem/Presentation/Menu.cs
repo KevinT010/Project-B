@@ -30,10 +30,10 @@ public class Menu
 
         if (selectedIndex >= 0 && selectedIndex < options.Length)
         {
-            
+
             string selectedMenuName = options[selectedIndex];
 
-            var categoryOrder = new List<string> { "Starter", "Main Course", "Dessert", "Drink" };
+            var categoryOrder = new List<string> { "Starter", "Main Course", "Dessert", "Drinks" };
 
             var itemsToDisplay = allMenuItems
                 .Where(menu => menu.MenuName == selectedMenuName)
@@ -71,15 +71,16 @@ public class Menu
                     if (allergens.Contains("Wheat") || allergens.Contains("Gluten")) emojiList.Add("🌾");
                     if (allergens.Contains("Soy")) emojiList.Add("🫘");
                     if (allergens.Contains("Sesame")) emojiList.Add("🌱");
+                    if (emojiList.Count == 0)
+                    {
+                        emojiList.Add("No allergens");
+                    }
 
                     string emoji = string.Join(" ", emojiList);
 
-                    Console.WriteLine($"Allergens:{emoji}");
+                    Console.WriteLine($"Allergens: {emoji}");
                 }
-
                 Console.WriteLine("-----------------------------");
-
-                
             }
 
             Console.WriteLine("Press any key to return to the other menus...");
