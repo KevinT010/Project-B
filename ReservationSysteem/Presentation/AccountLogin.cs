@@ -28,7 +28,7 @@ public class AccountLogin
 
         var logic = new AccountLoginLogic();
 
-        string email = ValidateInput("Enter your email:", "Email must contain a @ or email is not registered.", logic.EmailValidation);
+        string email = ValidateInput("Enter your email:", "Email must contain a @ and a period(.) or email is not registered.", logic.EmailValidation);
         if (email == null)
         {
             StartMenu.Start();
@@ -43,7 +43,7 @@ public class AccountLogin
         while (logic.AccountLoginValidation(email, password) == null)
         {
             Console.WriteLine("wrong email or password. Please try again.");
-            email = ValidateInput("Enter your email:", "Email must contain a @ or email is not registered.", logic.EmailValidation);
+            email = ValidateInput("Enter your email:", "Email must contain a @ and a period(.) or email is not registered.", logic.EmailValidation);
             password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
         }
 

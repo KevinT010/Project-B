@@ -17,7 +17,7 @@ public class AccountRegistrationLogic
 
     public bool EmailValidation(string email)
     {
-        if (email.Contains("@") && _access.GetByEmail(email) == null)
+        if (email.Contains("@") && email.Contains(".") && _access.GetByEmail(email) == null)
         {
             return true;
         }
@@ -31,6 +31,14 @@ public class AccountRegistrationLogic
     {
         if (phoneNumber.StartsWith("06") || phoneNumber.StartsWith("+31"))
         {
+            try
+            {
+              Convert.ToInt32(phoneNumber);
+            }
+            catch(FormatException)
+            {
+                return false;
+            }
             return true;
         }
         else
@@ -56,7 +64,7 @@ public class AccountRegistrationLogic
     {
         if (FullNameValidation(fullName) && EmailValidation(email) && PhoneNumberValidation(phoneNumber) && PasswordValidation(password))
         {
-            _access.InsertAccount(new AccountModel(fullName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 4));
+            _access.InsertAccount(new AccountModel(fullName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 1));
             return true;
         }
         else
