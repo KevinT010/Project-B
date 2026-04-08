@@ -33,7 +33,7 @@ public class Menu
 
             string selectedMenuName = options[selectedIndex];
 
-            var categoryOrder = new List<string> { "Starter", "Main Course", "Dessert", "Drinks" };
+            var categoryOrder = new List<string> { "Starter", "Main Course","Kids Meal", "Dessert", "Drinks" };
 
             var itemsToDisplay = allMenuItems
                 .Where(menu => menu.MenuName == selectedMenuName)
