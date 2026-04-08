@@ -44,7 +44,19 @@ public class AccountLogin
         {
             Console.WriteLine("wrong email or password. Please try again.");
             email = ValidateInput("Enter your email:", "Email must contain a @ and a period(.) or email is not registered.", logic.EmailValidation);
+            {
+                if (email == null)
+                {
+                    StartMenu.Start();
+                }
+            }
             password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
+            {
+                if (password == null)
+                {
+                    StartMenu.Start();
+                }
+            }
         }
 
         var loggedInUser = logic.AccountLoginValidation(email, password);
