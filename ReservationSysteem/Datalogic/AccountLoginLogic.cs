@@ -3,7 +3,7 @@ public class AccountLoginLogic
     private AccountRegistrationAccess _access = new();
     public bool EmailValidation(string email)
     {
-        if (email.Contains("@"))
+        if (email.Contains("@") && email.Contains("."))
         {
             return true;
         }

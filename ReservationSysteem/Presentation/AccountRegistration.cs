@@ -33,13 +33,13 @@ public class AccountRegistration
         {
             StartMenu.Start();
         }
-        string email = ValidateInput("Enter your email:", "Email must contain a @ or email is already registered.", logic.EmailValidation);
+        string email = ValidateInput("Enter your email:", "Email must contain a @, a period(.), or the email is already registered.", logic.EmailValidation);
         if (email == null)
         {
             StartMenu.Start();
         }
 
-        string phoneNumber = ValidateInput("Enter your phonenumber:", "Phonenumber must start with 06 or +31", logic.PhoneNumberValidation);
+        string phoneNumber = ValidateInput("Enter your phonenumber:", "Phonenumber must start with 06 or +31 and must only contain numbers.", logic.PhoneNumberValidation);
         if (phoneNumber == null)
         {
             StartMenu.Start();
