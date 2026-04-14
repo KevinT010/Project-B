@@ -17,7 +17,10 @@ public class AccountRegistrationLogic
 
     public bool EmailValidation(string email)
     {
-        if (email.Contains("@") && email.Contains(".") && _access.GetByEmail(email) == null)
+        int atIndex = email.IndexOf("@");
+        int dotIndex = email.LastIndexOf(".");
+        
+        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) == null)
         {
             return true;
         }
@@ -29,7 +32,7 @@ public class AccountRegistrationLogic
 
     public bool PhoneNumberValidation(string phoneNumber)
     {
-        if (phoneNumber.StartsWith("06") || phoneNumber.StartsWith("+31"))
+        if (phoneNumber.StartsWith("0") || phoneNumber.StartsWith("+") || phoneNumber.StartsWith("+353"))
         {
             try
             {

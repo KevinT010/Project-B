@@ -33,19 +33,19 @@ public class AccountRegistration
         {
             StartMenu.Start();
         }
-        string email = ValidateInput("Enter your email:", "Email must contain a @, a period(.), or the email is already registered.", logic.EmailValidation);
+        string email = ValidateInput("Enter your email:", "Email must contain a @ and at least one period(.) after the @, or the email is already registered.", logic.EmailValidation);
         if (email == null)
         {
             StartMenu.Start();
         }
 
-        string phoneNumber = ValidateInput("Enter your phonenumber:", "Phonenumber must start with 06 or +31 and must only contain numbers.", logic.PhoneNumberValidation);
+        string phoneNumber = ValidateInput("Enter your phonenumber:", "Phonenumber must start with 0 or +353 or + and must only contain numbers.", logic.PhoneNumberValidation);
         if (phoneNumber == null)
         {
             StartMenu.Start();
         }
 
-        string password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
+        string password = ValidateInput("Enter your password (password must be between 8 and 20 characters):", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
         if (password == null)
         {
             StartMenu.Start();
