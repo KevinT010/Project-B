@@ -15,7 +15,7 @@ public static class AccountVisibility
     private static void ShowUserMenu()
     {
         string prompt = "User Dashboard Welcome " + Session.CurrentUser.FullName;
-        string[] options = { "Show reservations", "Menu", "Reservations", "Floor-plan", "Edit account", "Delete account", "Logout" };
+        string[] options = { "Your reservations", "Menu", " Place reservations", "Floor-plan", "Account management", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
 
@@ -37,15 +37,13 @@ public static class AccountVisibility
                 break;
             case 5:
                 break;
-            case 6:
-                break;
         }
     }
 
     private static void ShowAdminMenu()
     {
         string prompt = "Admin Dashboard Welcome " + Session.CurrentUser.FullName;
-        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Edit user account", "Delete user account", "Logout" };
+        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan","Account management" , "Logout" };
         Ui adminMenu = new Ui(prompt, options);
         int selectedIndex = adminMenu.Run();
 
@@ -64,8 +62,6 @@ public static class AccountVisibility
             case 4:
                 break;
             case 5:
-                break;
-            case 6:
                 break;
         }
     }

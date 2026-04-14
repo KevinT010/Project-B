@@ -24,8 +24,14 @@ public class Menu
 
         if (options[selectedIndex] == "Return to start")
         {
-            AccountVisibility.VisibilityMenu(Session.CurrentUser);
-            return;
+            if (Session.CurrentUser != null)
+            {
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
+            }
+            else
+            {
+                StartMenu.Start();
+            }
         }
 
         if (selectedIndex >= 0 && selectedIndex < options.Length)
