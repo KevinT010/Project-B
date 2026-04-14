@@ -3,7 +3,10 @@ public class AccountLoginLogic
     private AccountRegistrationAccess _access = new();
     public bool EmailValidation(string email)
     {
-        if (email.Contains("@") && email.Contains("."))
+        int atIndex = email.IndexOf("@");
+        int dotIndex = email.LastIndexOf(".");
+        
+        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) == null)
         {
             return true;
         }
