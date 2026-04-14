@@ -67,7 +67,7 @@ public class AccountLogin
             Console.WriteLine("Account successfully logged in.");
             int waitTime = 2000;
             Thread.Sleep(waitTime);
-            StartMenu.Start();
+            AccountVisibility.VisibilityMenu(loggedInUser);
 
         }
         else

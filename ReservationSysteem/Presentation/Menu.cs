@@ -24,7 +24,7 @@ public class Menu
 
         if (options[selectedIndex] == "Return to start")
         {
-            StartMenu.Start();
+            AccountVisibility.VisibilityMenu(Session.CurrentUser);
             return;
         }
 
