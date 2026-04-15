@@ -6,7 +6,7 @@ public class AccountLoginLogic
         int atIndex = email.IndexOf("@");
         int dotIndex = email.LastIndexOf(".");
         
-        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) == null)
+        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) != null)
         {
             return true;
         }
