@@ -4,7 +4,7 @@ using Dapper;
 public class ReservationAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
-    private string ReservationTable = "Reservations";
+    private string ReservationTable = "Reservation";
 
     public List<ReservationModel> GetOverlappingReservations(Int64 tableId, DateTime requestedStart, int durationMinutes)
     {

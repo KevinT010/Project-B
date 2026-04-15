@@ -6,7 +6,7 @@ public class AccountRegistrationAccess
 {
     private SqliteConnection _connection = new SqliteConnection($"Data Source=DataSources/project.db");
 
-    private string Table = "Accounts";
+    private string Table = "Account";
 
     public void InsertAccount(AccountModel account)
     {
