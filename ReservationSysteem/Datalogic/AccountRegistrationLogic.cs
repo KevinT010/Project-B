@@ -36,7 +36,7 @@ public class AccountRegistrationLogic
         {
             try
             {
-              Convert.ToInt32(phoneNumber);
+              Convert.ToInt64(phoneNumber);
             }
             catch(FormatException)
             {
