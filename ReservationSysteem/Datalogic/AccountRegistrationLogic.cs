@@ -32,7 +32,7 @@ public class AccountRegistrationLogic
 
     public bool PhoneNumberValidation(string phoneNumber)
     {
-        if (phoneNumber.StartsWith("0") || phoneNumber.StartsWith("+") || phoneNumber.StartsWith("+353"))
+        if (phoneNumber.StartsWith("0") || phoneNumber.StartsWith("+") || phoneNumber.StartsWith("+353") && phoneNumber.Length >= 5 && phoneNumber.Length <= 15)
         {
             try
             {

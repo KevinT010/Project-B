@@ -39,7 +39,7 @@ public class AccountRegistration
             StartMenu.Start();
         }
 
-        string phoneNumber = ValidateInput("Enter your phonenumber:", "Phonenumber must start with 0 or +353 or + and must only contain numbers.", logic.PhoneNumberValidation);
+        string phoneNumber = ValidateInput("Enter your phonenumber (Phonenumber must be between 5 and 15 characters):", "Phonenumber must start with 0 or +353 or + and must only contain numbers and between 5 and 15 characters.", logic.PhoneNumberValidation);
         if (phoneNumber == null)
         {
             StartMenu.Start();
