@@ -4,7 +4,7 @@ using Dapper;
 public class TableAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
-    private string Table = "Table";
+    private string Table = "DiningTable";
 
     public List<TableModel> GetAllTables()
     {
