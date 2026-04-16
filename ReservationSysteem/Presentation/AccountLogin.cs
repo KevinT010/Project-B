@@ -1,11 +1,16 @@
 public class AccountLogin
 {
-  protected string ValidateInput(string text, string errorMessage, Func<string, bool> validationFunction)
+    private string ValidateInput(string text, string errorMessage, Func<string, bool> validationFunction)
     {
         while (true)
         {
-            Console.WriteLine(text);
+            Console.WriteLine($"{text} (or type 'back' to return to the main menu)");
             string input = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(input) && input.Trim().ToLower() == "back")
+            {
+                return null;
+            }
 
             if (validationFunction(input))
             {
@@ -18,19 +23,40 @@ public class AccountLogin
 
     public void Start()
     {
+        Console.Clear();
         Console.WriteLine("Account-Login");
 
         var logic = new AccountLoginLogic();
 
-        string email = ValidateInput("Enter your email:", "Email must contain a @ or email is not registered.", logic.EmailValidation);
+        string email = ValidateInput("Enter your email:", "Email must contain a @ and at least one period(.) after the @, or the email is not registered.", logic.EmailValidation);
+        if (email == null)
+        {
+            StartMenu.Start();
+        }
 
         string password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
+        if (password == null)
+        {
+            StartMenu.Start();
+        }
 
         while (logic.AccountLoginValidation(email, password) == null)
         {
             Console.WriteLine("wrong email or password. Please try again.");
-            email = ValidateInput("Enter your email:", "Email must contain a @ or email is not registered.", logic.EmailValidation);
+            email = ValidateInput("Enter your email:", "Email must contain a @ and at least one period(.) after the @, or the email is not registered.", logic.EmailValidation);
+            {
+                if (email == null)
+                {
+                    StartMenu.Start();
+                }
+            }
             password = ValidateInput("Enter your password:", "Password must be between 8 and 20 characters.", logic.PasswordValidation);
+            {
+                if (password == null)
+                {
+                    StartMenu.Start();
+                }
+            }
         }
 
         var loggedInUser = logic.AccountLoginValidation(email, password);
@@ -41,6 +67,7 @@ public class AccountLogin
             Console.WriteLine("Account successfully logged in.");
             int waitTime = 2000;
             Thread.Sleep(waitTime);
+            AccountVisibility.VisibilityMenu(loggedInUser);
 
         }
         else
@@ -50,7 +77,7 @@ public class AccountLogin
         }
 
     }
-    
 
-    
+
+
 }
