@@ -14,7 +14,7 @@ public static class AccountVisibility
 
     private static void ShowUserMenu()
     {
-        string prompt = "User Dashboard Welcome " + Session.CurrentUser.FirstName + " " + Session.CurrentUser.LastName;
+        string prompt = $"User Dashboard Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}";
         string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
@@ -22,26 +22,27 @@ public static class AccountVisibility
         switch (selectedIndex)
         {
             case 0:
-                break;
-            case 1:
                 Menu menu = new Menu();
                 menu.Start();
                 break;
-            case 2:
+            case 1:
                 Reservation reservation = new();
-                    reservation.Start(Session.CurrentUser);
-                    break;
+                reservation.Start(Session.CurrentUser);
+                break;
+            case 2:
+                break;
             case 3:
                 break;
             case 4:
+                Session.Logout();
                 break;
         }
     }
 
     private static void ShowAdminMenu()
     {
-        string prompt = "Admin Dashboard Welcome " + Session.CurrentUser.FirstName + " " + Session.CurrentUser.LastName;
-        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan","Account management" , "Logout" };
+        string prompt = $"Admin Dashboard Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}";
+        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Account management", "Logout" };
         Ui adminMenu = new Ui(prompt, options);
         int selectedIndex = adminMenu.Run();
 
@@ -60,6 +61,7 @@ public static class AccountVisibility
             case 4:
                 break;
             case 5:
+                Session.Logout();
                 break;
         }
     }
