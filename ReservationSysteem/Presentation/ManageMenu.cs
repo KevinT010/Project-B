@@ -180,103 +180,7 @@ public class ManageMenu
         long selectedMenuId = menus[selectedMenuIndex].Id;
 
         Console.Clear();
-        string name = GetUniqueItemName();
-        decimal price = GetValidPrice();
-        
-        Console.Write("Description: ");
-        string description = Console.ReadLine() ?? "";
 
-        string category = GetValidCategory();
-        Console.WriteLine($"Selected Category: {category}");
-        
-        Console.Write("Allergens (comma separated, or leave empty): ");
-        string allergens = Console.ReadLine() ?? "";
-
-        MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
-        long newItemId = Logic.AddMenuItem(newItem, selectedMenuId);
-        
-        Logic.LinkItemToMenu(newItemId, selectedMenuId);
-        
-        PrintItemSuccess(name, price, description, category, allergens);
-        Start();
-    }
-
-    public void EditMenuItem()
-    {
-        Console.Clear();
-        List<MenuModel> items = Logic.GetAllMenuItems();
-        
-        if (items.Count == 0)
-        {
-            Console.WriteLine("No menu items exist.");
-            Thread.Sleep(2000); 
-            Start();
-            return;
-        }
-
-        string[] itemOptions = new string[items.Count + 1];
-        for (int i = 0; i < items.Count; i++)
-        {
-            itemOptions[i] = items[i].Name;
-        }
-        itemOptions[items.Count] = "Cancel";
-
-        Ui itemSelection = new Ui("Select the item to edit:", itemOptions);
-        int selectedIndex = itemSelection.Run();
-
-        if (selectedIndex == items.Count)
-        {
-            Start();
-            return;
-        }
-
-        MenuModel selectedItem = items[selectedIndex];
-
-        Console.Clear();
-        
-        Console.Write($"Name ({selectedItem.Name}): ");
-        string newName = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newName))
-        {
-            selectedItem.Name = newName;
-        }
-
-        Console.Write($"Price ({selectedItem.Price}): ");
-        string priceInput = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(priceInput) && decimal.TryParse(priceInput, out decimal newPrice) && newPrice >= 0)
-        {
-            selectedItem.Price = newPrice;
-        }
-
-        Console.Write($"Description ({selectedItem.Description}): ");
-        string newDesc = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newDesc))
-        {
-            selectedItem.Description = newDesc;
-        }
-
-        Console.Write($"Category ({selectedItem.FoodCategory}): ");
-        string newCat = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newCat))
-        {
-            selectedItem.FoodCategory = newCat;
-        }
-
-        Console.Write($"Allergens ({selectedItem.Allergens}): ");
-        string newAllergens = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newAllergens))
-        {
-            selectedItem.Allergens = newAllergens;
-        }
-
-        Logic.UpdateMenuItem(selectedItem);
-        Console.WriteLine("Menu item updated.");
-        Thread.Sleep(2000);
-        Start();
-    }
-
-    public string GetUniqueItemName()
-    {
         Console.Write("Name: ");
         string name;
         while (true)
@@ -306,11 +210,7 @@ public class ManageMenu
 
             Console.Write("This name already exists. Enter a different name: ");
         }
-        return name;
-    }
 
-    public decimal GetValidPrice()
-    {
         decimal price;
         Console.Write("Price: ");
         while (!decimal.TryParse(Console.ReadLine(), out price) || price < 0)
@@ -318,11 +218,10 @@ public class ManageMenu
             Console.WriteLine("Invalid input. Please enter a valid number.");
             Console.Write("Price: ");
         }
-        return price;
-    }
+        
+        Console.Write("Description: ");
+        string description = Console.ReadLine() ?? "";
 
-    public string GetValidCategory()
-    {
         Console.Write("Category: ");
         string category = Console.ReadLine() ?? "";
 
@@ -331,22 +230,115 @@ public class ManageMenu
             Console.Write("Category cannot be empty. Enter category: ");
             category = Console.ReadLine() ?? "";
         }
-        return category;
-    }
+        Console.WriteLine($"Selected Category: {category}");
+        
+        Console.Write("Allergens (use , if you want multiple or leave empty): ");
+        string allergens = Console.ReadLine() ?? "";
 
-    public void PrintItemSuccess(string name, decimal price, string description, string category, string allergens)
-    {
+        MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
+        long newItemId = Logic.AddMenuItem(newItem, selectedMenuId);
+        
+        Logic.LinkItemToMenu(newItemId, selectedMenuId);
+        
         Console.Clear();
         Console.WriteLine("Menu item added successfully!");
         Console.WriteLine("-----------------------------");
         Console.WriteLine($"Name:        {name}");
-        Console.WriteLine($"Price:       {price}");
+        Console.WriteLine($"Price:       €{price:0.00}");
         Console.WriteLine($"Description: {description}");
         Console.WriteLine($"Category:    {category}");
         Console.WriteLine($"Allergens:   {allergens}");
         Console.WriteLine("-----------------------------");
         Console.WriteLine("Press any key to return...");
         Console.ReadKey();
+        Start();
+    }
+
+    public void EditMenuItem()
+    {
+        Console.Clear();
+        List<MenuModel> items = Logic.GetAllMenuItems();
+        
+        if (items.Count == 0)
+        {
+            Console.WriteLine("No menu items exist.");
+            Thread.Sleep(2000); 
+            Start();
+            return;
+        }
+
+        Console.Write("Enter the name of the item to edit: ");
+        string itemName = Console.ReadLine() ?? "";
+
+        MenuModel selectedItem = null;
+
+        foreach (var item in items)
+        {
+            if (item.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase))
+            {
+                selectedItem = item;
+                break;
+            }
+        }
+
+        if (selectedItem == null)
+        {
+            Console.WriteLine("Menu item not found.");
+            Thread.Sleep(2000);
+            Start();
+            return;
+        }
+
+        Console.Clear();
+        
+        Console.Write($"Name: ");
+        string newName = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newName))
+        {
+            selectedItem.Name = newName;
+        }
+
+        Console.Write($"Price: ");
+        string priceInput = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(priceInput) && decimal.TryParse(priceInput, out decimal newPrice) && newPrice >= 0)
+        {
+            selectedItem.Price = newPrice;
+        }
+
+        Console.Write($"Description: ");
+        string newDescription = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newDescription))
+        {
+            selectedItem.Description = newDescription;
+        }
+
+        Console.Write($"Category: ");
+        string newCategory = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newCategory))
+        {
+            selectedItem.FoodCategory = newCategory;
+        }
+
+        Console.Write($"Allergens: ");
+        string newAllergens = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newAllergens))
+        {
+            selectedItem.Allergens = newAllergens;
+        }
+
+        Logic.UpdateMenuItem(selectedItem);
+        Console.Clear();
+        Console.WriteLine("Menu item updated successfully!");
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine($"Name:        {selectedItem.Name}");
+        Console.WriteLine($"Price:       €{selectedItem.Price:0.00}");
+        Console.WriteLine($"Description: {selectedItem.Description}");
+        Console.WriteLine($"Category:    {selectedItem.FoodCategory}");
+        Console.WriteLine($"Allergens:   {selectedItem.Allergens}");
+        Console.WriteLine("-----------------------------");
+        Console.WriteLine("Press any key to return...");
+        Console.ReadKey();
+        Start();
     }
 
     public void DeleteMenuItem()
