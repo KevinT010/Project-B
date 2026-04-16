@@ -10,6 +10,7 @@ public static class Session
     public static void Logout()
     {
         CurrentUser = null;
+        StartMenu.Start();
     }
 
 }

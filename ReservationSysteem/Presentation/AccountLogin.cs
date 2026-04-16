@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 public class AccountLogin
 {
     private string ValidateInput(string text, string errorMessage, Func<string, bool> validationFunction)
@@ -59,9 +61,10 @@ public class AccountLogin
             }
         }
 
+        
         var loggedInUser = logic.AccountLoginValidation(email, password);
 
-        if (logic.AccountLoginValidation(email, password) != null)
+        if (loggedInUser != null)
         {
             Session.CurrentUser = loggedInUser;
             Console.WriteLine("Account successfully logged in.");
