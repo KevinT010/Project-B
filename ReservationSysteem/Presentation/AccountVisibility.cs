@@ -51,7 +51,10 @@ public static class AccountVisibility
             case 0:
                 break;
             case 1:
+                ManageMenu manageMenu = new ManageMenu();
+                manageMenu.Start();
                 break;
+
             case 2:
                 Menu menu = new Menu();
                 menu.Start();

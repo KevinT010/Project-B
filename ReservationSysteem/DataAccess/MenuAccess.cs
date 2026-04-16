@@ -24,7 +24,7 @@ public class MenuAccess
     public List<MenuModel> GetAllMenuItems()
     {
         string query = @"
-            SELECT MenuItem.*, Menu.MenuName 
+            SELECT MenuItem.*, Menu.MenuName, Menu.IsActive 
             FROM MenuItem
             LEFT JOIN Menu ON MenuItem.MenuId = Menu.id;";
         

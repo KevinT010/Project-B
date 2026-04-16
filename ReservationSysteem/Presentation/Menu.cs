@@ -23,6 +23,13 @@ public class Menu
         }
 
         List<string> optionsList = GetUniqueMenuNames(allMenuItems);
+        
+        if (optionsList.Count == 0)
+        {
+            HandleEmptyMenu();
+            return;
+        }
+
         optionsList.Add("Return to start");
 
         string[] options = optionsList.ToArray();
@@ -74,7 +81,7 @@ public class Menu
         List<string> optionsList = new List<string>();
         foreach (MenuModel m in allMenuItems)
         {
-            if (!string.IsNullOrEmpty(m.MenuName) && !optionsList.Contains(m.MenuName))
+            if (m.IsActive && !string.IsNullOrEmpty(m.MenuName) && !optionsList.Contains(m.MenuName))
             {
                 optionsList.Add(m.MenuName);
             }

@@ -9,31 +9,37 @@ public class ManageMenu
 
     public void Start()
     {
-        string[] options = { "Create Menu", "Delete Menu", "Add Menu Item", "Delete Menu Item", "go back to Main Menu" };
-        Ui ui = new Ui("Manage Menus & Items", options);
+        string[] options = { "Create menu", "Edit menu", "Delete menu", "Add menu item", "Edit menu item", "Delete menu item", "Go back to main menu" };
+        Ui ui = new Ui("Manage menu's & items", options);
         int choice = ui.Run();
 
         switch (choice)
         {
             case 0:
-                CreateMenuProcess();
+                CreateMenu();
                 break;
             case 1:
-                DeleteMenuProcess();
+                EditMenu();
                 break;
             case 2:
-                AddMenuItemProcess();
+                DeleteMenu();
                 break;
             case 3:
-                DeleteMenuItemProcess();
+                AddMenuItem();
                 break;
             case 4:
-                ReturnProcess();
+                EditMenuItem();
+                break;
+            case 5:
+                DeleteMenuItem();
+                break;
+            case 6:
+                Return();
                 break;
         }
     }
 
-    public void CreateMenuProcess()
+    public void CreateMenu()
     {
         Console.Clear();
         Console.Write("Enter new menu name:   (Or press Enter to cancel) ");
@@ -49,7 +55,55 @@ public class ManageMenu
         Start();
     }
 
-    public void DeleteMenuProcess()
+    public void EditMenu()
+    {
+        Console.Clear();
+        List<MenuModel> menus = Logic.GetAllMenus();
+        
+        if (menus.Count == 0)
+        {
+            Console.WriteLine("No menus exist.");
+            Thread.Sleep(2000); 
+            Start();
+            return;
+        }
+
+        string[] menuOptions = new string[menus.Count + 1];
+        for (int i = 0; i < menus.Count; i++)
+        {
+            menuOptions[i] = menus[i].MenuName;
+        }
+        menuOptions[menus.Count] = "Cancel";
+
+        Ui menuSelection = new Ui("Select the menu to edit:", menuOptions);
+        int selectedIndex = menuSelection.Run();
+
+        if (selectedIndex == menus.Count)
+        {
+            Start();
+            return;
+        }
+
+        MenuModel selectedMenu = menus[selectedIndex];
+
+        Console.Clear();
+        Console.Write($"Enter new menu name or press Enter to keep current name: ");
+        string newName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            newName = selectedMenu.MenuName;
+        }
+
+        Console.Write("Should this menu be active? (y/n): ");
+        bool isActive = Console.ReadLine()?.Trim().ToLower() == "y";
+
+        Logic.UpdateMenu(selectedMenu.Id, newName, isActive);
+        Console.WriteLine("Menu updated.");
+        Thread.Sleep(2000);
+        Start();
+    }
+
+    public void DeleteMenu()
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
@@ -94,7 +148,7 @@ public class ManageMenu
         Start();
     }
 
-    public void AddMenuItemProcess()
+    public void AddMenuItem()
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
@@ -144,6 +198,80 @@ public class ManageMenu
         Logic.LinkItemToMenu(newItemId, selectedMenuId);
         
         PrintItemSuccess(name, price, description, category, allergens);
+        Start();
+    }
+
+    public void EditMenuItem()
+    {
+        Console.Clear();
+        List<MenuModel> items = Logic.GetAllMenuItems();
+        
+        if (items.Count == 0)
+        {
+            Console.WriteLine("No menu items exist.");
+            Thread.Sleep(2000); 
+            Start();
+            return;
+        }
+
+        string[] itemOptions = new string[items.Count + 1];
+        for (int i = 0; i < items.Count; i++)
+        {
+            itemOptions[i] = items[i].Name;
+        }
+        itemOptions[items.Count] = "Cancel";
+
+        Ui itemSelection = new Ui("Select the item to edit:", itemOptions);
+        int selectedIndex = itemSelection.Run();
+
+        if (selectedIndex == items.Count)
+        {
+            Start();
+            return;
+        }
+
+        MenuModel selectedItem = items[selectedIndex];
+
+        Console.Clear();
+        
+        Console.Write($"Name ({selectedItem.Name}): ");
+        string newName = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newName))
+        {
+            selectedItem.Name = newName;
+        }
+
+        Console.Write($"Price ({selectedItem.Price}): ");
+        string priceInput = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(priceInput) && decimal.TryParse(priceInput, out decimal newPrice) && newPrice >= 0)
+        {
+            selectedItem.Price = newPrice;
+        }
+
+        Console.Write($"Description ({selectedItem.Description}): ");
+        string newDesc = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newDesc))
+        {
+            selectedItem.Description = newDesc;
+        }
+
+        Console.Write($"Category ({selectedItem.FoodCategory}): ");
+        string newCat = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newCat))
+        {
+            selectedItem.FoodCategory = newCat;
+        }
+
+        Console.Write($"Allergens ({selectedItem.Allergens}): ");
+        string newAllergens = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(newAllergens))
+        {
+            selectedItem.Allergens = newAllergens;
+        }
+
+        Logic.UpdateMenuItem(selectedItem);
+        Console.WriteLine("Menu item updated.");
+        Thread.Sleep(2000);
         Start();
     }
 
@@ -221,7 +349,7 @@ public class ManageMenu
         Console.ReadKey();
     }
 
-    public void DeleteMenuItemProcess()
+    public void DeleteMenuItem()
     {
         Console.Clear();
         Console.Write("Enter the name of the item to delete: ");
@@ -260,7 +388,7 @@ public class ManageMenu
         Start();
     }
 
-    public void ReturnProcess()
+    public void Return()
     {
         Console.Clear();
         if (Session.CurrentUser != null)
