@@ -3,9 +3,21 @@ using BCrypt.Net;
 public class AccountRegistrationLogic
 {
     private AccountRegistrationAccess _access = new();
-    public bool FullNameValidation(string fullName)
+    public bool FirstNameValidation(string firstName)
     {
-        if (fullName.Length < 2 || fullName.Length > 30)
+        if (firstName.Length < 2 || firstName.Length > 30)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public bool LastNameValidation(string lastName)
+
+    {
+        if (lastName.Length < 2 || lastName.Length > 30)
         {
             return false;
         }
@@ -63,11 +75,11 @@ public class AccountRegistrationLogic
     }
 
 
-    public bool AccountRegistrationValidation(string fullName, string email, string phoneNumber, string password)
+    public bool AccountRegistrationValidation(string firstName, string lastName, string email, string phoneNumber, string password)
     {
-        if (FullNameValidation(fullName) && EmailValidation(email) && PhoneNumberValidation(phoneNumber) && PasswordValidation(password))
+        if (FirstNameValidation(firstName) && LastNameValidation(lastName) && EmailValidation(email) && PhoneNumberValidation(phoneNumber) && PasswordValidation(password))
         {
-            _access.InsertAccount(new AccountModel(fullName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 1));
+            _access.InsertAccount(new AccountModel(firstName, lastName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 1));
             return true;
         }
         else

@@ -28,8 +28,13 @@ public class AccountRegistration
 
         var logic = new AccountRegistrationLogic();
 
-        string fullName = ValidateInput("Enter your fullname:", "FullName must be between 2 and 30 characters.", logic.FullNameValidation);
-        if (fullName == null)
+        string firstName = ValidateInput("Enter your firstname:", "firstname must be between 2 and 30 characters.", logic.FirstNameValidation);
+        if (firstName == null)
+        {
+            StartMenu.Start();
+        }
+        string lastName = ValidateInput("Enter your lastname:", "lastname must be between 2 and 30 characters.", logic.LastNameValidation);
+        if (lastName == null)
         {
             StartMenu.Start();
         }
@@ -51,7 +56,7 @@ public class AccountRegistration
             StartMenu.Start();
         }
 
-        if (logic.AccountRegistrationValidation(fullName, email, phoneNumber, password))
+        if (logic.AccountRegistrationValidation(firstName, lastName, email, phoneNumber, password))
         {
             Console.WriteLine("Account successfully registered.");
             Thread.Sleep(2000);
