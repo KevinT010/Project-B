@@ -61,6 +61,7 @@ public static class AccountVisibility
             case 4:
                 break;
             case 5:
+                Console.Clear();
                 Session.Logout();
                 break;
         }

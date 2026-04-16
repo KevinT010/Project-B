@@ -10,6 +10,8 @@ public static class Session
     public static void Logout()
     {
         CurrentUser = null;
+        Console.WriteLine("You have been logged out.");
+        Thread.Sleep(2000);
         StartMenu.Start();
     }
 
