@@ -106,7 +106,7 @@ public class Reservation
 
             Console.WriteLine("\nPress any key to return.");
             Console.ReadKey();
-            StartMenu.Start();
+            AccountVisibility.VisibilityMenu(Session.CurrentUser);
         }
 
         else
