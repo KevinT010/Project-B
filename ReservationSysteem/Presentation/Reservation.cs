@@ -4,14 +4,18 @@ public class Reservation
 {
     public void Start(AccountModel account)
     {
-        if(account != null)
+
+        // null check
+        if (account != null)
         {
             Console.OutputEncoding = Encoding.UTF8;
             ReservationLogic reservationLogic = new ReservationLogic();
 
+            // date parsing
             Console.Write("Enter reservation date (dd-MM-yyyy): ");
             string[] dateParts = Console.ReadLine().Split('-');
 
+            // if parts does not equal 3 check
             if (dateParts.Length != 3)
             {
                 Console.WriteLine("Invalid date. Press any key to go back.");
@@ -28,6 +32,7 @@ public class Reservation
             Console.Write("Enter reservation time (HH:mm): ");
             string[] timeParts = Console.ReadLine().Split(':');
 
+            // if parts does not equal 2 check
             if (timeParts.Length != 2)
             {
                 Console.WriteLine("Invalid time. Press any key to go back.");
@@ -40,6 +45,7 @@ public class Reservation
             int minute = Convert.ToInt32(timeParts[1]);
             DateTime requestedDateTime = new DateTime(year, month, day, hour, minute, 0);
 
+            // reservation date check
             if (requestedDateTime < DateTime.Now)
             {
                 Console.WriteLine("You can't make a reservation in the past. Press any key to go back.");
@@ -52,6 +58,7 @@ public class Reservation
             Console.Write("Enter number of guests: ");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
 
+            // number of guest check
             if (numberOfGuests < 1)
             {
                 Console.WriteLine("Invalid number of guests. Press any key to go back.");
@@ -60,8 +67,12 @@ public class Reservation
                 return;
             }
 
+
+            // ----------------------------------------------------------------------------------------------------------------------------------
+
             List<TableModel> availableTables = reservationLogic.GetAvailableTables(requestedDateTime, numberOfGuests);
 
+            // null check 
             if (availableTables.Count == 0)
             {
                 Console.WriteLine($"Sorry, there are no available tables at this time for a group of {numberOfGuests}. Press any key to go back.");
@@ -70,7 +81,10 @@ public class Reservation
                 return;
             }
 
+
             List<string> tableOptions = new List<string>();
+
+            // add & convert available table object to string list  
             foreach (TableModel table in availableTables)
             {
                 tableOptions.Add($"Table {table.TableNumber} (seats {table.Capacity})");
@@ -78,7 +92,10 @@ public class Reservation
             tableOptions.Add("Cancel");
 
             Ui tableMenu = new Ui("Select a table", tableOptions.ToArray());
-
+            tableMenu.OnBeforeDraw = (index) =>
+            {
+                TableMap.Display(availableTables, index);
+            };
             int selectedIndex = tableMenu.Run();
 
             if (tableOptions[selectedIndex] == "Cancel")

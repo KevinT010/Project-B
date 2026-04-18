@@ -4,6 +4,9 @@ public class Ui
     public string[] Options;
     public string Prompt;
 
+    // added
+    public Action<int>? OnBeforeDraw;
+
     public Ui(string prompt, string[] options)
     {
         Prompt = prompt;
@@ -39,17 +42,17 @@ public class Ui
             Console.WriteLine(line);
             Console.ResetColor();
         }
-
         Console.WriteLine(border);
     }
 
     public int Run()
     {
         ConsoleKey keyPressed;
-
         do
         {
             Console.Clear();
+            // added 
+            OnBeforeDraw?.Invoke(SelectedIndex);
             DisplayOptions();
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);

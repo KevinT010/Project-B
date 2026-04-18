@@ -30,6 +30,10 @@ public static class AccountVisibility
                 reservation.Start(Session.CurrentUser);
                 break;
             case 2:
+                TableMap.DisplayStatic();
+                Console.WriteLine("\nPress any key to return...");
+                Console.ReadKey();
+                ShowUserMenu();
                 break;
             case 3:
                 break;
