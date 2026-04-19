@@ -51,7 +51,6 @@ public class Ui
         do
         {
             Console.Clear();
-            // added 
             OnBeforeDraw?.Invoke(SelectedIndex);
             DisplayOptions();
 
