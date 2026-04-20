@@ -15,7 +15,7 @@ public class Menu
         string prompt = "Menu's";
 
         List<MenuModel> allMenuItems = _Logic.GetAllMenuItems();
-        
+
         if (allMenuItems.Count == 0)
         {
             HandleEmptyMenu();
@@ -23,7 +23,7 @@ public class Menu
         }
 
         List<string> optionsList = GetUniqueMenuNames(allMenuItems);
-        
+
         if (optionsList.Count == 0)
         {
             HandleEmptyMenu();
@@ -123,7 +123,7 @@ public class Menu
 
         Console.WriteLine("Press any key to return to the category selection...");
         Console.ReadKey();
-        SubMenu(itemsToDisplay); 
+        SubMenu(itemsToDisplay);
     }
 
     public List<string> GetUniqueCategories(List<MenuModel> itemsToDisplay)
@@ -189,14 +189,38 @@ public class Menu
 
         bool Has(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
 
-        if (Has("Milk") || Has("Dairy") || Has("Lactose")) emojiList.Add("🥛");
-        if (Has("Egg")) emojiList.Add("🥚");
-        if (Has("Shellfish")) emojiList.Add("🦐");
-        if (Has("Fish")) emojiList.Add("🐟");
-        if (Has("Peanuts") || Has("Nuts")) emojiList.Add("🥜");
-        if (Has("Wheat") || Has("Gluten")) emojiList.Add("🌾");
-        if (Has("Soy")) emojiList.Add("🫘");
-        if (Has("Sesame")) emojiList.Add("🌱");
+        if (Has("Milk") || Has("Dairy") || Has("Lactose"))
+        {
+            emojiList.Add("🥛"); 
+        }
+        if (Has("Egg"))
+        { 
+            emojiList.Add("🥚");
+        }
+        if (Has("Shellfish")) 
+        {
+            emojiList.Add("🦐");
+        }
+        if (Has("Fish")) 
+        {
+            emojiList.Add("🐟");
+        }
+        if (Has("Peanuts") || Has("Nuts")) 
+        {
+            emojiList.Add("🥜");
+        }
+        if (Has("Wheat") || Has("Gluten")) 
+        {
+            emojiList.Add("🌾");
+        }
+        if (Has("Soy")) 
+        {
+            emojiList.Add("🫘");
+        }
+        if (Has("Sesame")) 
+        {
+            emojiList.Add("🌱");
+        }
 
         return emojiList.Count > 0 ? string.Join(" ", emojiList) : "No allergens";
     }
