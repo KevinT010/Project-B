@@ -2,11 +2,11 @@ using System.Text;
 
 public class Menu
 {
-    public MenuLogic Logic { get; set; }
+    private MenuLogic _Logic { get; set; }
 
     public Menu()
     {
-        Logic = new MenuLogic();
+        _Logic = new MenuLogic();
     }
 
     public void Start()
@@ -14,7 +14,7 @@ public class Menu
         Console.OutputEncoding = Encoding.UTF8;
         string prompt = "Menu's";
 
-        List<MenuModel> allMenuItems = Logic.GetAllMenuItems();
+        List<MenuModel> allMenuItems = _Logic.GetAllMenuItems();
         
         if (allMenuItems.Count == 0)
         {
