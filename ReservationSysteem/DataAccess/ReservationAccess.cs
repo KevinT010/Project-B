@@ -1,5 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Dapper;
+using System.Collections;
+using SQLitePCL;
 
 public class ReservationAccess
 {
@@ -27,6 +29,17 @@ public class ReservationAccess
 
         return overlappingReservations;
     }
+
+    public List<ReservationModel> GetByAccountId(long accountId)
+    {
+        // List with Reservations based on account id
+        string query = $"SELECT * FROM {ReservationTable} WHERE AccountId = @AccountId";
+        // opens, executes, read etc
+        var Reservations = _connection.Query<ReservationModel>(query, new { AccountId = accountId }).ToList();
+
+        return Reservations;
+    }
+
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 
