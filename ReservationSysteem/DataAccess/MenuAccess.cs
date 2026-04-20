@@ -5,21 +5,21 @@ public class MenuAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
 
-    public void InsertMenuItem(MenuModel menuItem, int menuId)
-    {
-        string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
-                         VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
-                         SELECT last_insert_rowid();";
-        
-        _connection.ExecuteScalar<int>(query, new { 
-            MenuId = menuId,
-            Name = menuItem.Name,
-            Price = menuItem.Price,
-            Description = menuItem.Description,
-            FoodCategory = menuItem.FoodCategory,
-            Allergens = menuItem.Allergens
-        });
-    }
+    public int InsertMenuItem(MenuModel menuItem, int menuId)
+{
+    string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
+                     VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
+                     SELECT last_insert_rowid();";
+    
+    return _connection.ExecuteScalar<int>(query, new { 
+        MenuId = menuId,
+        Name = menuItem.Name,
+        Price = menuItem.Price,
+        Description = menuItem.Description,
+        FoodCategory = menuItem.FoodCategory,
+        Allergens = menuItem.Allergens
+    });
+}
 
     public List<MenuModel> GetAllMenuItems()
     {

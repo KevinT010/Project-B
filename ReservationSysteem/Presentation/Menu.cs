@@ -163,6 +163,7 @@ public class Menu
 
     public void DisplayItemsInCategory(List<MenuModel> itemsToDisplay, string selectedCategory)
     {
+        Console.Clear();
         Console.WriteLine($"\n=== {selectedCategory} ===\n");
 
         foreach (MenuModel item in itemsToDisplay)
@@ -196,37 +197,41 @@ public class Menu
         {
             emojiList.Add("🥛");
         }
-        else if (Contains("egg"))
+        if (Contains("egg"))
         {
             emojiList.Add("🥚");
         }
-        else if (Contains("shellfish"))
+        if (Contains("shellfish"))
         {
             emojiList.Add("🦐");
         }
-        else if (Contains("fish"))
+        if (Contains("fish"))
         {
             emojiList.Add("🐟");
         }
-        else if (Contains("peanuts") || Contains("nuts"))
+        if (Contains("peanuts") || Contains("nuts"))
         {
             emojiList.Add("🥜");
         }
-        else if (Contains("wheat") || Contains("gluten"))
+        if (Contains("wheat") || Contains("gluten"))
         {
             emojiList.Add("🌾");
         }
-        else if (Contains("soy"))
+        if (Contains("soy"))
         {
             emojiList.Add("🫘");
         }
-        else if (Contains("sesame"))
+        if (Contains("sesame"))
         {
             emojiList.Add("🌱");
         }
-        else if(Contains("alcohol"))
+        if(Contains("alcohol"))
         {
-            emojiList.Add("🔞");
+            emojiList.Add("🍷");
+        }
+        if(Contains("Crustaceans"))
+        {
+            emojiList.Add("🦐");
         }
 
 

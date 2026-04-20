@@ -8,7 +8,8 @@ public class MenuLogic
 
     public void AddMenuItem(MenuModel menuItem, int menuId)
     {
-        _access.InsertMenuItem(menuItem, menuId);
+        int newItemId = _access.InsertMenuItem(menuItem, menuId);
+        _access.LinkItemToMenu(newItemId, menuId);
     }
 
     public List<MenuModel> GetAllMenuItems()
