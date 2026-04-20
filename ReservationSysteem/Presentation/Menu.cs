@@ -53,9 +53,9 @@ public class Menu
     {
         if (Session.CurrentUser != null)
         {
-            AccountVisibility.VisibilityMenu(Session.CurrentUser);
             Console.WriteLine("No menu's available.");
             Thread.Sleep(2000);
+            AccountVisibility.VisibilityMenu(Session.CurrentUser);
         }
         else
         {
