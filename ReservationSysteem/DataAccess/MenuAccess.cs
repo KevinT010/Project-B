@@ -5,13 +5,13 @@ public class MenuAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
 
-    public long InsertMenuItem(MenuModel menuItem, long menuId)
+    public void InsertMenuItem(MenuModel menuItem, long menuId)
     {
         string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
                          VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
                          SELECT last_insert_rowid();";
         
-        return _connection.ExecuteScalar<long>(query, new { 
+        _connection.ExecuteScalar<long>(query, new { 
             MenuId = menuId,
             Name = menuItem.Name,
             Price = menuItem.Price,
