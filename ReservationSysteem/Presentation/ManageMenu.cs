@@ -213,9 +213,9 @@ public class ManageMenu
             Console.Write("This name already exists. Enter a different name: ");
         }
 
-        decimal price;
+        double price;
         Console.Write("Price: ");
-        while (!decimal.TryParse(Console.ReadLine(), out price) || price < 0)
+        while (!double.TryParse(Console.ReadLine(), out price) || price < 0)
         {
             Console.WriteLine("Invalid input. Please enter a valid number.");
             Console.Write("Price: ");
@@ -300,7 +300,7 @@ public class ManageMenu
 
         Console.Write($"Price: ");
         string priceInput = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(priceInput) && decimal.TryParse(priceInput, out decimal newPrice) && newPrice >= 0)
+        if (!string.IsNullOrWhiteSpace(priceInput) && double.TryParse(priceInput, out double newPrice) && newPrice >= 0)
         {
             selectedItem.Price = newPrice;
         }
