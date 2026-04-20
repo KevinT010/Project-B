@@ -97,7 +97,7 @@ public class ManageMenu
         Console.Write("Should this menu be active? (y/n): ");
         bool isActive = Console.ReadLine()?.Trim().ToLower() == "y";
 
-        Logic.UpdateMenu(selectedMenu.Id, newName, isActive);
+        Logic.UpdateMenu((int)selectedMenu.Id, newName, isActive);
         Console.WriteLine("Menu updated.");
         Thread.Sleep(2000);
         Start();
@@ -132,7 +132,8 @@ public class ManageMenu
             return;
         }
 
-        long idToDelete = menus[selectedIndex].Id;
+        int idToDelete = (int)menus[selectedIndex].Id;
+        
         bool success = Logic.DeleteMenu(idToDelete);
         
         if (success)
@@ -177,7 +178,8 @@ public class ManageMenu
             return;
         }
 
-        long selectedMenuId = menus[selectedMenuIndex].Id;
+        int selectedMenuId = (int)menus[selectedMenuIndex].Id;
+        
 
         Console.Clear();
 
@@ -236,9 +238,7 @@ public class ManageMenu
         string allergens = Console.ReadLine() ?? "";
 
         MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
-        long newItemId = Logic.AddMenuItem(newItem, selectedMenuId);
-        
-        Logic.LinkItemToMenu(newItemId, selectedMenuId);
+        Logic.AddMenuItem(newItem, selectedMenuId);
         
         Console.Clear();
         Console.WriteLine("Menu item added successfully!");
@@ -361,7 +361,7 @@ public class ManageMenu
 
         if (itemToDelete != null)
         {
-            bool success = Logic.DeleteMenuItem(itemToDelete.Id);
+            bool success = Logic.DeleteMenuItem((int)itemToDelete.Id);
             if (success)
             {
                 Console.WriteLine($"Item '{itemToDelete.Name}' deleted.");
