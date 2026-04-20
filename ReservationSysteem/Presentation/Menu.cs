@@ -54,6 +54,8 @@ public class Menu
         if (Session.CurrentUser != null)
         {
             AccountVisibility.VisibilityMenu(Session.CurrentUser);
+            Console.WriteLine("No menu's available.");
+            Thread.Sleep(2000);
         }
         else
         {
@@ -220,6 +222,11 @@ public class Menu
         {
             emojiList.Add("🌱");
         }
+        else if(Contains("alcohol"))
+        {
+            emojiList.Add("🔞");
+        }
+
 
         return emojiList.Count > 0 ? string.Join(" ", emojiList) : "No allergens";
     }
