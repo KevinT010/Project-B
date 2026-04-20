@@ -23,7 +23,6 @@ public class Menu
         }
 
         List<string> optionsList = GetUniqueMenuNames(allMenuItems);
-
         if (optionsList.Count == 0)
         {
             HandleEmptyMenu();
@@ -79,11 +78,11 @@ public class Menu
     public List<string> GetUniqueMenuNames(List<MenuModel> allMenuItems)
     {
         List<string> optionsList = new List<string>();
-        foreach (MenuModel m in allMenuItems)
+        foreach (MenuModel menuModel in allMenuItems)
         {
-            if (m.IsActive && !string.IsNullOrEmpty(m.MenuName) && !optionsList.Contains(m.MenuName))
+            if (menuModel.IsActive && !string.IsNullOrEmpty(menuModel.MenuName) && !optionsList.Contains(menuModel.MenuName))
             {
-                optionsList.Add(m.MenuName);
+                optionsList.Add(menuModel.MenuName);
             }
         }
         return optionsList;
@@ -140,23 +139,23 @@ public class Menu
     }
 
     public List<string> GetOrderedAvailableCategories(List<string> uniqueCategories)
-    {
-        List<string> categoryOrder = new List<string> { "Starter", "Main Course", "Kids Meal", "Dessert", "Drinks" };
-        List<string> availableCategories = new List<string>();
+{
+    List<string> categoryOrder = new List<string> { "starter", "main course", "kids meal", "dessert", "drinks" };
+    List<string> availableCategories = new List<string>();
 
-        foreach (string expectedCategory in categoryOrder)
+    foreach (string expectedCategory in categoryOrder)
+    {
+        foreach (string uniqueCategory in uniqueCategories)
         {
-            foreach (string uniqueCategory in uniqueCategories)
+            if (uniqueCategory.ToLower() == expectedCategory.ToLower())
             {
-                if (uniqueCategory.Equals(expectedCategory, StringComparison.OrdinalIgnoreCase))
-                {
-                    availableCategories.Add(expectedCategory);
-                    break;
-                }
+                availableCategories.Add(expectedCategory);
+                break;
             }
         }
-        return availableCategories;
     }
+    return availableCategories;
+}
 
     public void DisplayItemsInCategory(List<MenuModel> itemsToDisplay, string selectedCategory)
     {
@@ -187,37 +186,37 @@ public class Menu
 
         var emojiList = new List<string>();
 
-        bool Has(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
+        bool Contains(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
 
-        if (Has("milk") || Has("dairy") || Has("lactose"))
+        if (Contains("milk") || Contains("dairy") || Contains("lactose"))
         {
             emojiList.Add("🥛");
         }
-        else if (Has("egg"))
+        else if (Contains("egg"))
         {
             emojiList.Add("🥚");
         }
-        else if (Has("shellfish"))
+        else if (Contains("shellfish"))
         {
             emojiList.Add("🦐");
         }
-        else if (Has("fish"))
+        else if (Contains("fish"))
         {
             emojiList.Add("🐟");
         }
-        else if (Has("peanuts") || Has("nuts"))
+        else if (Contains("peanuts") || Contains("nuts"))
         {
             emojiList.Add("🥜");
         }
-        else if (Has("wheat") || Has("gluten"))
+        else if (Contains("wheat") || Contains("gluten"))
         {
             emojiList.Add("🌾");
         }
-        else if (Has("soy"))
+        else if (Contains("soy"))
         {
             emojiList.Add("🫘");
         }
-        else if (Has("sesame"))
+        else if (Contains("sesame"))
         {
             emojiList.Add("🌱");
         }

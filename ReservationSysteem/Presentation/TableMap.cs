@@ -3,7 +3,11 @@ public static class TableMap
 {
     public static void Display(List<TableModel> availableTables, int selectedIndex)
     {
-        HashSet<int> available = availableTables.Select(t => t.TableNumber).ToHashSet();
+        List<int> available = new List<int>();
+        foreach (TableModel table in availableTables)
+        {
+            available.Add(table.TableNumber);
+        }
         int selected = -1;
         if (selectedIndex >= 0 && selectedIndex < availableTables.Count)
         {
@@ -109,7 +113,7 @@ public static class TableMap
         Console.WriteLine("========================================Entrance=============================================");
     }
 
-    private static void Print(string table, HashSet<int> available, int selected)
+    private static void Print(string table, List<int> available, int selected)
     {
         int num = int.Parse(table.Substring(1));
 
