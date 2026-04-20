@@ -193,31 +193,31 @@ public class Menu
         {
             emojiList.Add("🥛"); 
         }
-        if (Has("Egg"))
+        else if (Has("Egg"))
         { 
             emojiList.Add("🥚");
         }
-        if (Has("Shellfish")) 
+        else if (Has("Shellfish")) 
         {
             emojiList.Add("🦐");
         }
-        if (Has("Fish")) 
+        else if (Has("Fish")) 
         {
             emojiList.Add("🐟");
         }
-        if (Has("Peanuts") || Has("Nuts")) 
+        else if (Has("Peanuts") || Has("Nuts")) 
         {
             emojiList.Add("🥜");
         }
-        if (Has("Wheat") || Has("Gluten")) 
+        else if (Has("Wheat") || Has("Gluten")) 
         {
             emojiList.Add("🌾");
         }
-        if (Has("Soy")) 
+        else if (Has("Soy")) 
         {
             emojiList.Add("🫘");
         }
-        if (Has("Sesame")) 
+        else if (Has("Sesame")) 
         {
             emojiList.Add("🌱");
         }
