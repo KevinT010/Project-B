@@ -14,7 +14,6 @@ public class PreOrderLogic
         Reservations = _reservationAccess.GetByAccountId(accountId);
         return Reservations;
     }
-
 }
 
 
