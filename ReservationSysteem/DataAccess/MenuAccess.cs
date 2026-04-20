@@ -6,20 +6,21 @@ public class MenuAccess
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
 
     public int InsertMenuItem(MenuModel menuItem, int menuId)
-{
-    string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
+    {
+        string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
                      VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
                      SELECT last_insert_rowid();";
-    
-    return _connection.ExecuteScalar<int>(query, new { 
-        MenuId = menuId,
-        Name = menuItem.Name,
-        Price = menuItem.Price,
-        Description = menuItem.Description,
-        FoodCategory = menuItem.FoodCategory,
-        Allergens = menuItem.Allergens
-    });
-}
+
+        return _connection.ExecuteScalar<int>(query, new
+        {
+            MenuId = menuId,
+            Name = menuItem.Name,
+            Price = menuItem.Price,
+            Description = menuItem.Description,
+            FoodCategory = menuItem.FoodCategory,
+            Allergens = menuItem.Allergens
+        });
+    }
 
     public List<MenuModel> GetAllMenuItems()
     {
@@ -27,7 +28,7 @@ public class MenuAccess
             SELECT MenuItem.*, Menu.MenuName, Menu.IsActive 
             FROM MenuItem
             LEFT JOIN Menu ON MenuItem.MenuId = Menu.id;";
-        
+
         return _connection.Query<MenuModel>(query).ToList();
     }
 
@@ -43,10 +44,10 @@ public class MenuAccess
         _connection.Execute(query, new { MenuItemId = menuItemId, MenuId = menuId });
     }
 
-    public void CreateMenu(string menuName)
+    public void CreateMenu(string menuName, bool isActive)
     {
-        string query = "INSERT INTO Menu (MenuName, IsActive) VALUES (@MenuName, 1)";
-        _connection.Execute(query, new { MenuName = menuName });
+        string query = "INSERT INTO Menu (MenuName, IsActive) VALUES (@MenuName, @IsActive)";
+        _connection.Execute(query, new { MenuName = menuName, IsActive = isActive });
     }
 
     public void UpdateMenu(int menuId, string newMenuName, bool isActive)
@@ -65,7 +66,7 @@ public class MenuAccess
     public bool IsItemInReservation(int menuItemId)
     {
         string query = "SELECT COUNT(1) FROM ReservationItem WHERE MenuItemId = @MenuItemId";
-        try 
+        try
         {
             return _connection.ExecuteScalar<int>(query, new { MenuItemId = menuItemId }) > 0;
         }
@@ -96,7 +97,7 @@ public class MenuAccess
         {
             return false;
         }
-        
+
         string deleteLinkQuery = "DELETE FROM ItemOnMenu WHERE MenuItemId = @Id";
         _connection.Execute(deleteLinkQuery, new { Id = menuItemId });
 

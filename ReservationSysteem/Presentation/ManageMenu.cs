@@ -44,14 +44,17 @@ public class ManageMenu
         Console.Clear();
         Console.Write("Enter new menu name:   (Or press Enter to cancel) ");
         string name = Console.ReadLine();
-        
+
         if (!string.IsNullOrWhiteSpace(name))
         {
-            Logic.CreateMenu(name);
+            Console.Write("Should this menu be active? (y/n): ");
+            bool isActive = Console.ReadLine()?.Trim().ToLower() == "y";
+
+            Logic.CreateMenu(name, isActive);
             Console.WriteLine("Menu created successfully.");
         }
-        
-        Thread.Sleep(2000); 
+
+        Thread.Sleep(2000);
         Start();
     }
 
@@ -59,11 +62,11 @@ public class ManageMenu
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
-        
+
         if (menus.Count == 0)
         {
             Console.WriteLine("No menus exist.");
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000);
             Start();
             return;
         }
@@ -107,11 +110,11 @@ public class ManageMenu
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
-        
+
         if (menus.Count == 0)
         {
             Console.WriteLine("No menus exist.");
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000);
             Start();
             return;
         }
@@ -133,9 +136,9 @@ public class ManageMenu
         }
 
         int idToDelete = (int)menus[selectedIndex].Id;
-        
+
         bool success = Logic.DeleteMenu(idToDelete);
-        
+
         if (success)
         {
             Console.WriteLine("Menu deleted.");
@@ -144,8 +147,8 @@ public class ManageMenu
         {
             Console.WriteLine("Cannot delete menu: items are currently in a reservation.");
         }
-        
-        Thread.Sleep(2000); 
+
+        Thread.Sleep(2000);
         Start();
     }
 
@@ -153,11 +156,11 @@ public class ManageMenu
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
-        
+
         if (menus.Count == 0)
         {
             Console.WriteLine("Please create a menu first.");
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000);
             Start();
             return;
         }
@@ -179,7 +182,7 @@ public class ManageMenu
         }
 
         int selectedMenuId = (int)menus[selectedMenuIndex].Id;
-        
+
 
         Console.Clear();
 
@@ -220,7 +223,7 @@ public class ManageMenu
             Console.WriteLine("Invalid input. Please enter a valid number.");
             Console.Write("Price: ");
         }
-        
+
         Console.Write("Description: ");
         string description = Console.ReadLine() ?? "";
 
@@ -233,13 +236,13 @@ public class ManageMenu
             category = Console.ReadLine() ?? "";
         }
         Console.WriteLine($"Selected Category: {category}");
-        
+
         Console.Write("Allergens (use , if you want multiple or leave empty): ");
         string allergens = Console.ReadLine() ?? "";
 
         MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
         Logic.AddMenuItem(newItem, selectedMenuId);
-        
+
         Console.Clear();
         Console.WriteLine("Menu item added successfully!");
         Console.WriteLine("-----------------------------");
@@ -258,11 +261,11 @@ public class ManageMenu
     {
         Console.Clear();
         List<MenuModel> items = Logic.GetAllMenuItems();
-        
+
         if (items.Count == 0)
         {
             Console.WriteLine("No menu items exist.");
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000);
             Start();
             return;
         }
@@ -290,7 +293,7 @@ public class ManageMenu
         }
 
         Console.Clear();
-        
+
         Console.Write($"Name: ");
         string newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))

@@ -24,9 +24,9 @@ public class MenuLogic
         return menus ?? new List<MenuModel>();
     }
 
-    public void CreateMenu(string menuName)
+    public void CreateMenu(string menuName, bool isActive)
     {
-        _access.CreateMenu(menuName);
+        _access.CreateMenu(menuName, isActive);
     }
 
     public void UpdateMenu(int menuId, string newMenuName, bool isActive)
