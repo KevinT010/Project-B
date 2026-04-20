@@ -131,6 +131,7 @@ public class Reservation
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
                 Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm}");
                 Console.WriteLine($"   Guests:    {numberOfGuests}");
+                Console.WriteLine($"   Kids:    {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
             }
             else
