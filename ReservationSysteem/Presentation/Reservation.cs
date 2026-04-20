@@ -53,18 +53,25 @@ public class Reservation
                 Start(account);
                 return;
             }
+            else if (requestedDateTime > DateTime.Now.AddYears(1))
+            {
+                Console.WriteLine("You can't make reservations further than a year in the future. Press any key to go back.");
+                Console.ReadKey();
+                Start(account);
+                return;
+            }
 
 
             Console.Write("Enter number of guests: ");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
 
             // number of guest check
-            if (numberOfGuests < 1)
+            while (numberOfGuests < 1)
             {
                 Console.WriteLine("Invalid number of guests. Press any key to go back.");
                 Console.ReadKey();
-                Start(account);
-                return;
+                Console.Write("Enter number of guests: "); 
+                numberOfGuests = Convert.ToInt32(Console.ReadLine());
             }
 
 

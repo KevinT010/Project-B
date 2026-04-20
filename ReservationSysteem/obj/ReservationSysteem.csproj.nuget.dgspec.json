@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gebruiker\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {}
+    "C:\\Users\\tariq\\OneDrive\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gebruiker\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {
+    "C:\\Users\\tariq\\OneDrive\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gebruiker\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
+        "projectUniqueName": "C:\\Users\\tariq\\OneDrive\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
         "projectName": "ReservationSysteem",
-        "projectPath": "C:\\Users\\Gebruiker\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
-        "packagesPath": "C:\\Users\\Gebruiker\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gebruiker\\Documents\\GitHub\\Project-B\\ReservationSysteem\\obj\\",
+        "projectPath": "C:\\Users\\tariq\\OneDrive\\Documents\\GitHub\\Project-B\\ReservationSysteem\\ReservationSysteem.csproj",
+        "packagesPath": "C:\\Users\\tariq\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tariq\\OneDrive\\Documents\\GitHub\\Project-B\\ReservationSysteem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gebruiker\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\tariq\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -73,7 +73,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
