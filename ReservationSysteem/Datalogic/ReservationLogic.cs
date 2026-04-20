@@ -38,7 +38,7 @@ public class ReservationLogic
         }
     }
 
-    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int durationMinutes = 120)
+    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int durationMinutes = 120)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
         if (overlapping.Count > 0)
@@ -46,7 +46,7 @@ public class ReservationLogic
             return false;
         }
 
-        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, durationMinutes));
+        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes));
         return true;
     }
 }

@@ -74,6 +74,16 @@ public class Reservation
                 numberOfGuests = Convert.ToInt32(Console.ReadLine());
             }
 
+            Console.Write("Enter number of kids: ");
+            int numberOfKids = Convert.ToInt32(Console.ReadLine());
+
+            while (0 > numberOfKids || numberOfKids > numberOfGuests)
+            {
+                Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
+                Console.ReadKey();
+                Console.Write("Enter number of kids: "); 
+                numberOfKids = Convert.ToInt32(Console.ReadLine());
+            }
 
             // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -113,7 +123,7 @@ public class Reservation
 
             TableModel selectedTable = availableTables[selectedIndex];
 
-            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests);
+            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids);
 
             if (success)
             {
