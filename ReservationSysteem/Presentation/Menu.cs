@@ -164,7 +164,7 @@ public class Menu
 
         foreach (MenuModel item in itemsToDisplay)
         {
-            if (item.FoodCategory.Equals(selectedCategory, StringComparison.OrdinalIgnoreCase))
+            if (item.FoodCategory.ToLower() == selectedCategory.ToLower())
             {
                 Console.WriteLine($"Name: {item.Name}");
                 Console.WriteLine($"Description: {item.Description}");
@@ -189,35 +189,35 @@ public class Menu
 
         bool Has(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
 
-        if (Has("Milk") || Has("Dairy") || Has("Lactose"))
+        if (Has("milk") || Has("dairy") || Has("lactose"))
         {
-            emojiList.Add("🥛"); 
+            emojiList.Add("🥛");
         }
-        else if (Has("Egg"))
-        { 
+        else if (Has("egg"))
+        {
             emojiList.Add("🥚");
         }
-        else if (Has("Shellfish")) 
+        else if (Has("shellfish"))
         {
             emojiList.Add("🦐");
         }
-        else if (Has("Fish")) 
+        else if (Has("fish"))
         {
             emojiList.Add("🐟");
         }
-        else if (Has("Peanuts") || Has("Nuts")) 
+        else if (Has("peanuts") || Has("nuts"))
         {
             emojiList.Add("🥜");
         }
-        else if (Has("Wheat") || Has("Gluten")) 
+        else if (Has("wheat") || Has("gluten"))
         {
             emojiList.Add("🌾");
         }
-        else if (Has("Soy")) 
+        else if (Has("soy"))
         {
             emojiList.Add("🫘");
         }
-        else if (Has("Sesame")) 
+        else if (Has("sesame"))
         {
             emojiList.Add("🌱");
         }
