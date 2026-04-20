@@ -40,6 +40,7 @@ public static class AccountVisibility
             case 4:
                 PreOrder preOrder = new PreOrder();
                 preOrder.Start(Session.CurrentUser);
+                ShowUserMenu();
                 break;
             case 5:
                 Session.Logout();
