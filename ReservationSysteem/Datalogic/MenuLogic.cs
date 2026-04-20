@@ -6,9 +6,9 @@ public class MenuLogic
     {
     }
 
-    public long AddMenuItem(MenuModel menuItem, long menuId)
+    public void AddMenuItem(MenuModel menuItem, int menuId)
     {
-        return _access.InsertMenuItem(menuItem, menuId);
+        _access.InsertMenuItem(menuItem, menuId);
     }
 
     public List<MenuModel> GetAllMenuItems()
