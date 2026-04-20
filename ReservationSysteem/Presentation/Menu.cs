@@ -23,7 +23,6 @@ public class Menu
         }
 
         List<string> optionsList = GetUniqueMenuNames(allMenuItems);
-
         if (optionsList.Count == 0)
         {
             HandleEmptyMenu();
@@ -187,37 +186,37 @@ public class Menu
 
         var emojiList = new List<string>();
 
-        bool Has(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
+        bool Contains(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
 
-        if (Has("milk") || Has("dairy") || Has("lactose"))
+        if (Contains("milk") || Contains("dairy") || Contains("lactose"))
         {
             emojiList.Add("🥛");
         }
-        else if (Has("egg"))
+        else if (Contains("egg"))
         {
             emojiList.Add("🥚");
         }
-        else if (Has("shellfish"))
+        else if (Contains("shellfish"))
         {
             emojiList.Add("🦐");
         }
-        else if (Has("fish"))
+        else if (Contains("fish"))
         {
             emojiList.Add("🐟");
         }
-        else if (Has("peanuts") || Has("nuts"))
+        else if (Contains("peanuts") || Contains("nuts"))
         {
             emojiList.Add("🥜");
         }
-        else if (Has("wheat") || Has("gluten"))
+        else if (Contains("wheat") || Contains("gluten"))
         {
             emojiList.Add("🌾");
         }
-        else if (Has("soy"))
+        else if (Contains("soy"))
         {
             emojiList.Add("🫘");
         }
-        else if (Has("sesame"))
+        else if (Contains("sesame"))
         {
             emojiList.Add("🌱");
         }
