@@ -53,20 +53,37 @@ public class Reservation
                 Start(account);
                 return;
             }
+            else if (requestedDateTime > DateTime.Now.AddYears(1))
+            {
+                Console.WriteLine("You can't make reservations further than a year in the future. Press any key to go back.");
+                Console.ReadKey();
+                Start(account);
+                return;
+            }
 
 
             Console.Write("Enter number of guests: ");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
 
             // number of guest check
-            if (numberOfGuests < 1)
+            while (numberOfGuests < 1)
             {
                 Console.WriteLine("Invalid number of guests. Press any key to go back.");
                 Console.ReadKey();
-                Start(account);
-                return;
+                Console.Write("Enter number of guests: "); 
+                numberOfGuests = Convert.ToInt32(Console.ReadLine());
             }
 
+            Console.Write("Enter number of kids: ");
+            int numberOfKids = Convert.ToInt32(Console.ReadLine());
+
+            while (0 > numberOfKids || numberOfKids > numberOfGuests)
+            {
+                Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
+                Console.ReadKey();
+                Console.Write("Enter number of kids: "); 
+                numberOfKids = Convert.ToInt32(Console.ReadLine());
+            }
 
             // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -106,7 +123,7 @@ public class Reservation
 
             TableModel selectedTable = availableTables[selectedIndex];
 
-            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests);
+            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids);
 
             if (success)
             {
