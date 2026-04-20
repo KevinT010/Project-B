@@ -28,7 +28,7 @@ public class MenuLogic
         _access.CreateMenu(menuName);
     }
 
-    public void UpdateMenu(long menuId, string newMenuName, bool isActive)
+    public void UpdateMenu(int menuId, string newMenuName, bool isActive)
     {
         _access.UpdateMenu(menuId, newMenuName, isActive);
     }
@@ -38,17 +38,17 @@ public class MenuLogic
         _access.UpdateMenuItem(menuItem);
     }
 
-    public bool DeleteMenuItem(long menuItemId)
+    public bool DeleteMenuItem(int menuItemId)
     {
         return _access.DeleteMenuItem(menuItemId);
     }
 
-    public bool DeleteMenu(long menuId)
+    public bool DeleteMenu(int menuId)
     {
         return _access.DeleteMenu(menuId);
     }
-    
-    public void LinkItemToMenu(long menuItemId, long menuId)
+
+    public void LinkItemToMenu(int menuItemId, int menuId)
     {
         _access.LinkItemToMenu(menuItemId, menuId);
     }

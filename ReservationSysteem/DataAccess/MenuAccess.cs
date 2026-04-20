@@ -5,13 +5,13 @@ public class MenuAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
 
-    public void InsertMenuItem(MenuModel menuItem, long menuId)
+    public void InsertMenuItem(MenuModel menuItem, int menuId)
     {
         string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
                          VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
                          SELECT last_insert_rowid();";
         
-        _connection.ExecuteScalar<long>(query, new { 
+        _connection.ExecuteScalar<int>(query, new { 
             MenuId = menuId,
             Name = menuItem.Name,
             Price = menuItem.Price,
@@ -37,7 +37,7 @@ public class MenuAccess
         return _connection.Query<MenuModel>(query).ToList();
     }
 
-    public void LinkItemToMenu(long menuItemId, long menuId)
+    public void LinkItemToMenu(int menuItemId, int menuId)
     {
         string query = "INSERT INTO ItemOnMenu (MenuItemId, MenuId) VALUES (@MenuItemId, @MenuId)";
         _connection.Execute(query, new { MenuItemId = menuItemId, MenuId = menuId });
@@ -49,7 +49,7 @@ public class MenuAccess
         _connection.Execute(query, new { MenuName = menuName });
     }
 
-    public void UpdateMenu(long menuId, string newMenuName, bool isActive)
+    public void UpdateMenu(int menuId, string newMenuName, bool isActive)
     {
         string query = "UPDATE Menu SET MenuName = @MenuName, IsActive = @IsActive WHERE id = @Id";
         _connection.Execute(query, new { MenuName = newMenuName, IsActive = isActive, Id = menuId });
@@ -62,7 +62,7 @@ public class MenuAccess
         _connection.Execute(query, menuItem);
     }
 
-    public bool IsItemInReservation(long menuItemId)
+    public bool IsItemInReservation(int menuItemId)
     {
         string query = "SELECT COUNT(1) FROM ReservationItem WHERE MenuItemId = @MenuItemId";
         try 
@@ -75,7 +75,7 @@ public class MenuAccess
         }
     }
 
-    public bool IsMenuInReservation(long menuId)
+    public bool IsMenuInReservation(int menuId)
     {
         string query = @"SELECT COUNT(1) FROM MenuItem mi
                          JOIN ReservationItem ri ON mi.id = ri.MenuItemId
@@ -90,7 +90,7 @@ public class MenuAccess
         }
     }
 
-    public bool DeleteMenuItem(long menuItemId)
+    public bool DeleteMenuItem(int menuItemId)
     {
         if (IsItemInReservation(menuItemId))
         {
@@ -105,7 +105,7 @@ public class MenuAccess
         return true;
     }
 
-    public bool DeleteMenu(long menuId)
+    public bool DeleteMenu(int menuId)
     {
         if (IsMenuInReservation(menuId))
         {

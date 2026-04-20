@@ -132,7 +132,8 @@ public class ManageMenu
             return;
         }
 
-        long idToDelete = menus[selectedIndex].Id;
+        int idToDelete = menus[selectedIndex].Id;
+        
         bool success = Logic.DeleteMenu(idToDelete);
         
         if (success)
@@ -177,7 +178,8 @@ public class ManageMenu
             return;
         }
 
-        long selectedMenuId = menus[selectedMenuIndex].Id;
+        int selectedMenuId = menus[selectedMenuIndex].Id;
+        
 
         Console.Clear();
 
@@ -236,9 +238,7 @@ public class ManageMenu
         string allergens = Console.ReadLine() ?? "";
 
         MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
-        long newItemId = Logic.AddMenuItem(newItem, selectedMenuId);
-        
-        Logic.LinkItemToMenu(newItemId, selectedMenuId);
+        Logic.AddMenuItem(newItem, selectedMenuId);
         
         Console.Clear();
         Console.WriteLine("Menu item added successfully!");
