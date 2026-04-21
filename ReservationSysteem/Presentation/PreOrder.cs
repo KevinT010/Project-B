@@ -17,7 +17,7 @@ public class PreOrder
         List<string> Guest = new();
         int GuestCounter = 1;
 
-        for (int i = 0; i <= pickedReservation.NumberOfGuests; i++)
+        for (int i = 0; i < pickedReservation.NumberOfGuests; i++)
         {
             Guest.Add($"Guest {GuestCounter}");
             GuestCounter++;
