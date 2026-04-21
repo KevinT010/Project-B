@@ -14,7 +14,7 @@ public class PreOrder
         // List null check
         if (reservations.Count == 0)
         {
-            Console.WriteLine("No reservations found.");
+            Console.WriteLine("No upcoming reservations found.");
             Console.ReadKey();
             AccountVisibility.VisibilityMenu(account);
             return;

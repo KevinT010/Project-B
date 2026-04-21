@@ -145,13 +145,17 @@ public class Reservation
 
             if (success)
             {
+                RewardLogic rewardLogic = new RewardLogic();
+                rewardLogic.GiveReservationPoints(Session.CurrentUser);
                 Console.WriteLine($"\n✅ Reservation confirmed!");
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
                 Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm}");
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
                 Console.WriteLine($"   Kids:    {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
+                Console.WriteLine($"   Reward points earned:  +20");
             }
+
             else
             {
                 Console.WriteLine("❌ Reservation failed. The table was just taken. Please try again.");
