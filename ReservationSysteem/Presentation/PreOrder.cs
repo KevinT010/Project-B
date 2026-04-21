@@ -3,59 +3,56 @@ using System.ComponentModel.DataAnnotations;
 
 public class PreOrder
 {
-
-
     private List<MenuModel> AllSelectedItems = [];
 
-    public void Start(AccountModel account)
+    private PreOrderLogic Logic = new PreOrderLogic();
+    private MenuLogic MenuLogic = new MenuLogic();
+    private ViewReservations viewReservations = new();
+
+    public void Start(AccountModel account, ReservationModel pickedReservation)
     {
 
         // account null check
-        if (account == null)
-        {
-            return;
-        }
+        // if (account == null)
+        // {
+        //     return;
+        // }
 
-        PreOrderLogic Logic = new PreOrderLogic();
-        ReservationLogic ReservationLogic = new ReservationLogic();
-        MenuLogic MenuLogic = new MenuLogic();
-        var reservations = Logic.GetReservations(account.Id);
-        reservations = ReservationLogic.GetActiveReservations(reservations);
 
-        // List null check
-        if (reservations.Count == 0)
-        {
-            Console.WriteLine("No upcoming reservations found.");
-            Console.ReadKey();
-            return;
-        }
+        // // List null check
+        // if (reservations.Count == 0)
+        // {
+        //     Console.WriteLine("No upcoming reservations found.");
+        //     Console.ReadKey();
+        //     return;
+        // }
 
-        List<string> options = new List<string>();
+        // List<string> options = new List<string>();
 
-        foreach (var r in reservations)
-        {
-            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests - r.NumberOfKids} | Kids: {r.NumberOfKids}");
-        }
+        // foreach (var r in reservations)
+        // {
+        //     options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests - r.NumberOfKids} | Kids: {r.NumberOfKids}");
+        // }
 
-        options.Add("Back");
+        // options.Add("Back");
 
-        Ui ReservationList = new Ui("Select a reservation for Pre-Order", options.ToArray());
-        int selectedIndexReservation = ReservationList.Run();
+        // Ui ReservationList = new Ui("Select a reservation for Pre-Order", options.ToArray());
+        // int selectedIndexReservation = ReservationList.Run();
 
-        if (options[selectedIndexReservation] == "Back")
-            return;
+        // if (options[selectedIndexReservation] == "Back")
+        //     return;
 
-        ReservationModel selectedReservation = reservations[selectedIndexReservation];
+        // ReservationModel selectedReservation = reservations[selectedIndexReservation];
 
-        Console.Clear();
-        Console.WriteLine($"Selected reservation:");
-        Console.WriteLine($"{selectedReservation.DateTime} - {selectedReservation.NumberOfGuests - selectedReservation.NumberOfKids} adults - {selectedReservation.NumberOfKids} kids");
+        // Console.Clear();
+        // Console.WriteLine($"Selected reservation:");
+        // Console.WriteLine($"{pickedReservation.DateTime} - {pickedReservation.NumberOfGuests - pickedReservation.NumberOfKids} adults - {pickedReservation.NumberOfKids} kids");
 
         // ------------------------------------------------------------------------------------------------------------------------------------------- 
         List<string> Guest = new();
         int GuestCounter = 1;
 
-        for (int i = 0; i <= selectedReservation.NumberOfGuests; i++)
+        for (int i = 0; i < pickedReservation.NumberOfGuests; i++)
         {
             Guest.Add($"Guest: {GuestCounter}");
             GuestCounter++;
@@ -99,10 +96,9 @@ public class PreOrder
                 }
             }
 
-            Console.WriteLine("\nPress any key...");
-            Console.ReadKey();
+            // Console.WriteLine("\nPress any key...");
+            // Console.ReadKey();
 
-            Start(account);
             return;
         }
 
@@ -121,7 +117,7 @@ public class PreOrder
 
         if (Guest[selectedIndexGuest] == "Back")
         {
-            Start(account);
+            viewReservations.Start(account);
             return;
         }
 
@@ -132,7 +128,7 @@ public class PreOrder
 
 
         int guestNumber = selectedIndexGuest + 1;
-        GuestModel? existingGuest = Logic.GetGuest(selectedReservation.Id, guestNumber);
+        GuestModel? existingGuest = Logic.GetGuest(pickedReservation.Id, guestNumber);
 
         if (existingGuest != null)
         {
@@ -142,9 +138,30 @@ public class PreOrder
             if (!string.IsNullOrEmpty(existingGuest.Allergens))
             {
                 Console.WriteLine($"Allergens: {existingGuest.Allergens}");
+                Console.WriteLine();
+                Console.WriteLine("Chosen allergens:");
+                if (chosenAllergens.Count == 0)
+                {
+                    Console.WriteLine("- none");
+                }
+                else
+                {
+                    chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
+                }
             }
-            Console.WriteLine("\nPress any key to continue");
-            Console.ReadKey();
+            ;
+
+            // int selectedAllergenIndex = AllergensList.Run();
+            // string choice = allergenOptions[selectedAllergenIndex];
+
+            // if (choice == "Back")
+            // {
+            //     Start(account, pickedReservation);
+            //     return;
+            // }
+
+            // Console.WriteLine("\nPress any key to continue");
+            // Console.ReadKey();
         }
         else
         {
@@ -168,7 +185,7 @@ public class PreOrder
 
                 if (choice == "Back")
                 {
-                    Start(account);
+                    Start(account, pickedReservation);
                     return;
                 }
 
@@ -184,7 +201,7 @@ public class PreOrder
                     // datalogic layer to make user and continue making the pre-order flow
                     // grab chosenAllergens and pass to datalogic to create guest
                     string? allergens = string.Join(", ", chosenAllergens);
-                    Logic.MakeGuest(selectedReservation.Id, selectedIndexGuest + 1, allergens);
+                    Logic.MakeGuest(pickedReservation.Id, selectedIndexGuest + 1, allergens);
                     break;
                     // exit loop continue with showing menu
                 }
@@ -226,7 +243,7 @@ public class PreOrder
 
         if (AllMenuOptions[MenuSelected] == "Back")
         {
-            Start(account);
+            Start(account, pickedReservation);
             return;
         }
 
@@ -254,7 +271,7 @@ public class PreOrder
 
         if (CategoryOptions[SelectedCategory] == "Back")
         {
-            Start(account);
+            Start(account, pickedReservation);
             return;
         }
 
@@ -279,7 +296,7 @@ public class PreOrder
 
         if (ItemOptions[SelectedItem] == "Back")
         {
-            Start(account);
+            Start(account, pickedReservation);
             return;
         }
 

@@ -9,14 +9,6 @@ public class PreOrderLogic
     private ReservationAccess _reservationAccess = new();
     private readonly GuestAccess _guestAccess = new();
 
-    public List<ReservationModel> GetReservations(long accountId)
-    {
-        // making list and filling it with reservations by account id
-        var Reservations = new List<ReservationModel>();
-        Reservations = _reservationAccess.GetByAccountId(accountId);
-        return Reservations;
-    }
-
     // heb een method nodig die eerst een guest aan maakt
     public GuestModel MakeGuest(long reservationId, int guestNumber, string? allergens)
     {

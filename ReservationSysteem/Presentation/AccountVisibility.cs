@@ -15,7 +15,7 @@ public static class AccountVisibility
     private static void ShowUserMenu()
     {
         string prompt = $"User Dashboard Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}";
-        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Pre-Order", "Point Shop", "Logout" };
+        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Point Shop", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
 
@@ -55,15 +55,10 @@ public static class AccountVisibility
             case 3:
                 break;
             case 4:
-                PreOrder preOrder = new PreOrder();
-                preOrder.Start(Session.CurrentUser);
-                ShowUserMenu();
-                break;
-            case 5:
                 PointShop pointshop = new();
                 pointshop.Start(Session.CurrentUser);
                 break;
-            case 6:
+            case 5:
                 Session.Logout();
                 break;
         }

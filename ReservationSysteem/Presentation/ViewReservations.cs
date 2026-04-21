@@ -30,5 +30,31 @@ public class ViewReservations
             AccountVisibility.VisibilityMenu(account);
             return;
         }
+
+        ReservationModel pickedReservation = reservations[selectedIndex];
+
+        if (reservationLogic.IsExpired(pickedReservation))
+        {
+            Console.Clear();
+            Console.WriteLine("This reservation has expired, you cannot pre-order for it.");
+            Thread.Sleep(2000);
+            Start(account);
+            return;
+        }
+
+        string[] reservationActions = { "Pre-Order", "Go back" };
+        Ui actionMenu = new Ui("What would you like to do?", reservationActions);
+        int actionIndex = actionMenu.Run();
+
+        switch (actionIndex)
+        {
+            case 0:
+                PreOrder preOrder = new();
+                preOrder.Start(account, pickedReservation);
+                break;
+            case 1:
+                Start(account);
+                break;
+        }
     }
 }
