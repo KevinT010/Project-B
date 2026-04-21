@@ -68,4 +68,9 @@ public class ReservationLogic
         }
         return active;
     }
+
+    public List<ReservationModel> GetReservationsByAccountId(Int64 accountId)
+    {
+        return _reservationAccess.GetByAccountId(accountId);
+    }
 }
