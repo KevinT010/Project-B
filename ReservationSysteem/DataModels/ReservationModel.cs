@@ -14,7 +14,7 @@ public class ReservationModel
     {
     }
 
-    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 1, bool expired = false, double priceTotal = 0.0)
+    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 120, bool expired = false, double priceTotal = 0.0)
     {
         AccountId = accountid;
         TableId = tableId;

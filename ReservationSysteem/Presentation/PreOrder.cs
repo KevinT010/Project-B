@@ -24,7 +24,7 @@ public class PreOrder
 
         foreach (var r in reservations)
         {
-            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests} | Kids: {r.NumberOfKids}");
+            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests - r.NumberOfKids} | Kids: {r.NumberOfKids}");
         }
 
         options.Add("Back");
@@ -43,7 +43,7 @@ public class PreOrder
 
         Console.Clear();
         Console.WriteLine($"Selected reservation:");
-        Console.WriteLine($"{selectedReservation.DateTime} - {selectedReservation.NumberOfGuests} guests");
+        Console.WriteLine($"{selectedReservation.DateTime} - {selectedReservation.NumberOfGuests - selectedReservation.NumberOfKids} adults - {selectedReservation.NumberOfKids} kids");
 
         Console.WriteLine("\nNext step");
         Console.ReadKey();
