@@ -79,7 +79,7 @@ public class AccountRegistrationLogic
     {
         if (FirstNameValidation(firstName) && LastNameValidation(lastName) && EmailValidation(email) && PhoneNumberValidation(phoneNumber) && PasswordValidation(password))
         {
-            _access.InsertAccount(new AccountModel(firstName, lastName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 1));
+            _access.InsertAccount(new AccountModel(firstName, lastName, email, phoneNumber, BCrypt.Net.BCrypt.HashPassword(password), 1, 0));
             return true;
         }
         else

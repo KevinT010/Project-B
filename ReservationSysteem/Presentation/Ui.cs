@@ -4,7 +4,7 @@ public class Ui
     public string[] Options;
     public string Prompt;
 
-    // added
+    public Action<int>? OnAfterDraw;
     public Action<int>? OnBeforeDraw;
 
     public Ui(string prompt, string[] options)
@@ -53,6 +53,7 @@ public class Ui
             Console.Clear();
             OnBeforeDraw?.Invoke(SelectedIndex);
             DisplayOptions();
+            OnAfterDraw?.Invoke(SelectedIndex);
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             keyPressed = keyInfo.Key;
