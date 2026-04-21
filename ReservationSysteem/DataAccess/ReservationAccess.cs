@@ -42,14 +42,12 @@ public class ReservationAccess
 
     public List<ReservationModel> GetAllReservations()
     {
-        // List with all Reservations
-        string query = $"SELECT * FROM {ReservationTable}";
-        // opens, executes, read etc
-        var Reservations = _connection.Query<ReservationModel>(query, new()).ToList();
-
-        return Reservations;
+        string query = $@"SELECT res.*, acc.FirstName, acc.LastName 
+                        FROM {ReservationTable} res
+                        LEFT JOIN Account acc ON res.AccountId = acc.Id";
+        return _connection.Query<ReservationModel>(query).ToList();
     }
-
+    
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 

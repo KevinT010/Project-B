@@ -79,7 +79,7 @@ public class ViewReservations
             for (int i = 0; i < reservations.Count; i++)
             {
                 string status = reservationLogic.IsExpired(reservations[i]) ? "[Expired]" : "[Active]";
-                options[i] = $"{status} Reserved by: {reservations[i].AccountId}  {reservations[i].DateTime:dd-MM-yyyy HH:mm} -{reservations[i].DateTime.AddHours(2): HH:mm} | Adults: {reservations[i].NumberOfGuests - reservations[i].NumberOfKids} | Kids: {reservations[i].NumberOfKids}";
+                options[i] = $"{status} Reserved by: {reservations[i].FirstName} {reservations[i].LastName} | {reservations[i].DateTime:dd-MM-yyyy HH:mm} -{reservations[i].DateTime.AddHours(2): HH:mm} | Adults: {reservations[i].NumberOfGuests - reservations[i].NumberOfKids} | Kids: {reservations[i].NumberOfKids}";
             }
             options[reservations.Count] = "Go back";
 

@@ -27,7 +27,7 @@ public class Reservation
             // if parts does not equal 3 check
             if (dateParts.Length != 3)
             {
-                Console.WriteLine("Invalid date. Press any key to go back.");
+                Console.WriteLine("Invalid date.\nPress any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
@@ -53,7 +53,7 @@ public class Reservation
             // if parts does not equal 2 check
             if (timeParts.Length != 2)
             {
-                Console.WriteLine("Invalid time. Press any key to go back.");
+                Console.WriteLine("Invalid time.\nPress any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
@@ -66,21 +66,21 @@ public class Reservation
             // reservation date check
             if (requestedDateTime < DateTime.Now)
             {
-                Console.WriteLine("You can't make a reservation in the past. Press any key to go back.");
+                Console.WriteLine("You can't make a reservation in the past.\nPress any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
             }
             else if (requestedDateTime > DateTime.Now.AddYears(1))
             {
-                Console.WriteLine("You can't make reservations further than a year in the future. Press any key to go back.");
+                Console.WriteLine("You can't make reservations further than a year in the future.\nPress any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
             }
 
 
-            Console.Write("Enter number of guests: ");
+            Console.Write("Enter number of total guests: ");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
 
             // number of guest check
@@ -92,7 +92,7 @@ public class Reservation
                 numberOfGuests = Convert.ToInt32(Console.ReadLine());
             }
 
-            Console.Write("Enter number of kids: ");
+            Console.Write("Enter number of kids in the party: ");
             int numberOfKids = Convert.ToInt32(Console.ReadLine());
 
             while (0 > numberOfKids || numberOfKids > numberOfGuests)
@@ -110,7 +110,7 @@ public class Reservation
             // null check 
             if (availableTables.Count == 0)
             {
-                Console.WriteLine($"Sorry, there are no available tables at this time for a group of {numberOfGuests}. Press any key to go back.");
+                Console.WriteLine($"Sorry, there are no available tables at this time for a group of {numberOfGuests}.\nPress any key to go back.");
                 Console.ReadKey();
                 Start(account);
                 return;
@@ -168,7 +168,7 @@ public class Reservation
 
         else
         {
-            Console.WriteLine("You must be logged in to make a reservation first. Press any key to go back.");
+            Console.WriteLine("You must be logged in to make a reservation first.\nPress any key to go back.");
             Console.ReadKey();
             StartMenu.Start();
         }

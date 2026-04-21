@@ -2,6 +2,8 @@ public class ReservationModel
 {
     public Int64 Id { get; set; }
     public Int64 AccountId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public Int64 TableId { get; set; }
     public DateTime DateTime { get; set; }
     public int NumberOfGuests { get; set; }
