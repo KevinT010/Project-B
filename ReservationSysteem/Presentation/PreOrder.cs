@@ -99,8 +99,8 @@ public class PreOrder
                     AllSelectedItems.RemoveAt(SelectedEdit);
                     Console.WriteLine("Item removed.");
                 }
-
-                Console.ReadKey();
+                Console.Clear();
+            
             }
 
             Start(account, pickedReservation);
@@ -115,11 +115,10 @@ public class PreOrder
             Console.WriteLine("Order Placed");
             Console.WriteLine("Press any key");
             Console.ReadKey();
-            
+
             viewReservations.Start(account);
             return;
         }
-
 
         if (Guest[selectedIndexGuest] == "Back")
         {
