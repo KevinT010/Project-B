@@ -65,30 +65,16 @@ public class MenuAccess
 
     public bool IsItemInReservation(int menuItemId)
     {
-        string query = "SELECT COUNT(1) FROM ReservationItem WHERE MenuItemId = @MenuItemId";
-        try
-        {
-            return _connection.ExecuteScalar<int>(query, new { MenuItemId = menuItemId }) > 0;
-        }
-        catch
-        {
-            return false;
-        }
+        string query = "SELECT COUNT(1) FROM Guestchoice WHERE MenuItemId = @MenuItemId";
+        return _connection.ExecuteScalar<long>(query, new { MenuItemId = menuItemId }) > 0;
     }
 
     public bool IsMenuInReservation(int menuId)
     {
         string query = @"SELECT COUNT(1) FROM MenuItem mi
-                         JOIN ReservationItem ri ON mi.id = ri.MenuItemId
-                         WHERE mi.MenuId = @MenuId";
-        try
-        {
-            return _connection.ExecuteScalar<int>(query, new { MenuId = menuId }) > 0;
-        }
-        catch
-        {
-            return false;
-        }
+                     JOIN Guestchoice gc ON mi.id = gc.MenuItemId
+                     WHERE mi.MenuId = @MenuId";
+        return _connection.ExecuteScalar<long>(query, new { MenuId = menuId }) > 0;
     }
 
     public bool DeleteMenuItem(int menuItemId)

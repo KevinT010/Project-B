@@ -106,7 +106,7 @@ public class ManageMenu
         Start();
     }
 
-    public void DeleteMenu()
+public void DeleteMenu()
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
@@ -382,7 +382,6 @@ public class ManageMenu
         Thread.Sleep(2000);
         Start();
     }
-
     public void Return()
     {
         Console.Clear();
