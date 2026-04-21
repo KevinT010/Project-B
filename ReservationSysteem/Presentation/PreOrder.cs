@@ -3,52 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 public class PreOrder
 {
-    private List<MenuModel> AllSelectedItems = [];
-
+    private List<(int GuestNumber, MenuModel Item, int Quantity)> AllSelectedItems = [];
     private PreOrderLogic Logic = new PreOrderLogic();
     private MenuLogic MenuLogic = new MenuLogic();
     private ViewReservations viewReservations = new();
 
     public void Start(AccountModel account, ReservationModel pickedReservation)
     {
-
-        // account null check
-        // if (account == null)
-        // {
-        //     return;
-        // }
-
-
-        // // List null check
-        // if (reservations.Count == 0)
-        // {
-        //     Console.WriteLine("No upcoming reservations found.");
-        //     Console.ReadKey();
-        //     return;
-        // }
-
-        // List<string> options = new List<string>();
-
-        // foreach (var r in reservations)
-        // {
-        //     options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests - r.NumberOfKids} | Kids: {r.NumberOfKids}");
-        // }
-
-        // options.Add("Back");
-
-        // Ui ReservationList = new Ui("Select a reservation for Pre-Order", options.ToArray());
-        // int selectedIndexReservation = ReservationList.Run();
-
-        // if (options[selectedIndexReservation] == "Back")
-        //     return;
-
-        // ReservationModel selectedReservation = reservations[selectedIndexReservation];
-
-        // Console.Clear();
-        // Console.WriteLine($"Selected reservation:");
-        // Console.WriteLine($"{pickedReservation.DateTime} - {pickedReservation.NumberOfGuests - pickedReservation.NumberOfKids} adults - {pickedReservation.NumberOfKids} kids");
-
-        // ------------------------------------------------------------------------------------------------------------------------------------------- 
         List<string> Guest = new();
         int GuestCounter = 1;
 
@@ -76,9 +37,8 @@ public class PreOrder
 
         if (Guest[selectedIndexGuest] == "View Order")
         {
-            // Ui ViewOrder = new Ui("Order List",);
             // if guest selects view order user hass to
-            // see a list : MenuItem.Name || price || Guest who ordered it 
+            // see a list : MenuItem.Name || price || Guest who ordered it
 
             // Use: List<MenuModel> AllSelectedItems = [];
             Console.Clear();
@@ -90,30 +50,75 @@ public class PreOrder
             }
             else
             {
-                foreach (var item in AllSelectedItems)
+                foreach (var x in AllSelectedItems)
                 {
-                    Console.WriteLine($"{item.Name} - €{item.Price}");
+                    Console.WriteLine($"Guest_{x.GuestNumber} | {x.Item.Name} | €{x.Item.Price} | x{x.Quantity}");
                 }
             }
 
-            // Console.WriteLine("\nPress any key...");
-            // Console.ReadKey();
-
+            Console.WriteLine("\nPress any key...");
+            Console.ReadKey();
+            Start(account, pickedReservation);
             return;
         }
 
         if (Guest[selectedIndexGuest] == "Edit Order")
         {
-            // Edit order  is een lijst met alle gekozen items
-            // Confirm order
+            while (true)
+            {
+                if (AllSelectedItems.Count == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("No items selected.");
+                    Console.ReadKey();
+                    break;
+                }
+
+                List<string> EditOptions = [];
+
+                foreach (var order in AllSelectedItems)
+                    EditOptions.Add($"Guest_{order.GuestNumber} | {order.Item.Name} - €{order.Item.Price} | x{order.Quantity}");
+
+                EditOptions.Add("Back");
+
+                Ui EditOrder = new Ui("Edit Order - Select item to remove", EditOptions.ToArray());
+                int SelectedEdit = EditOrder.Run();
+
+                if (EditOptions[SelectedEdit] == "Back")
+                    break;
+
+                // decrement quantity or remove if quantity is 1
+                var selectedOrder = AllSelectedItems[SelectedEdit];
+
+                if (selectedOrder.Quantity > 1)
+                {
+                    AllSelectedItems[SelectedEdit] = (selectedOrder.GuestNumber, selectedOrder.Item, selectedOrder.Quantity - 1);
+                }
+                else
+                {
+                    AllSelectedItems.RemoveAt(SelectedEdit);
+                    Console.WriteLine("Item removed.");
+                }
+                Console.Clear();
+            
+            }
+
+            Start(account, pickedReservation);
             return;
         }
 
         if (Guest[selectedIndexGuest] == "Confirm Order")
         {
-            // insert
-        }
 
+            Logic.InsertGuestChoices(AllSelectedItems, pickedReservation.Id);
+            Console.Clear();
+            Console.WriteLine("Order Placed");
+            Console.WriteLine("Press any key");
+            Console.ReadKey();
+
+            viewReservations.Start(account);
+            return;
+        }
 
         if (Guest[selectedIndexGuest] == "Back")
         {
@@ -123,8 +128,8 @@ public class PreOrder
 
         // -------------------------------------------------------------------------------------------------------------------------------------------
 
-        List<string> allergenOptions = new() { "Milk / Dairy", "Egg", "Shellfish", "Fish", "Peanuts / Nuts", "Wheat / Gluten", "Soy", "Sesame", "Alcohol", "None", "Remove item", "Back", "Done" };
-        List<string> chosenAllergens = new();
+        List<string> allergenOptions = ["Milk / Dairy", "Egg", "Shellfish", "Fish", "Peanuts / Nuts", "Wheat / Gluten", "Soy", "Sesame", "Alcohol", "None", "Remove item", "Back", "Done"];
+        List<string> chosenAllergens = [];
 
 
         int guestNumber = selectedIndexGuest + 1;
@@ -135,37 +140,26 @@ public class PreOrder
             Console.Clear();
             Console.WriteLine($"Guest {guestNumber}");
 
-            if (!string.IsNullOrEmpty(existingGuest.Allergens))
+            if (existingGuest != null)
             {
-                Console.WriteLine($"Allergens: {existingGuest.Allergens}");
-                Console.WriteLine();
-                Console.WriteLine("Chosen allergens:");
-                if (chosenAllergens.Count == 0)
+                Console.Clear();
+                Console.WriteLine($"Guest_{guestNumber}");
+
+                if (!string.IsNullOrEmpty(existingGuest.Allergens))
                 {
-                    Console.WriteLine("- none");
+                    Console.WriteLine($"Allergens: {existingGuest.Allergens}");
                 }
                 else
                 {
-                    chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
+                    Console.WriteLine("Allergens: none");
                 }
+                Console.WriteLine("\nPress any key to continue");
+                Console.ReadKey();
+
             }
-            ;
-
-            // int selectedAllergenIndex = AllergensList.Run();
-            // string choice = allergenOptions[selectedAllergenIndex];
-
-            // if (choice == "Back")
-            // {
-            //     Start(account, pickedReservation);
-            //     return;
-            // }
-
-            // Console.WriteLine("\nPress any key to continue");
-            // Console.ReadKey();
         }
         else
         {
-            // select multiple times
             while (true)
             {
                 Ui AllergensList = new("Select allergen", allergenOptions.ToArray());
@@ -175,9 +169,13 @@ public class PreOrder
                     Console.WriteLine();
                     Console.WriteLine("Chosen allergens:");
                     if (chosenAllergens.Count == 0)
+                    {
                         Console.WriteLine("- none");
+                    }
                     else
+                    {
                         chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
+                    }
                 };
 
                 int selectedAllergenIndex = AllergensList.Run();
@@ -262,7 +260,9 @@ public class PreOrder
 
         foreach (MenuModel item in ItemsInMenu)
             if (!CategoryOptions.Contains(item.FoodCategory))
+            {
                 CategoryOptions.Add(item.FoodCategory);
+            }
 
         CategoryOptions.Add("Back");
 
@@ -282,13 +282,16 @@ public class PreOrder
 
         foreach (MenuModel item in ItemsInMenu)
             if (item.FoodCategory == selectedCategory)
+            {
                 ItemsInCategory.Add(item);
+            }
 
         List<string> ItemOptions = [];
 
         foreach (MenuModel item in ItemsInCategory)
-            ItemOptions.Add($"{item.Name} - €{item.Price}");
-
+        {
+            ItemOptions.Add($"{item.Name} - ${item.Price}");
+        }
         ItemOptions.Add("Back");
 
         Ui ItemList = new Ui("Select item", ItemOptions.ToArray());
@@ -301,20 +304,23 @@ public class PreOrder
         }
 
         MenuModel selectedItem = ItemsInCategory[SelectedItem];
-        AllSelectedItems.Add(selectedItem);
+        var existing = AllSelectedItems.FirstOrDefault(order => order.GuestNumber == guestNumber && order.Item.Id == selectedItem.Id);
 
-        // cannot access list before declaring !??!?
-        // Need to store MenuModel selectedItem = ItemsInCategory[SelectedItem];
-        // if guest wants to view order show         List<MenuModel> AllSelectedItems = [];
+        if (existing != default)
+        {
+            AllSelectedItems.Remove(existing);
+            AllSelectedItems.Add((existing.GuestNumber, existing.Item, existing.Quantity + 1));
+        }
+        else
+        {
+            AllSelectedItems.Add((guestNumber, selectedItem, 1));
+        }
 
+        Console.WriteLine("Item added to order");
 
-
-
-
-        Console.WriteLine("Next step");
         Console.ReadKey();
 
-        AccountVisibility.VisibilityMenu(account);
+        Start(account, pickedReservation);
     }
 }
 
@@ -366,3 +372,9 @@ public class PreOrder
 // after that we need to check if user we need to implement check cuzz
 // if guest already has selected allergens they can straight up chose things 
 // from menu 
+
+
+// cannot access list before declaring !??!?
+// Need to store MenuModel selectedItem = ItemsInCategory[SelectedItem];
+// if guest wants to view order show         List<MenuModel> AllSelectedItems = [];
+
