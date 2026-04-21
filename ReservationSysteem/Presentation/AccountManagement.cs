@@ -62,48 +62,64 @@ public class CustomerManagement
         }
     }
 
-    private void EditAccount()
+private void EditAccount()
+{
+    while (true)
     {
         Console.Clear();
-        Console.WriteLine("Edit Account");
+        string prompt = "Edit Account";
+        string[] options = 
+        { 
+            "Edit Name", 
+            "Edit Email", 
+            "Edit Phone", 
+            "Edit Password", 
+            "Save & Back" 
+        };
 
-        Console.Write("New name: ");
-        string name = Console.ReadLine();
-
-        Console.Write("New email: ");
-        string email = Console.ReadLine();
-
-        Console.Write("New phone: ");
-        string phone = Console.ReadLine();
-
-        Console.Write("New password: ");
-        string password = Console.ReadLine();
-
-        Console.WriteLine("Save changes? (yes/no)");
-        string confirm = Console.ReadLine();
-
-        if (!confirm.Equals("yes", StringComparison.OrdinalIgnoreCase))
-            return;
+        Ui menu = new Ui(prompt, options);
+        int choice = menu.Run();
 
         var user = Session.CurrentUser;
 
-        if (!string.IsNullOrWhiteSpace(name))
-            user.FullName = name;
+        switch (choice)
+        {
+            case 0:
+                Console.Write("New name: ");
+                string name = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(name))
+                    user.FullName = name;
+                break;
 
-        if (!string.IsNullOrWhiteSpace(email))
-            user.Email = email;
+            case 1:
+                Console.Write("New email: ");
+                string email = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(email))
+                    user.Email = email;
+                break;
 
-        if (!string.IsNullOrWhiteSpace(phone))
-            user.PhoneNumber = phone;
+            case 2:
+                Console.Write("New phone: ");
+                string phone = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(phone))
+                    user.PhoneNumber = phone;
+                break;
 
-        if (!string.IsNullOrWhiteSpace(password))
-            user.Password = password;
+            case 3:
+                Console.Write("New password: ");
+                string password = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(password))
+                    user.Password = password;
+                break;
 
-        new AccountRegistrationLogic().UpdateAccount(user);
-
-        Console.WriteLine("Account updated successfully.");
-        Console.ReadKey();
+            case 4:
+                new AccountRegistrationLogic().UpdateAccount(user);
+                Console.WriteLine("Account updated successfully.");
+                Console.ReadKey();
+                return;
+        }
     }
+}
 
     private void DeleteAccount()
     {
