@@ -26,4 +26,15 @@ public class AccountRegistrationAccess
         _connection.Execute(query, new { Points = points, Id = accountId });
     }
 
+    public void UpdateAccount(AccountModel account)
+    {
+        string query = $"UPDATE {Table} SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Password = @Password WHERE Id = @Id";
+        _connection.Execute(query, account);
+    }
+
+    public void DeleteAccount(int id)
+    {
+        string query = $"DELETE FROM {Table} WHERE Id = @Id";
+        _connection.Execute(query, new { Id = id });
+    }
 }

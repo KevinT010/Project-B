@@ -1,5 +1,7 @@
-public class CustomerManagement
+public class AccountManagement
 {
+    private AccountManagementLogic _logic = new();
+
     public void Start()
     {
         if (Session.CurrentUser == null)
@@ -34,7 +36,6 @@ public class CustomerManagement
                     case 0:
                         DeleteAccount();
                         break;
-
                     case 1:
                         Start();
                         break;
@@ -53,7 +54,6 @@ public class CustomerManagement
                     case 0:
                         AccountVisibility.VisibilityMenu(Session.CurrentUser);
                         break;
-
                     case 1:
                         StartMenu.Start();
                         break;
@@ -62,93 +62,91 @@ public class CustomerManagement
         }
     }
 
-private void EditAccount()
-{
-    while (true)
+    private void EditAccount()
     {
-        Console.Clear();
-        string prompt = "Edit Account";
-        string[] options = 
-        { 
-            "Edit Name", 
-            "Edit Email", 
-            "Edit Phone", 
-            "Edit Password", 
-            "Save & Back" 
-        };
-
-        Ui menu = new Ui(prompt, options);
-        int choice = menu.Run();
-
-        var user = Session.CurrentUser;
-
-        switch (choice)
+        while (true)
         {
-            case 0:
-                Console.Write("New name: ");
-                string name = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(name))
-                    user.FullName = name;
-                break;
+            Console.Clear();
+            string prompt = "Edit Account";
+            string[] options =
+            {
+                "Edit First Name",
+                "Edit Last Name",
+                "Edit Email",
+                "Edit Phone",
+                "Edit Password",
+                "Save & Back"
+            };
 
-            case 1:
-                Console.Write("New email: ");
-                string email = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(email))
-                    user.Email = email;
-                break;
+            Ui menu = new Ui(prompt, options);
+            int choice = menu.Run();
 
-            case 2:
-                Console.Write("New phone: ");
-                string phone = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(phone))
-                    user.PhoneNumber = phone;
-                break;
+            var user = Session.CurrentUser;
 
-            case 3:
-                Console.Write("New password: ");
-                string password = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(password))
-                    user.Password = password;
-                break;
+            switch (choice)
+            {
+                case 0:
+                    Console.Write("New first name: ");
+                    string firstName = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(firstName))
+                        user.FirstName = firstName;
+                    break;
 
-            case 4:
-                new AccountRegistrationLogic().UpdateAccount(user);
-                Console.WriteLine("Account updated successfully.");
-                Console.ReadKey();
-                return;
+                case 1:
+                    Console.Write("New last name: ");
+                    string lastName = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(lastName))
+                        user.LastName = lastName;
+                    break;
+
+                case 2:
+                    Console.Write("New email: ");
+                    string email = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(email))
+                        user.Email = email;
+                    break;
+
+                case 3:
+                    Console.Write("New phone: ");
+                    string phone = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(phone))
+                        user.PhoneNumber = phone;
+                    break;
+
+                case 4:
+                    Console.Write("New password: ");
+                    string password = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(password))
+                        user.Password = password;
+                    break;
+
+                case 5:
+                    _logic.UpdateAccount(user);
+                    Console.WriteLine("Account updated successfully.");
+                    Console.ReadKey();
+                    return;
+            }
         }
     }
-}
 
     private void DeleteAccount()
     {
         Console.Clear();
-        Console.WriteLine("Delete Account");
-        Console.WriteLine("Are you sure? (yes/no)");
-
-        string confirm = Console.ReadLine();
-
-        if (!confirm.Equals("yes", StringComparison.OrdinalIgnoreCase))
-            return;
-
-        Console.Write("Enter your password: ");
+        Console.WriteLine("Enter your password to confirm deletion:");
         string password = Console.ReadLine();
 
         var user = Session.CurrentUser;
 
-        if (user.Password != password)
+        if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
             Console.WriteLine("Incorrect password.");
             Console.ReadKey();
             return;
         }
 
-        new ReservationLogic().DeleteReservationsByUser(user.Id);
-        new AccountRegistrationLogic().DeleteAccount(user.Id);
+        _logic.DeleteAccount(user.Id);
 
         Session.CurrentUser = null;
-
         Console.WriteLine("Account deleted successfully.");
         Console.ReadKey();
 

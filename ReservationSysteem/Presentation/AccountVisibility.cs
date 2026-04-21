@@ -53,6 +53,8 @@ public static class AccountVisibility
                 ShowUserMenu();
                 break;
             case 3:
+                AccountManagement accountManagement = new AccountManagement();
+                accountManagement.Start();
                 break;
             case 4:
                 PreOrder preOrder = new PreOrder();
