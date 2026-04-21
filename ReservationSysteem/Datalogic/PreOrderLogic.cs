@@ -26,10 +26,17 @@ public class PreOrderLogic
         return _guestAccess.GetGuest(reservationId, guestNumber);
     }
 
-    public GuestChoiceModel Insert(long GuestId, long MenuItemId, int Quantity)
+    public void InsertGuestChoices(List<(int GuestNumber, MenuModel Item, int Quantity)> allSelectedItems, long reservationId)
     {
-        // recieves list with written params changes params too
-        return null;
+        foreach (var order in allSelectedItems)
+        {
+            GuestModel? guest = _guestAccess.GetGuest(reservationId, order.GuestNumber);
+            if (guest == null)
+                continue;
+
+            GuestChoiceModel choice = new GuestChoiceModel(order.Item.Id, guest.Id, order.Quantity);
+            _guestAccess.InsertGuestChoice(choice);
+        }
     }
 
 }
