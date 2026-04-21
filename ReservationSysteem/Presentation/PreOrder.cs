@@ -4,8 +4,10 @@ public class PreOrder
     {
         // account null check
         if (account == null)
+        {
             return;
-
+        }
+        
         PreOrderLogic logic = new PreOrderLogic();
         var reservations = logic.GetReservations(account.Id);
 
@@ -19,8 +21,8 @@ public class PreOrder
 
         List<string> options = new List<string>();
 
-        foreach (var r in reservations)
-            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Guests: {r.NumberOfGuests}");
+        foreach (var reservation in reservations)
+            options.Add($"{reservation.DateTime:dd-MM-yyyy HH:mm} | Guests: {reservation.NumberOfGuests}");
 
         options.Add("Back");
 
@@ -40,7 +42,7 @@ public class PreOrder
         List<string> Guest = new();
         int GuestCounter = 1;
 
-        for (int i = 1; i <= selectedReservation.NumberOfGuests; i++)
+        for (int i = 0; i <= selectedReservation.NumberOfGuests; i++)
         {
             Guest.Add($"Guest {GuestCounter}");
             GuestCounter++;
@@ -84,11 +86,17 @@ public class PreOrder
 
         while (true)
         {
-            string allergenDisplay = chosenAllergens.Count == 0
-                ? "- none"
-                : string.Join("\n", chosenAllergens.Select(a => "- " + a));
+            Ui AllergensList = new("Select allergen", allergenOptions.ToArray());
 
-            Ui AllergensList = new($"Guest_{selectedIndexGuest + 1} - Select allergen\n\nChosen allergens:\n{allergenDisplay}\n", allergenOptions.ToArray());
+            AllergensList.OnAfterDraw = _ =>
+            {
+                Console.WriteLine();
+                Console.WriteLine("Chosen allergens:");
+                if (chosenAllergens.Count == 0)
+                    Console.WriteLine("- none");
+                else
+                    chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
+            };
 
             int selectedAllergenIndex = AllergensList.Run();
             string choice = allergenOptions[selectedAllergenIndex];
@@ -100,7 +108,12 @@ public class PreOrder
             }
 
             if (choice == "Done")
-                break;
+            {
+                // if user is done grab list chosenAllergens and send it too
+                // datalogic layer to make user and continue making the pre-order flow
+                // 
+                return;
+            }
 
             if (choice == "None")
             {
@@ -118,7 +131,6 @@ public class PreOrder
                 chosenAllergens.RemoveAt(removeIndex);
                 continue;
             }
-
             if (!chosenAllergens.Contains(choice))
                 chosenAllergens.Add(choice);
         }
