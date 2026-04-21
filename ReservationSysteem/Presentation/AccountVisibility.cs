@@ -38,7 +38,7 @@ public static class AccountVisibility
                         reservation.Start(Session.CurrentUser);
                         break;
                     case 1:
-                        ViewReservations viewReservations = new ViewReservations();
+                        ViewReservations viewReservations = new();
                         viewReservations.Start(Session.CurrentUser);
                         break;
                     case 2:
@@ -74,6 +74,8 @@ public static class AccountVisibility
         switch (selectedIndex)
         {
             case 0:
+                ViewReservations viewReservations = new();
+                viewReservations.Start(Session.CurrentUser);
                 break;
             case 1:
                 ManageMenu manageMenu = new ManageMenu();

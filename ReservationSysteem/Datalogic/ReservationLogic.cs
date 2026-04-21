@@ -73,4 +73,9 @@ public class ReservationLogic
     {
         return _reservationAccess.GetByAccountId(accountId);
     }
+
+    public List<ReservationModel> GetAllReservations()
+    {
+        return _reservationAccess.GetAllReservations();
+    }
 }

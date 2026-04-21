@@ -40,6 +40,16 @@ public class ReservationAccess
         return Reservations;
     }
 
+    public List<ReservationModel> GetAllReservations()
+    {
+        // List with all Reservations
+        string query = $"SELECT * FROM {ReservationTable}";
+        // opens, executes, read etc
+        var Reservations = _connection.Query<ReservationModel>(query, new()).ToList();
+
+        return Reservations;
+    }
+
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 
