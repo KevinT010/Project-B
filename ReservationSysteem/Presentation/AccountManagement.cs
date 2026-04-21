@@ -121,8 +121,14 @@ public class AccountManagement
                     break;
 
                 case 5:
-                    _logic.UpdateAccount(user);
-                    Console.WriteLine("Account updated successfully.");
+                    if (_logic.UpdateAccount(user))
+                    {
+                        Console.WriteLine("Account updated successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Update failed. Check your inputs.");
+                    }
                     Console.ReadKey();
                     return;
             }
