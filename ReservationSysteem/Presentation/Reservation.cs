@@ -12,8 +12,17 @@ public class Reservation
             ReservationLogic reservationLogic = new ReservationLogic();
 
             // date parsing
-            Console.Write("Enter reservation date (dd-MM-yyyy): ");
-            string[] dateParts = Console.ReadLine().Split('-');
+            Console.Write("Enter reservation date (dd-MM-yyyy) or 'Cancel' to go back to the main menu: ");
+            string date_input = Console.ReadLine();
+            if (date_input.ToLower() == "cancel")
+            {
+                Console.WriteLine("Reservation canceled, returning to the main menu.");
+                Thread.Sleep(2000);
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                return;
+            }
+
+            string[] dateParts = date_input.Split('-');
 
             // if parts does not equal 3 check
             if (dateParts.Length != 3)
@@ -29,8 +38,17 @@ public class Reservation
             int year = Convert.ToInt32(dateParts[2]);
             DateTime date = new DateTime(year, month, day);
 
-            Console.Write("Enter reservation time (HH:mm): ");
-            string[] timeParts = Console.ReadLine().Split(':');
+            Console.Write("Enter reservation time (HH:mm) or 'Cancel' to go back to the main menu: ");
+            string time_input = Console.ReadLine();
+            if (time_input.ToLower() == "cancel")
+            {
+                Console.WriteLine("Reservation canceled, returning to the main menu.");
+                Thread.Sleep(2000);
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                return;
+            }
+
+            string[] timeParts = time_input.Split(':');
 
             // if parts does not equal 2 check
             if (timeParts.Length != 2)
@@ -66,9 +84,9 @@ public class Reservation
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());
 
             // number of guest check
-            while (numberOfGuests < 1)
+            while (numberOfGuests < 1 || numberOfGuests > 8)
             {
-                Console.WriteLine("Invalid number of guests. Press any key to go back.");
+                Console.WriteLine("Invalid number of guests. You can only select between 1 and 8 guests.\nPress any key to go back.");
                 Console.ReadKey();
                 Console.Write("Enter number of guests: "); 
                 numberOfGuests = Convert.ToInt32(Console.ReadLine());
@@ -117,8 +135,8 @@ public class Reservation
 
             if (tableOptions[selectedIndex] == "Cancel")
             {
-                Start(account);
-                return;
+               Start(account);
+               return;
             }
 
             TableModel selectedTable = availableTables[selectedIndex];

@@ -8,12 +8,13 @@ public class ReservationModel
     public int NumberOfKids { get; set; }
     public int DurationMinutes { get; set; }
     public bool Expired { get; set; }
+    public double? PriceTotal { get; set; }
 
     public ReservationModel()
     {
     }
 
-    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 120)
+    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 1, bool expired = false, double priceTotal = 0.0)
     {
         AccountId = accountid;
         TableId = tableId;
@@ -21,6 +22,7 @@ public class ReservationModel
         NumberOfGuests = numberOfGuests;
         NumberOfKids = numberOfKids;
         DurationMinutes = durationMinutes;
-        Expired = false;
+        Expired = expired;
+        PriceTotal = priceTotal;
     }
 }

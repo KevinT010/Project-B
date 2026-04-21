@@ -7,7 +7,9 @@ public class PreOrder
             return;
 
         PreOrderLogic logic = new PreOrderLogic();
+        ReservationLogic reservationlogic = new ReservationLogic();
         var reservations = logic.GetReservations(account.Id);
+        reservations = reservationlogic.GetActiveReservations(reservations);
 
         // List null check
         if (reservations.Count == 0)
@@ -22,7 +24,7 @@ public class PreOrder
 
         foreach (var r in reservations)
         {
-            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Guests: {r.NumberOfGuests}");
+            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests} | Kids: {r.NumberOfKids}");
         }
 
         options.Add("Back");

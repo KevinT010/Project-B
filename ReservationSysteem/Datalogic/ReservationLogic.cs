@@ -38,7 +38,7 @@ public class ReservationLogic
         }
     }
 
-    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int durationMinutes = 120)
+    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
         if (overlapping.Count > 0)
@@ -46,7 +46,26 @@ public class ReservationLogic
             return false;
         }
 
-        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes));
+        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes, expired, totalPrice));
         return true;
+    }
+
+    public bool IsExpired(ReservationModel reservation)
+    {
+        DateTime reservationEnd = reservation.DateTime.AddMinutes(reservation.DurationMinutes);
+        return reservationEnd < DateTime.Now;
+    }
+
+    public List<ReservationModel> GetActiveReservations(List<ReservationModel> reservations)
+    {
+        List<ReservationModel> active = [];
+        foreach (ReservationModel reservation in reservations)
+        {
+            if (!IsExpired(reservation))
+            {
+                active.Add(reservation);
+            }
+        }
+        return active;
     }
 }
