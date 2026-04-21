@@ -53,6 +53,8 @@ public static class AccountVisibility
                 ShowUserMenu();
                 break;
             case 3:
+                AccountManagement accountManagement = new AccountManagement();
+                accountManagement.Start();
                 break;
             case 4:
                 PointShop pointshop = new();
@@ -87,6 +89,10 @@ public static class AccountVisibility
                 menu.Start();
                 break;
             case 3:
+                TableMap.DisplayStatic();
+                Console.WriteLine("\nPress any key to return...");
+                Console.ReadKey();
+                ShowAdminMenu();
                 break;
             case 4:
                 break;

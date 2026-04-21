@@ -55,4 +55,10 @@ public class ReservationAccess
             VALUES (@AccountId, @TableId, @DateTime, @NumberOfGuests, @NumberOfKids, @DurationMinutes, @Expired, @PriceTotal)";
         _connection.Execute(query, reservation);
     }
+
+    public void DeleteReservationsByUser(long userId)
+    {
+        string query = $"DELETE FROM {ReservationTable} WHERE AccountId = @AccountId";
+        _connection.Execute(query, new { AccountId = userId });
+    }
 }
