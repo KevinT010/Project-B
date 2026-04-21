@@ -26,10 +26,11 @@ public class AccountRegistrationAccess
         _connection.Execute(query, new { Points = points, Id = accountId });
     }
 
-    public void UpdateAccount(AccountModel account)
+    public AccountModel UpdateAccount(AccountModel account)
     {
         string query = $"UPDATE {Table} SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Password = @Password WHERE Id = @Id";
         _connection.Execute(query, account);
+        return account;
     }
 
     public void DeleteAccount(int id)

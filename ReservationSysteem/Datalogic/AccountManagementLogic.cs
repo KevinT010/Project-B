@@ -8,25 +8,54 @@ public class AccountManagementLogic
     {
     }
 
-    public bool UpdateAccount(AccountModel account)
+    public AccountModel FirstNameValidation(string firstName)
     {
-        if (!_registrationLogic.FirstNameValidation(account.FirstName)){
-            return false;
-        }
-        if (!_registrationLogic.LastNameValidation(account.LastName)){
-            return false;
-        }
-        if (!_registrationLogic.PhoneNumberValidation(account.PhoneNumber)){
-            return false;
-        }
-        if (!string.IsNullOrWhiteSpace(account.Password))
-        {
-            if (!_registrationLogic.PasswordValidation(account.Password)){
-                return false;
-            }
-            account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
-        }
+        if (!_registrationLogic.FirstNameValidation(firstName))
+            return null;
 
+        AccountModel account = _access.UpdateAccount(Session.CurrentUser);
+        account.FirstName = firstName;
+        return account;
+    }
+    public AccountModel LastNameValidation(string lastName)
+    {
+        if (!_registrationLogic.LastNameValidation(lastName))
+            return null;
+
+        AccountModel account = _access.UpdateAccount(Session.CurrentUser);
+        account.LastName = lastName;
+        return account;
+    }
+    public AccountModel EmailValidation(string email)
+    {
+        if (!_registrationLogic.EmailValidation(email))
+            return null;
+
+        AccountModel account = _access.UpdateAccount(Session.CurrentUser);
+        account.Email = email;
+        return account;
+    }
+    public AccountModel PhoneNumberValidation(string phoneNumber)
+    {
+        if (!_registrationLogic.PhoneNumberValidation(phoneNumber))
+            return null;
+
+        AccountModel account = _access.UpdateAccount(Session.CurrentUser);
+        account.PhoneNumber = phoneNumber;
+        return account;
+    }
+    public AccountModel PasswordValidation(string password)
+    {
+        if (!_registrationLogic.PasswordValidation(password))
+            return null;
+
+        AccountModel account = _access.UpdateAccount(Session.CurrentUser);
+        account.Password = password;
+        return account;
+    }
+    public bool UpdateAccount(AccountModel account)
+
+    {
         _access.UpdateAccount(account);
         {
         }

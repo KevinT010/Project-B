@@ -1,5 +1,5 @@
+using BCrypt.Net;
 
-using  BCrypt.Net;
 public class AccountManagement
 {
     private AccountManagementLogic _logic = new();
@@ -66,6 +66,7 @@ public class AccountManagement
 
     private void EditAccount()
     {
+
         while (true)
         {
             Console.Clear();
@@ -88,48 +89,138 @@ public class AccountManagement
             switch (choice)
             {
                 case 0:
-                    Console.Write("New first name: ");
-                    string firstName = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(firstName))
-                        user.FirstName = firstName;
+                    bool isValidFirstName = false;
+                    while (!isValidFirstName)
+                    {
+                        Console.WriteLine("Enter your new firstname: (or type 'back' to return)");
+                        string firstName = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(firstName) && firstName.Trim().ToLower() == "back")
+                        {
+                            break;
+                        }
+
+                        isValidFirstName = _logic.FirstNameValidation(firstName) != null;
+                        if (!isValidFirstName)
+                        {
+                            Console.WriteLine("Firstname must be between 2 and 30 characters.");
+                        }
+                        else
+                        {
+                            user.FirstName = firstName;
+                        }
+                    }
                     break;
 
                 case 1:
-                    Console.Write("New last name: ");
-                    string lastName = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(lastName))
-                        user.LastName = lastName;
+                    bool isValidLastName = false;
+                    while (!isValidLastName)
+                    {
+                        Console.WriteLine("Enter your new lastname: (or type 'back' to return)");
+                        string lastName = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(lastName) && lastName.Trim().ToLower() == "back")
+                        {
+                            break;
+                        }
+
+                        isValidLastName = _logic.LastNameValidation(lastName) != null;
+                        if (!isValidLastName)
+                        {
+                            Console.WriteLine("Lastname must be between 2 and 30 characters.");
+                        }
+                        else
+                        {
+                            user.LastName = lastName;
+                        }
+                    }
                     break;
 
                 case 2:
-                    Console.Write("New email: ");
-                    string email = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(email))
-                        user.Email = email;
+                    bool isValidEmail = false;
+                    while (!isValidEmail)
+                    {
+                        Console.WriteLine("Enter your new email: (or type 'back' to return)");
+                        string email = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(email) && email.Trim().ToLower() == "back")
+                        {
+                            break;
+                        }
+
+                        isValidEmail = _logic.EmailValidation(email) != null;
+                        if (!isValidEmail)
+                        {
+                            Console.WriteLine("Email must contain a @ and at least one period(.) after the @, or the email is not registered.");
+                        }
+                        else
+                        {
+                            user.Email = email;
+                        }
+                    }
                     break;
 
                 case 3:
-                    Console.Write("New phone: ");
-                    string phone = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(phone))
-                        user.PhoneNumber = phone;
+                    bool isValidPhone = false;
+                    while (!isValidPhone)
+                    {
+                        Console.WriteLine("Enter your new phonenumber: (or type 'back' to return)");
+                        string phoneNumber = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Trim().ToLower() == "back")
+                        {
+                            break;
+                        }
+
+                        isValidPhone = _logic.PhoneNumberValidation(phoneNumber) != null;
+                        if (!isValidPhone)
+                        {
+                            Console.WriteLine("Phonenumber must start with 0 or +353 or + and must only contain numbers and between 5 and 15 characters.");
+                        }
+                        else
+                        {
+                            user.PhoneNumber = phoneNumber;
+                        }
+                    }
                     break;
 
                 case 4:
-                    Console.Write("New password: ");
-                    string password = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(password))
-                        user.Password = password;
+                    bool isValidPassword = false;
+                    while (!isValidPassword)
+                    {
+                        Console.WriteLine("Enter your new password (password must be between 8 and 20 characters): (or type 'back' to return)");
+                        string password = Console.ReadLine();
+
+                        if (!string.IsNullOrWhiteSpace(password) && password.Trim().ToLower() == "back")
+                        {
+                            break;
+                        }
+
+                        isValidPassword = _logic.PasswordValidation(password) != null;
+                        if (!isValidPassword)
+                        {
+                            Console.WriteLine("Password must be between 8 and 20 characters.");
+                        }
+                        else
+                        {
+                            user.Password = password;
+                        }
+                    }
                     break;
 
                 case 5:
                     if (_logic.UpdateAccount(user))
                     {
                         Console.WriteLine("Account updated successfully.");
+                        Thread.Sleep(2000);
+                        AccountManagement accountManagement = new AccountManagement();
+                        accountManagement.Start();
                     }
                     else
                     {
                         Console.WriteLine("Update failed. Check your inputs.");
+                        AccountManagement accountManagement = new AccountManagement();
+                        accountManagement.Start();
                     }
                     Console.ReadKey();
                     return;
@@ -156,8 +247,7 @@ public class AccountManagement
 
         Session.CurrentUser = null;
         Console.WriteLine("Account deleted successfully.");
-        Console.ReadKey();
-
+        Thread.Sleep(2000);
         StartMenu.Start();
     }
 }
