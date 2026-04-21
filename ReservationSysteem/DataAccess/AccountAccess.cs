@@ -10,7 +10,7 @@ public class AccountRegistrationAccess
 
     public void InsertAccount(AccountModel account)
     {
-        string query = $"INSERT INTO {Table} (FullName, Email, PhoneNumber, Password, AccountLevel) VALUES (@FullName, @Email, @PhoneNumber, @Password, @AccountLevel)";
+        string query = $"INSERT INTO {Table} (FirstName, LastName, Email, PhoneNumber, Password, AccountLevel) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Password, @AccountLevel, @Points)";
         _connection.Execute(query, account);
     }
 
@@ -18,6 +18,12 @@ public class AccountRegistrationAccess
     {
         string query = $"SELECT * FROM {Table} WHERE Email = @Email";
         return _connection.QueryFirstOrDefault<AccountModel>(query, new { Email = email });
+    }
+
+    public void UpdatePoints(Int64 accountId, int points)
+    {
+        string query = $"UPDATE {Table} SET Points = @Points WHERE Id = @Id";
+        _connection.Execute(query, new { Points = points, Id = accountId });
     }
 
 }
