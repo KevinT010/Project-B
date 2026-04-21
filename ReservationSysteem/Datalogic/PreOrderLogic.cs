@@ -7,6 +7,7 @@ public class PreOrderLogic
 {
     // Init _reservationAccess to get access to a new method we are going to use to get all the reservations based on the account 
     private ReservationAccess _reservationAccess = new();
+    private readonly GuestAccess _guestAccess = new();
 
     public List<ReservationModel> GetReservations(long accountId)
     {
@@ -17,17 +18,27 @@ public class PreOrderLogic
     }
 
     // heb een method nodig die eerst een guest aan maakt
-    public GuestModel MakeGuest(int ReservationId, int GuestNumber, string Allergens)
+    public GuestModel MakeGuest(long reservationId, int guestNumber, string? allergens)
     {
-        // Method params: int ReservationId, int GuestNumber, string Allergens
-        // omdat guest choice een guest id nodig heeft en guest moet dan bestaan    
+        GuestModel guest = new GuestModel(reservationId, guestNumber, allergens);
 
+        GuestAccess access = new GuestAccess();
+        access.InsertGuest(guest);
 
-        return null;
+        return guest;
     }
 
     // have to check if selected user allready has filled in there allergens
+    public GuestModel? GetGuest(long reservationId, int guestNumber)
+    {
+        return _guestAccess.GetGuest(reservationId, guestNumber);
+    }
 
+    public GuestChoiceModel Insert(long GuestId, long MenuItemId, int Quantity)
+    {
+        // recieves list with written params changes params too
+        return null;
+    }
 
 }
 

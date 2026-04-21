@@ -9,7 +9,7 @@ public class GuestModel
     {
     }
 
-    public GuestModel(Int64 ReservationId, int GuestNumber, string Allergens)
+    public GuestModel(Int64 ReservationId, int GuestNumber, string? Allergens)
     {
         this.ReservationId = ReservationId;
         this.GuestNumber = GuestNumber;

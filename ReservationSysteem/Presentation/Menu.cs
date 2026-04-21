@@ -143,23 +143,23 @@ public class Menu
     }
 
     public List<string> GetOrderedAvailableCategories(List<string> uniqueCategories)
-{
-    List<string> categoryOrder = new List<string> { "starter", "main course", "kids meal", "dessert", "drinks" };
-    List<string> availableCategories = new List<string>();
-
-    foreach (string expectedCategory in categoryOrder)
     {
-        foreach (string uniqueCategory in uniqueCategories)
+        List<string> categoryOrder = new List<string> { "starter", "main course", "kids meal", "dessert", "drinks" };
+        List<string> availableCategories = new List<string>();
+
+        foreach (string expectedCategory in categoryOrder)
         {
-            if (uniqueCategory.ToLower() == expectedCategory.ToLower())
+            foreach (string uniqueCategory in uniqueCategories)
             {
-                availableCategories.Add(expectedCategory);
-                break;
+                if (uniqueCategory.ToLower() == expectedCategory.ToLower())
+                {
+                    availableCategories.Add(expectedCategory);
+                    break;
+                }
             }
         }
+        return availableCategories;
     }
-    return availableCategories;
-}
 
     public void DisplayItemsInCategory(List<MenuModel> itemsToDisplay, string selectedCategory)
     {
@@ -225,11 +225,11 @@ public class Menu
         {
             emojiList.Add("🌱");
         }
-        if(Contains("alcohol"))
+        if (Contains("alcohol"))
         {
             emojiList.Add("🍷");
         }
-        if(Contains("Crustaceans"))
+        if (Contains("Crustaceans"))
         {
             emojiList.Add("🦐");
         }

@@ -1,17 +1,26 @@
+using System.Buffers;
+using System.ComponentModel.DataAnnotations;
+
 public class PreOrder
 {
+
+
+    private List<MenuModel> AllSelectedItems = [];
+
     public void Start(AccountModel account)
     {
+
         // account null check
         if (account == null)
         {
             return;
         }
-        
-        PreOrderLogic logic = new PreOrderLogic();
-        ReservationLogic reservationlogic = new ReservationLogic();
-        var reservations = logic.GetReservations(account.Id);
-        reservations = reservationlogic.GetActiveReservations(reservations);
+
+        PreOrderLogic Logic = new PreOrderLogic();
+        ReservationLogic ReservationLogic = new ReservationLogic();
+        MenuLogic MenuLogic = new MenuLogic();
+        var reservations = Logic.GetReservations(account.Id);
+        reservations = ReservationLogic.GetActiveReservations(reservations);
 
         // List null check
         if (reservations.Count == 0)
@@ -48,18 +57,51 @@ public class PreOrder
 
         for (int i = 0; i <= selectedReservation.NumberOfGuests; i++)
         {
-            Guest.Add($"Guest {GuestCounter}");
+            Guest.Add($"Guest: {GuestCounter}");
             GuestCounter++;
         }
 
+        // later .....
+        // for (int i = 0; i <= selectedReservation.NumberOfKids; i++)
+        // {
+        //     Guest.Add($"kid {GuestCounter}");
+        //     GuestCounter++;
+        // }
+
+        Guest.Add("View Order");
         Guest.Add("Edit Order");
+        Guest.Add("Confirm Order");
         Guest.Add("Back");
 
         Ui GuestList = new Ui("Select Guest", Guest.ToArray());
         int selectedIndexGuest = GuestList.Run();
 
-        if (Guest[selectedIndexGuest] == "Back")
+
+        if (Guest[selectedIndexGuest] == "View Order")
         {
+            // Ui ViewOrder = new Ui("Order List",);
+            // if guest selects view order user hass to
+            // see a list : MenuItem.Name || price || Guest who ordered it 
+
+            // Use: List<MenuModel> AllSelectedItems = [];
+            Console.Clear();
+            Console.WriteLine("Selected items:\n");
+
+            if (AllSelectedItems.Count == 0)
+            {
+                Console.WriteLine("No items selected.");
+            }
+            else
+            {
+                foreach (var item in AllSelectedItems)
+                {
+                    Console.WriteLine($"{item.Name} - €{item.Price}");
+                }
+            }
+
+            Console.WriteLine("\nPress any key...");
+            Console.ReadKey();
+
             Start(account);
             return;
         }
@@ -70,74 +112,187 @@ public class PreOrder
             // Confirm order
             return;
         }
-        // -------------------------------------------------------------------------------------------------------------------------------------------
 
-        // if guest is selected I need to make a list ui of allergens 
-        // a guest has to be able to select multiple ?? 
+        if (Guest[selectedIndexGuest] == "Confirm Order")
+        {
+            // insert
+        }
+
+
+        if (Guest[selectedIndexGuest] == "Back")
+        {
+            Start(account);
+            return;
+        }
+
+        // -------------------------------------------------------------------------------------------------------------------------------------------
 
         List<string> allergenOptions = new() { "Milk / Dairy", "Egg", "Shellfish", "Fish", "Peanuts / Nuts", "Wheat / Gluten", "Soy", "Sesame", "Alcohol", "None", "Remove item", "Back", "Done" };
         List<string> chosenAllergens = new();
 
-        // now I need a loop to select the allergens a user has and I would like
-        // to highlight and dehighlight the chosen options if this is possible
-        // after guest is done with chosing and selectedIndex = Done
-        // we need to add all the highlighted options in chosenAllergens 
-        // and pass it to datalogic layer to make guest  
 
-        // after that we need to check if user we need to implement check cuzz
-        // if guest already has selected allergens they can straight up chose things 
-        // from menu 
+        int guestNumber = selectedIndexGuest + 1;
+        GuestModel? existingGuest = Logic.GetGuest(selectedReservation.Id, guestNumber);
 
-        while (true)
+        if (existingGuest != null)
         {
-            Ui AllergensList = new("Select allergen", allergenOptions.ToArray());
+            Console.Clear();
+            Console.WriteLine($"Guest {guestNumber}");
 
-            AllergensList.OnAfterDraw = _ =>
+            if (!string.IsNullOrEmpty(existingGuest.Allergens))
             {
-                Console.WriteLine();
-                Console.WriteLine("Chosen allergens:");
-                if (chosenAllergens.Count == 0)
-                    Console.WriteLine("- none");
-                else
-                    chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
-            };
-
-            int selectedAllergenIndex = AllergensList.Run();
-            string choice = allergenOptions[selectedAllergenIndex];
-
-            if (choice == "Back")
-            {
-                Start(account);
-                return;
+                Console.WriteLine($"Allergens: {existingGuest.Allergens}");
             }
-
-            if (choice == "Done")
-            {
-                // if user is done grab list chosenAllergens and send it too
-                // datalogic layer to make user and continue making the pre-order flow
-                // 
-                return;
-            }
-
-            if (choice == "None")
-            {
-                chosenAllergens.Clear();
-                continue;
-            }
-
-            if (choice == "Remove item")
-            {
-                if (chosenAllergens.Count == 0)
-                    continue;
-
-                Ui RemoveList = new("Remove allergen", chosenAllergens.ToArray());
-                int removeIndex = RemoveList.Run();
-                chosenAllergens.RemoveAt(removeIndex);
-                continue;
-            }
-            if (!chosenAllergens.Contains(choice))
-                chosenAllergens.Add(choice);
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadKey();
         }
+        else
+        {
+            // select multiple times
+            while (true)
+            {
+                Ui AllergensList = new("Select allergen", allergenOptions.ToArray());
+
+                AllergensList.OnAfterDraw = _ =>
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Chosen allergens:");
+                    if (chosenAllergens.Count == 0)
+                        Console.WriteLine("- none");
+                    else
+                        chosenAllergens.ForEach(a => Console.WriteLine("- " + a));
+                };
+
+                int selectedAllergenIndex = AllergensList.Run();
+                string choice = allergenOptions[selectedAllergenIndex];
+
+                if (choice == "Back")
+                {
+                    Start(account);
+                    return;
+                }
+
+                if (choice == "None")
+                {
+                    chosenAllergens.Clear();
+                    continue;
+                }
+
+                if (choice == "Done")
+                {
+                    // if user is done grab list chosenAllergens and send it too
+                    // datalogic layer to make user and continue making the pre-order flow
+                    // grab chosenAllergens and pass to datalogic to create guest
+                    string? allergens = string.Join(", ", chosenAllergens);
+                    Logic.MakeGuest(selectedReservation.Id, selectedIndexGuest + 1, allergens);
+                    break;
+                    // exit loop continue with showing menu
+                }
+
+                if (choice == "Remove item")
+                {
+                    if (chosenAllergens.Count == 0)
+                        continue;
+
+                    Ui RemoveList = new("Remove allergen", chosenAllergens.ToArray());
+                    int removeIndex = RemoveList.Run();
+                    chosenAllergens.RemoveAt(removeIndex);
+                    continue;
+                }
+                if (!chosenAllergens.Contains(choice))
+                {
+                    chosenAllergens.Add(choice);
+                }
+            }
+        }
+
+
+        // now we need to see which menus there available 
+        // im very lucky cuzz we can use kevin's MenuLogic methods to:
+        // - GetAllMenus();
+        // - GetAllMenuItems
+
+        List<MenuModel> AllMenus = MenuLogic.GetAllMenus();
+        List<string> AllMenuOptions = [];
+
+        foreach (MenuModel Menu in AllMenus)
+        {
+            AllMenuOptions.Add(Menu.MenuName);
+        }
+        AllMenuOptions.Add("Back");
+
+        Ui MenuList = new Ui("Select menu", AllMenuOptions.ToArray());
+        int MenuSelected = MenuList.Run();
+
+        if (AllMenuOptions[MenuSelected] == "Back")
+        {
+            Start(account);
+            return;
+        }
+
+        MenuModel SelectedMenu = AllMenus[MenuSelected];
+
+        List<MenuModel> AllMenuItems = MenuLogic.GetAllMenuItems();
+        List<MenuModel> ItemsInMenu = [];
+
+        foreach (MenuModel item in AllMenuItems)
+            if (item.MenuName == SelectedMenu.MenuName)
+            {
+                ItemsInMenu.Add(item);
+            }
+
+        List<string> CategoryOptions = [];
+
+        foreach (MenuModel item in ItemsInMenu)
+            if (!CategoryOptions.Contains(item.FoodCategory))
+                CategoryOptions.Add(item.FoodCategory);
+
+        CategoryOptions.Add("Back");
+
+        Ui CategoryList = new Ui("Select category", CategoryOptions.ToArray());
+        int SelectedCategory = CategoryList.Run();
+
+        if (CategoryOptions[SelectedCategory] == "Back")
+        {
+            Start(account);
+            return;
+        }
+
+        string selectedCategory = CategoryOptions[SelectedCategory];
+
+        // get items in selected category
+        List<MenuModel> ItemsInCategory = [];
+
+        foreach (MenuModel item in ItemsInMenu)
+            if (item.FoodCategory == selectedCategory)
+                ItemsInCategory.Add(item);
+
+        List<string> ItemOptions = [];
+
+        foreach (MenuModel item in ItemsInCategory)
+            ItemOptions.Add($"{item.Name} - €{item.Price}");
+
+        ItemOptions.Add("Back");
+
+        Ui ItemList = new Ui("Select item", ItemOptions.ToArray());
+        int SelectedItem = ItemList.Run();
+
+        if (ItemOptions[SelectedItem] == "Back")
+        {
+            Start(account);
+            return;
+        }
+
+        MenuModel selectedItem = ItemsInCategory[SelectedItem];
+        AllSelectedItems.Add(selectedItem);
+
+        // cannot access list before declaring !??!?
+        // Need to store MenuModel selectedItem = ItemsInCategory[SelectedItem];
+        // if guest wants to view order show         List<MenuModel> AllSelectedItems = [];
+
+
+
+
 
         Console.WriteLine("Next step");
         Console.ReadKey();
@@ -179,3 +334,18 @@ public class PreOrder
 // maak een guest model aan om dat als type te kunnen gebruiken
 
 // public List<>
+
+
+// if guest is selected I need to make a list ui of allergens 
+// a guest has to be able to select multiple ?? 
+
+
+// now I need a loop to select the allergens a user has and I would like
+// to highlight and dehighlight the chosen options if this is possible
+// after guest is done with chosing and selectedIndex = Done
+// we need to add all the highlighted options in chosenAllergens 
+// and pass it to datalogic layer to make guest  
+
+// after that we need to check if user we need to implement check cuzz
+// if guest already has selected allergens they can straight up chose things 
+// from menu 
