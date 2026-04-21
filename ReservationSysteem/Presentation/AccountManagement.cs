@@ -1,3 +1,5 @@
+
+using  BCrypt.Net;
 public class AccountManagement
 {
     private AccountManagementLogic _logic = new();
