@@ -15,7 +15,7 @@ public static class AccountVisibility
     private static void ShowUserMenu()
     {
         string prompt = $"User Dashboard Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}";
-        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Pre-Order", "Logout" };
+        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Pre-Order", "Point Shop", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
 
@@ -26,8 +26,25 @@ public static class AccountVisibility
                 menu.Start();
                 break;
             case 1:
-                Reservation reservation = new();
-                reservation.Start(Session.CurrentUser);
+                string reservation_prompt = "Reservations";
+                string[] reservationOptions = { "Make a reservation", "View reservations", "Return" };
+                Ui reservationMenu = new(reservation_prompt, reservationOptions);
+                int reservationChoice = reservationMenu.Run();
+
+                switch (reservationChoice)
+                {
+                    case 0:
+                        Reservation reservation = new();
+                        reservation.Start(Session.CurrentUser);
+                        break;
+                    case 1:
+                        ViewReservations viewReservations = new ViewReservations();
+                        viewReservations.Start(Session.CurrentUser);
+                        break;
+                    case 2:
+                        ShowUserMenu();
+                        break;
+                }
                 break;
             case 2:
                 TableMap.DisplayStatic();
@@ -40,8 +57,13 @@ public static class AccountVisibility
             case 4:
                 PreOrder preOrder = new PreOrder();
                 preOrder.Start(Session.CurrentUser);
+                ShowUserMenu();
                 break;
             case 5:
+                PointShop pointshop = new();
+                pointshop.Start(Session.CurrentUser);
+                break;
+            case 6:
                 Session.Logout();
                 break;
         }

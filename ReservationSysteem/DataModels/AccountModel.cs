@@ -13,11 +13,13 @@ public class AccountModel
 
     public int AccountLevel { get; set; }
 
+    public int Points { get; set; }
+
     public AccountModel()
     {
     }
 
-    public AccountModel(string firstName, string lastName, string email, string phoneNumber, string password, int accountLevel)
+    public AccountModel(string firstName, string lastName, string email, string phoneNumber, string password, int accountLevel, int points)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -25,6 +27,7 @@ public class AccountModel
         PhoneNumber = phoneNumber;
         Password = password;
         AccountLevel = accountLevel;
+        Points = points;
     }
 
 
