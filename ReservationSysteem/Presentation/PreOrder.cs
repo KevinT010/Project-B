@@ -1,52 +1,23 @@
 public class PreOrder
 {
-    public void Start(AccountModel account)
+    public void Start(AccountModel account, ReservationModel pickedReservation)
     {
         // account null check
         if (account == null)
         {
             return;
         }
-        
-        PreOrderLogic logic = new PreOrderLogic();
-        ReservationLogic reservationlogic = new ReservationLogic();
-        var reservations = logic.GetReservations(account.Id);
-        reservations = reservationlogic.GetActiveReservations(reservations);
-
-        // List null check
-        if (reservations.Count == 0)
-        {
-            Console.WriteLine("No upcoming reservations found.");
-            Console.ReadKey();
-            return;
-        }
-
-        List<string> options = new List<string>();
-
-        foreach (var r in reservations)
-        {
-            options.Add($"{r.DateTime:dd-MM-yyyy HH:mm} | Adults: {r.NumberOfGuests - r.NumberOfKids} | Kids: {r.NumberOfKids}");
-        }
-
-        options.Add("Back");
-
-        Ui ReservationList = new Ui("Select a reservation for Pre-Order", options.ToArray());
-        int selectedIndexReservation = ReservationList.Run();
-
-        if (options[selectedIndexReservation] == "Back")
-            return;
-
-        ReservationModel selectedReservation = reservations[selectedIndexReservation];
+    
 
         Console.Clear();
         Console.WriteLine($"Selected reservation:");
-        Console.WriteLine($"{selectedReservation.DateTime} - {selectedReservation.NumberOfGuests - selectedReservation.NumberOfKids} adults - {selectedReservation.NumberOfKids} kids");
+        Console.WriteLine($"{pickedReservation.DateTime} - {pickedReservation.NumberOfGuests - pickedReservation.NumberOfKids} adults - {pickedReservation.NumberOfKids} kids");
 
         // ------------------------------------------------------------------------------------------------------------------------------------------- 
         List<string> Guest = new();
         int GuestCounter = 1;
 
-        for (int i = 0; i <= selectedReservation.NumberOfGuests; i++)
+        for (int i = 0; i <= pickedReservation.NumberOfGuests; i++)
         {
             Guest.Add($"Guest {GuestCounter}");
             GuestCounter++;
@@ -60,7 +31,8 @@ public class PreOrder
 
         if (Guest[selectedIndexGuest] == "Back")
         {
-            Start(account);
+            ViewReservations viewReservations = new();
+            viewReservations.Start(account);
             return;
         }
 
@@ -107,7 +79,7 @@ public class PreOrder
 
             if (choice == "Back")
             {
-                Start(account);
+                Start(account, pickedReservation);
                 return;
             }
 
