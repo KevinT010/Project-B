@@ -43,23 +43,9 @@ public class AccountManagement
                         break;
                 }
                 break;
-
+                
             case 2:
-                string backPrompt = "Back Menu";
-                string[] backOptions = { "Go to Visibility Menu", "Go to Start Menu" };
-                Ui backMenu = new Ui(backPrompt, backOptions);
-
-                int backChoice = backMenu.Run();
-
-                switch (backChoice)
-                {
-                    case 0:
-                        AccountVisibility.VisibilityMenu(Session.CurrentUser);
-                        break;
-                    case 1:
-                        StartMenu.Start();
-                        break;
-                }
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
         }
     }
@@ -151,7 +137,7 @@ public class AccountManagement
                         isValidEmail = _logic.EmailValidation(email) != null;
                         if (!isValidEmail)
                         {
-                            Console.WriteLine("Email must contain a @ and at least one period(.) after the @, or the email is not registered.");
+                            Console.WriteLine("Email must contain a @ and at least one period(.) after the @, or the email is already registered.");
                         }
                         else
                         {
@@ -203,7 +189,7 @@ public class AccountManagement
                         }
                         else
                         {
-                            user.Password = password;
+                            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
                         }
                     }
                     break;
