@@ -100,7 +100,7 @@ public class PreOrder
                     Console.WriteLine("Item removed.");
                 }
                 Console.Clear();
-            
+
             }
 
             Start(account, pickedReservation);
@@ -109,6 +109,15 @@ public class PreOrder
 
         if (Guest[selectedIndexGuest] == "Confirm Order")
         {
+            if (AllSelectedItems.Count == 0)
+            {
+                Console.Clear();
+                Console.WriteLine("No items selected.");
+                Console.WriteLine("Add items before confirming.");
+                Console.ReadKey();
+                Start(account, pickedReservation);
+                return;
+            }
 
             Logic.InsertGuestChoices(AllSelectedItems, pickedReservation.Id);
             Console.Clear();
