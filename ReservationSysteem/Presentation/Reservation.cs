@@ -11,13 +11,14 @@ public class Reservation
             Console.OutputEncoding = Encoding.UTF8;
             ReservationLogic reservationLogic = new();
             List<ReservationModel> b = reservationLogic.GetActiveByAccountId(account.Id);
-            if (b.Count >= 2)
+            /*if (b.Count >= 2)
             {
                 Console.WriteLine("You currently already have 2 active reservations, returning to the main menu.");
                 Thread.Sleep(2000);
                 AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 return;
             }
+            */
 
             // date parsing
             Console.Write("Enter reservation date (dd-MM-yyyy) or 'Cancel' to go back to the main menu: ");
@@ -94,7 +95,10 @@ public class Reservation
             // number of guest check
             while (numberOfGuests < 1 || numberOfGuests > 8)
             {
-                Console.WriteLine("Invalid number of guests. You can only select between 1 and 8 guests.\nPress any key to go back.");
+                if (numberOfGuests > 8)
+                    Console.WriteLine("For parties with more than 8 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
+                else if(numberOfGuests < 1)
+                    Console.WriteLine("You can not make a reservation for less than 1 person\nPress any key to go back.");
                 Console.ReadKey();
                 Console.Write("Enter number of guests: "); 
                 numberOfGuests = Convert.ToInt32(Console.ReadLine());

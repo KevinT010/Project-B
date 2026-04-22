@@ -128,7 +128,7 @@ public static class TableMap
         }
         else
         {
-            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
         }
 
         Console.Write(table);

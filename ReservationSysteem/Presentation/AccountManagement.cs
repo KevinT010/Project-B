@@ -161,7 +161,7 @@ public class AccountManagement
                         isValidPhone = _logic.PhoneNumberValidation(phoneNumber) != null;
                         if (!isValidPhone)
                         {
-                            Console.WriteLine("Phonenumber must start with 0 or +353 or + and must only contain numbers and between 5 and 15 characters.");
+                            Console.WriteLine("Phonenumber must start with 0 or + and must only contain numbers and between 5 and 15 characters.");
                         }
                         else
                         {
