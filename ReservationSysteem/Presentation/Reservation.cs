@@ -9,7 +9,15 @@ public class Reservation
         if (account != null)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            ReservationLogic reservationLogic = new ReservationLogic();
+            ReservationLogic reservationLogic = new();
+            List<ReservationModel> b = reservationLogic.GetActiveByAccountId(account.Id);
+            if (b.Count >= 2)
+            {
+                Console.WriteLine("You currently already have 2 active reservations, returning to the main menu.");
+                Thread.Sleep(2000);
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                return;
+            }
 
             // date parsing
             Console.Write("Enter reservation date (dd-MM-yyyy) or 'Cancel' to go back to the main menu: ");
@@ -117,6 +125,7 @@ public class Reservation
             }
 
 
+
             List<string> tableOptions = new List<string>();
 
             // add & convert available table object to string list  
@@ -166,11 +175,12 @@ public class Reservation
             AccountVisibility.VisibilityMenu(Session.CurrentUser);
         }
 
-        else
-        {
-            Console.WriteLine("You must be logged in to make a reservation first.\nPress any key to go back.");
-            Console.ReadKey();
-            StartMenu.Start();
-        }
+
+        Console.WriteLine("You must be logged in to make a reservation first.\nPress any key to go back.");
+        Console.ReadKey();
+        StartMenu.Start();
+        
+    
+
     }
 }
