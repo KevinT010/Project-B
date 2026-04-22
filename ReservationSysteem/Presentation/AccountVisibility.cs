@@ -95,6 +95,8 @@ public static class AccountVisibility
                 ShowAdminMenu();
                 break;
             case 4:
+                Nothing nothing = new Nothing();
+                nothing.start();
                 break;
             case 5:
                 Console.Clear();
