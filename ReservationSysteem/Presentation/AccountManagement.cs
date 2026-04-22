@@ -137,7 +137,7 @@ public class AccountManagement
                         isValidEmail = _logic.EmailValidation(email) != null;
                         if (!isValidEmail)
                         {
-                            Console.WriteLine("Email must contain a @ and at least one period(.) after the @, or the email is not registered.");
+                            Console.WriteLine("Email must contain a @ and at least one period(.) after the @, or the email is already registered.");
                         }
                         else
                         {
