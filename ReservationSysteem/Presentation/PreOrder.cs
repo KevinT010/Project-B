@@ -19,13 +19,6 @@ public class PreOrder
             GuestCounter++;
         }
 
-        // later .....
-        // for (int i = 0; i <= selectedReservation.NumberOfKids; i++)
-        // {
-        //     Guest.Add($"kid {GuestCounter}");
-        //     GuestCounter++;
-        // }
-
         Guest.Add("View Order");
         Guest.Add("Edit Order");
         Guest.Add("Confirm Order");
@@ -37,10 +30,6 @@ public class PreOrder
 
         if (Guest[selectedIndexGuest] == "View Order")
         {
-            // if guest selects view order user hass to
-            // see a list : MenuItem.Name || price || Guest who ordered it
-
-            // Use: List<MenuModel> AllSelectedItems = [];
             Console.Clear();
             Console.WriteLine("Selected items:\n");
 
@@ -85,9 +74,10 @@ public class PreOrder
                 int SelectedEdit = EditOrder.Run();
 
                 if (EditOptions[SelectedEdit] == "Back")
+                {
                     break;
+                }
 
-                // decrement quantity or remove if quantity is 1
                 var selectedOrder = AllSelectedItems[SelectedEdit];
 
                 if (selectedOrder.Quantity > 1)
@@ -135,8 +125,6 @@ public class PreOrder
             return;
         }
 
-        // -------------------------------------------------------------------------------------------------------------------------------------------
-
         List<string> allergenOptions = ["Milk / Dairy", "Egg", "Shellfish", "Fish", "Peanuts / Nuts", "Wheat / Gluten", "Soy", "Sesame", "Alcohol", "None", "Remove item", "Back", "Done"];
         List<string> chosenAllergens = [];
 
@@ -173,7 +161,7 @@ public class PreOrder
             {
                 Ui AllergensList = new("Select allergen", allergenOptions.ToArray());
 
-                AllergensList.OnAfterDraw = _ =>
+                AllergensList.OnAfterDraw = number =>
                 {
                     Console.WriteLine();
                     Console.WriteLine("Chosen allergens:");
@@ -204,13 +192,9 @@ public class PreOrder
 
                 if (choice == "Done")
                 {
-                    // if user is done grab list chosenAllergens and send it too
-                    // datalogic layer to make user and continue making the pre-order flow
-                    // grab chosenAllergens and pass to datalogic to create guest
                     string? allergens = string.Join(", ", chosenAllergens);
                     Logic.MakeGuest(pickedReservation.Id, selectedIndexGuest + 1, allergens);
                     break;
-                    // exit loop continue with showing menu
                 }
 
                 if (choice == "Remove item")
@@ -229,12 +213,6 @@ public class PreOrder
                 }
             }
         }
-
-
-        // now we need to see which menus there available 
-        // im very lucky cuzz we can use kevin's MenuLogic methods to:
-        // - GetAllMenus();
-        // - GetAllMenuItems
 
         List<MenuModel> AllMenus = MenuLogic.GetAllMenus();
         List<string> AllMenuOptions = [];
@@ -260,18 +238,22 @@ public class PreOrder
         List<MenuModel> ItemsInMenu = [];
 
         foreach (MenuModel item in AllMenuItems)
+        {
             if (item.MenuName == SelectedMenu.MenuName)
             {
                 ItemsInMenu.Add(item);
             }
+        }
 
         List<string> CategoryOptions = [];
 
         foreach (MenuModel item in ItemsInMenu)
+        {
             if (!CategoryOptions.Contains(item.FoodCategory))
             {
                 CategoryOptions.Add(item.FoodCategory);
             }
+        }
 
         CategoryOptions.Add("Back");
 
@@ -286,15 +268,15 @@ public class PreOrder
 
         string selectedCategory = CategoryOptions[SelectedCategory];
 
-        // get items in selected category
         List<MenuModel> ItemsInCategory = [];
 
         foreach (MenuModel item in ItemsInMenu)
+        {
             if (item.FoodCategory == selectedCategory)
             {
                 ItemsInCategory.Add(item);
             }
-
+        }
         List<string> ItemOptions = [];
 
         foreach (MenuModel item in ItemsInCategory)
@@ -326,9 +308,7 @@ public class PreOrder
         }
 
         Console.WriteLine("Item added to order");
-
         Console.ReadKey();
-
         Start(account, pickedReservation);
     }
 }
@@ -387,3 +367,32 @@ public class PreOrder
 // Need to store MenuModel selectedItem = ItemsInCategory[SelectedItem];
 // if guest wants to view order show         List<MenuModel> AllSelectedItems = [];
 
+// later .....
+// for (int i = 0; i <= selectedReservation.NumberOfKids; i++)
+// {
+//     Guest.Add($"kid {GuestCounter}");
+//     GuestCounter++;
+// }
+
+
+// if guest selects view order user hass to
+// see a list : MenuItem.Name || price || Guest who ordered it
+
+// Use: List<MenuModel> AllSelectedItems = [];
+// decrement quantity or remove if quantity is 1
+
+
+
+// now we need to see which menus there available 
+// im very lucky cuzz we can use kevin's MenuLogic methods to:
+// - GetAllMenus();
+// - GetAllMenuItems
+
+// get items in selected category
+// exit loop continue with showing menu
+
+// if user is done grab list chosenAllergens and send it too
+// datalogic layer to make user and continue making the pre-order flow
+// grab chosenAllergens and pass to datalogic to create guest
+
+// -------------------------------------------------------------------------------------------------------------------------------------------
