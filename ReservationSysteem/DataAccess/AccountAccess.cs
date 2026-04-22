@@ -10,7 +10,7 @@ public class AccountRegistrationAccess
 
     public void InsertAccount(AccountModel account)
     {
-        string query = $"INSERT INTO {Table} (FirstName, LastName, Email, PhoneNumber, Password, AccountLevel) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Password, @AccountLevel, @Points)";
+        string query = $"INSERT INTO {Table} (FirstName, LastName, Email, PhoneNumber, Password, AccountLevel, Points) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Password, @AccountLevel, @Points)";
         _connection.Execute(query, account);
     }
 

@@ -50,7 +50,7 @@ public class AccountManagementLogic
             return null;
 
         AccountModel account = _access.UpdateAccount(Session.CurrentUser);
-        account.Password = password;
+        account.Password = BCrypt.Net.BCrypt.HashPassword(password);
         return account;
     }
     public bool UpdateAccount(AccountModel account)
