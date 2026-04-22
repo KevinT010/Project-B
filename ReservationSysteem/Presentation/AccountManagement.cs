@@ -225,8 +225,9 @@ public class AccountManagement
         if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
             Console.WriteLine("Incorrect password.");
-            Console.ReadKey();
-            return;
+            Thread.Sleep(2000);
+            AccountManagement accountManagement = new AccountManagement();
+            accountManagement.DeleteAccount();
         }
 
         _logic.DeleteAccount(user.Id);
