@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 [TestClass]
 public class MenuLogicTest
 {
@@ -12,11 +10,9 @@ public class MenuLogicTest
 
         manageMenu.CreateMenu(name, isActive);
 
-        var menus = manageMenu.GetAllMenus();
-        var addedMenu = menus.Find(m => m.MenuName == name);
+        string actualMenuName = manageMenu.GetAllMenus()[^1].MenuName;
 
-        Assert.IsNotNull(addedMenu);
-        Assert.AreEqual(name, addedMenu.MenuName);
+        Assert.AreEqual(name, actualMenuName);
     }
 
     [TestMethod]
@@ -24,20 +20,15 @@ public class MenuLogicTest
     {
         MenuLogic manageMenu = new MenuLogic();
         manageMenu.CreateMenu("test menu", true);
-        
-        var menus = manageMenu.GetAllMenus();
-        var menu = menus.Find(m => m.MenuName == "test menu");
-        int menuId = (int)menu.Id;
+        int menuId = (int)manageMenu.GetAllMenus()[^1].Id;
+        string name = "kunpao chicken";
 
-        MenuModel newItem = new MenuModel("test menu", "kunpao chicken", "Delicious kunpao chicken", 5.99, "Main Course", "Gluten, Eggs");
-
+        MenuModel newItem = new MenuModel("test menu", name, "Delicious kunpao chicken", 5.99, "Main Course", "Gluten, Eggs");
         manageMenu.AddMenuItem(newItem, menuId);
 
-        var items = manageMenu.GetAllMenuItems();
-        var addedItem = items.Find(i => i.Name == "kunpao chicken");
+        string actualName = manageMenu.GetAllMenuItems()[^1].Name;
 
-        Assert.IsNotNull(addedItem);
-        Assert.AreEqual("kunpao chicken", addedItem.Name);
+        Assert.AreEqual(name, actualName);
     }
 
     [TestMethod]
@@ -45,17 +36,14 @@ public class MenuLogicTest
     {
         MenuLogic manageMenu = new MenuLogic();
         manageMenu.CreateMenu("Initial Menu", false);
+        int menuId = (int)manageMenu.GetAllMenus()[^1].Id;
 
-        var menus = manageMenu.GetAllMenus();
-        var menu = menus.Find(m => m.MenuName == "Initial Menu");
+        manageMenu.UpdateMenu(menuId, "Test menu update", true);
 
-        manageMenu.UpdateMenu((int)menu.Id, "Updated Test Menu", true);
+        string expected = "Test menu update";
+        string actual = manageMenu.GetAllMenus()[^1].MenuName;
 
-        menus = manageMenu.GetAllMenus();
-        var updatedMenu = menus.Find(m => m.Id == menu.Id);
-
-        Assert.IsNotNull(updatedMenu);
-        Assert.AreEqual("Updated Test Menu", updatedMenu.MenuName);
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]
@@ -63,25 +51,19 @@ public class MenuLogicTest
     {
         MenuLogic manageMenu = new MenuLogic();
         manageMenu.CreateMenu("test menu", true);
-        
-        var menus = manageMenu.GetAllMenus();
-        var menu = menus.Find(m => m.MenuName == "test menu");
-        int menuId = (int)menu.Id;
-
+        int menuId = (int)manageMenu.GetAllMenus()[^1].Id;
         MenuModel testItem = new MenuModel("test menu", "kunpao chicken update", "Delicious kunpao chicken", 5.99, "Main Course", "Gluten, Eggs");
         manageMenu.AddMenuItem(testItem, menuId);
+        
+        MenuModel addedItem = manageMenu.GetAllMenuItems()[^1];
+        addedItem.Name = "chicken update";
 
-        var items = manageMenu.GetAllMenuItems();
-        var addedItem = items.Find(i => i.Name == "kunpao chicken update");
-
-        addedItem.Name = "Updated Chicken";
         manageMenu.UpdateMenuItem(addedItem);
 
-        items = manageMenu.GetAllMenuItems();
-        var updatedItem = items.Find(i => i.Id == addedItem.Id);
+        string expected = "chicken update";
+        string actual = manageMenu.GetAllMenuItems()[^1].Name;
 
-        Assert.IsNotNull(updatedItem);
-        Assert.AreEqual("Updated Chicken", updatedItem.Name);
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]
@@ -89,13 +71,12 @@ public class MenuLogicTest
     {
         MenuLogic manageMenu = new MenuLogic();
         manageMenu.CreateMenu("test menu delete", true);
+        int menuId = (int)manageMenu.GetAllMenus()[^1].Id;
 
-        var menus = manageMenu.GetAllMenus();
-        var menu = menus.Find(m => m.MenuName == "test menu delete");
+        bool actual = manageMenu.DeleteMenu(menuId);
 
-        bool result = manageMenu.DeleteMenu((int)menu.Id);
-
-        Assert.IsTrue(result);
+        bool expected = true;
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]
@@ -103,19 +84,14 @@ public class MenuLogicTest
     {
         MenuLogic manageMenu = new MenuLogic();
         manageMenu.CreateMenu("test menu delete item", true);
-        
-        var menus = manageMenu.GetAllMenus();
-        var menu = menus.Find(m => m.MenuName == "test menu");
-        int menuId = (int)menu.Id;
-
+        int menuId = (int)manageMenu.GetAllMenus()[^1].Id;
         MenuModel testItem = new MenuModel("test menu", "kunpao chicken delete", "Delicious kunpao chicken", 5.99, "Main Course", "Gluten, Eggs");
         manageMenu.AddMenuItem(testItem, menuId);
+        int itemId = (int)manageMenu.GetAllMenuItems()[^1].Id;
 
-        var items = manageMenu.GetAllMenuItems();
-        var addedItem = items.Find(i => i.Name == "kunpao chicken delete");
+        bool actual = manageMenu.DeleteMenuItem(itemId);
 
-        bool result = manageMenu.DeleteMenuItem((int)addedItem.Id);
-
-        Assert.IsTrue(result);
+        bool expected = true;
+        Assert.AreEqual(expected, actual);
     }
 }

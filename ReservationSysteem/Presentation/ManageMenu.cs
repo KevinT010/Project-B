@@ -45,11 +45,10 @@ public class ManageMenu
         Console.Write("Enter new menu name:   (Or press Enter to cancel) ");
         string name = Console.ReadLine();
 
-        if (!string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(name))
         {
             Console.Write("Should this menu be active? (y/n): ");
             bool isActive = Console.ReadLine()?.Trim().ToLower() == "y";
-
             Logic.CreateMenu(name, isActive);
             Console.WriteLine("Menu created successfully.");
         }
@@ -92,6 +91,7 @@ public class ManageMenu
         Console.Clear();
         Console.Write($"Enter new menu name or press Enter to keep current name: ");
         string newName = Console.ReadLine();
+
         if (string.IsNullOrWhiteSpace(newName))
         {
             newName = selectedMenu.MenuName;
@@ -102,11 +102,12 @@ public class ManageMenu
 
         Logic.UpdateMenu((int)selectedMenu.Id, newName, isActive);
         Console.WriteLine("Menu updated.");
+
         Thread.Sleep(2000);
         Start();
     }
 
-public void DeleteMenu()
+    public void DeleteMenu()
     {
         Console.Clear();
         List<MenuModel> menus = Logic.GetAllMenus();
@@ -136,7 +137,6 @@ public void DeleteMenu()
         }
 
         int idToDelete = (int)menus[selectedIndex].Id;
-
         bool success = Logic.DeleteMenu(idToDelete);
 
         if (success)
@@ -183,15 +183,12 @@ public void DeleteMenu()
 
         int selectedMenuId = (int)menus[selectedMenuIndex].Id;
 
-
         Console.Clear();
-
         Console.Write("Name: ");
         string name;
         while (true)
         {
             name = Console.ReadLine() ?? "";
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 Console.Write("Name cannot be empty. Enter name: ");
@@ -212,7 +209,6 @@ public void DeleteMenu()
             {
                 break;
             }
-
             Console.Write("This name already exists. Enter a different name: ");
         }
 
@@ -229,7 +225,6 @@ public void DeleteMenu()
 
         Console.Write("Category: ");
         string category = Console.ReadLine() ?? "";
-
         while (string.IsNullOrWhiteSpace(category))
         {
             Console.Write("Category cannot be empty. Enter category: ");
@@ -247,7 +242,7 @@ public void DeleteMenu()
         Console.WriteLine("Menu item added successfully!");
         Console.WriteLine("-----------------------------");
         Console.WriteLine($"Name:        {name}");
-        Console.WriteLine($"Price:       €{price:0.00}");
+        Console.WriteLine($"Price:        {price:0.00}");
         Console.WriteLine($"Description: {description}");
         Console.WriteLine($"Category:    {category}");
         Console.WriteLine($"Allergens:   {allergens}");
@@ -260,40 +255,71 @@ public void DeleteMenu()
     public void EditMenuItem()
     {
         Console.Clear();
-        List<MenuModel> items = Logic.GetAllMenuItems();
+        List<MenuModel> menus = Logic.GetAllMenus();
 
-        if (items.Count == 0)
+        if (menus.Count == 0)
         {
-            Console.WriteLine("No menu items exist.");
+            Console.WriteLine("No menus exist.");
             Thread.Sleep(2000);
             Start();
             return;
         }
 
-        Console.Write("Enter the name of the item to edit: ");
-        string itemName = Console.ReadLine() ?? "";
-
-        MenuModel selectedItem = null;
-
-        foreach (var item in items)
+        string[] menuOptions = new string[menus.Count + 1];
+        for (int i = 0; i < menus.Count; i++)
         {
-            if (item.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase))
+            menuOptions[i] = menus[i].MenuName;
+        }
+        menuOptions[menus.Count] = "Go back";
+
+        Ui menuSelection = new Ui("Select the menu containing the item:", menuOptions);
+        int selectedMenuIndex = menuSelection.Run();
+
+        if (selectedMenuIndex == menus.Count)
+        {
+            Start();
+            return;
+        }
+
+        string selectedMenuName = menus[selectedMenuIndex].MenuName;
+        List<MenuModel> allItems = Logic.GetAllMenuItems();
+        List<MenuModel> itemsInMenu = new List<MenuModel>();
+
+        foreach (var item in allItems)
+        {
+            if (item.MenuName == selectedMenuName)
             {
-                selectedItem = item;
-                break;
+                itemsInMenu.Add(item);
             }
         }
 
-        if (selectedItem == null)
+        if (itemsInMenu.Count == 0)
         {
-            Console.WriteLine("Menu item not found.");
+            Console.WriteLine("No menu items exist in this menu.");
             Thread.Sleep(2000);
             Start();
             return;
         }
 
-        Console.Clear();
+        string[] itemOptions = new string[itemsInMenu.Count + 1];
+        for (int i = 0; i < itemsInMenu.Count; i++)
+        {
+            itemOptions[i] = itemsInMenu[i].Name;
+        }
+        itemOptions[itemsInMenu.Count] = "Cancel";
 
+        Ui itemSelection = new Ui("Select the item to edit:", itemOptions);
+        int selectedItemIndex = itemSelection.Run();
+
+        if (selectedItemIndex == itemsInMenu.Count)
+        {
+            Start();
+            return;
+        }
+
+        MenuModel selectedItem = itemsInMenu[selectedItemIndex];
+
+        Console.Clear();
         Console.Write($"Name: ");
         string newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))
@@ -330,11 +356,12 @@ public void DeleteMenu()
         }
 
         Logic.UpdateMenuItem(selectedItem);
+
         Console.Clear();
         Console.WriteLine("Menu item updated successfully!");
         Console.WriteLine("-----------------------------");
         Console.WriteLine($"Name:        {selectedItem.Name}");
-        Console.WriteLine($"Price:       €{selectedItem.Price:0.00}");
+        Console.WriteLine($"Price:        {selectedItem.Price:0.00}");
         Console.WriteLine($"Description: {selectedItem.Description}");
         Console.WriteLine($"Category:    {selectedItem.FoodCategory}");
         Console.WriteLine($"Allergens:   {selectedItem.Allergens}");
@@ -347,41 +374,84 @@ public void DeleteMenu()
     public void DeleteMenuItem()
     {
         Console.Clear();
-        Console.Write("Enter the name of the item to delete: ");
-        string itemName = Console.ReadLine() ?? "";
+        List<MenuModel> menus = Logic.GetAllMenus();
 
+        if (menus.Count == 0)
+        {
+            Console.WriteLine("No menus exist.");
+            Thread.Sleep(2000);
+            Start();
+            return;
+        }
+
+        string[] menuOptions = new string[menus.Count + 1];
+        for (int i = 0; i < menus.Count; i++)
+        {
+            menuOptions[i] = menus[i].MenuName;
+        }
+        menuOptions[menus.Count] = "Go back";
+
+        Ui menuSelection = new Ui("Select the menu containing the item:", menuOptions);
+        int selectedMenuIndex = menuSelection.Run();
+
+        if (selectedMenuIndex == menus.Count)
+        {
+            Start();
+            return;
+        }
+
+        string selectedMenuName = menus[selectedMenuIndex].MenuName;
         List<MenuModel> allItems = Logic.GetAllMenuItems();
-        MenuModel itemToDelete = null;
+        List<MenuModel> itemsInMenu = new List<MenuModel>();
 
         foreach (var item in allItems)
         {
-            if (item.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase))
+            if (item.MenuName == selectedMenuName)
             {
-                itemToDelete = item;
-                break;
+                itemsInMenu.Add(item);
             }
         }
 
-        if (itemToDelete != null)
+        if (itemsInMenu.Count == 0)
         {
-            bool success = Logic.DeleteMenuItem((int)itemToDelete.Id);
-            if (success)
-            {
-                Console.WriteLine($"Item '{itemToDelete.Name}' deleted.");
-            }
-            else
-            {
-                Console.WriteLine("Cannot delete item: it is currently in a reservation.");
-            }
+            Console.WriteLine("No menu items exist in this menu.");
+            Thread.Sleep(2000);
+            Start();
+            return;
+        }
+
+        string[] itemOptions = new string[itemsInMenu.Count + 1];
+        for (int i = 0; i < itemsInMenu.Count; i++)
+        {
+            itemOptions[i] = itemsInMenu[i].Name;
+        }
+        itemOptions[itemsInMenu.Count] = "Cancel";
+
+        Ui itemSelection = new Ui("Select the item to delete:", itemOptions);
+        int selectedItemIndex = itemSelection.Run();
+
+        if (selectedItemIndex == itemsInMenu.Count)
+        {
+            Start();
+            return;
+        }
+
+        MenuModel itemToDelete = itemsInMenu[selectedItemIndex];
+
+        bool success = Logic.DeleteMenuItem((int)itemToDelete.Id);
+        if (success)
+        {
+            Console.WriteLine($"Item '{itemToDelete.Name}' deleted.");
         }
         else
         {
-            Console.WriteLine("Menu item not found.");
+            Console.WriteLine("Cannot delete item: it is currently in a reservation.");
         }
 
         Thread.Sleep(2000);
         Start();
     }
+
     public void Return()
     {
         Console.Clear();

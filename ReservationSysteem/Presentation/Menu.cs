@@ -191,7 +191,7 @@ public class Menu
 
         var emojiList = new List<string>();
 
-        bool Contains(string value) => allergens.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0;
+        bool Contains(string value) => allergens.ToLower().Contains(value.ToLower());
 
         if (Contains("milk") || Contains("dairy") || Contains("lactose"))
         {
