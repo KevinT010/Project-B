@@ -9,7 +9,7 @@ public class GuestChoiceModel
     {
     }
 
-    public GuestChoiceModel(int MenuItemId, int GuestId, int Quantity)
+    public GuestChoiceModel(long MenuItemId, long GuestId, int Quantity)
     {
         this.MenuItemId = MenuItemId;
         this.GuestId = GuestId; 
