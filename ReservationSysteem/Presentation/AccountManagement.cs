@@ -1,4 +1,3 @@
-using BCrypt.Net;
 
 public class AccountManagement
 {
@@ -43,7 +42,7 @@ public class AccountManagement
                         break;
                 }
                 break;
-                
+
             case 2:
                 AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
@@ -171,6 +170,20 @@ public class AccountManagement
                     break;
 
                 case 4:
+                    Console.WriteLine("Enter your current password: (or type 'back' to return)");
+                    string currentPassword = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(currentPassword) || !_logic.VerifyPassword(user, currentPassword))
+                    {
+                        Console.WriteLine("Current password is incorrect.");
+                        Thread.Sleep(2000);
+                        break;
+                    }
+                    else if (currentPassword.Trim().ToLower() == "back")
+                    {
+                        break;
+                    }
+
                     bool isValidPassword = false;
                     while (!isValidPassword)
                     {
@@ -182,14 +195,10 @@ public class AccountManagement
                             break;
                         }
 
-                        isValidPassword = _logic.PasswordValidation(password) != null;
+                        isValidPassword = _logic.UpdatePassword(user, password);
                         if (!isValidPassword)
                         {
                             Console.WriteLine("Password must be between 8 and 20 characters.");
-                        }
-                        else
-                        {
-                            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
                         }
                     }
                     break;

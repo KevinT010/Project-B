@@ -7,6 +7,8 @@ public class ReservationAccess
 {
     private SqliteConnection _connection = new SqliteConnection("Data Source=DataSources/project.db");
     private string ReservationTable = "Reservation";
+    private string GuestTable = "Guest";
+    private string GuestChoiceTable = "GuestChoice";
 
     public List<ReservationModel> GetOverlappingReservations(Int64 tableId, DateTime requestedStart, int durationMinutes)
     {
@@ -57,7 +59,7 @@ public class ReservationAccess
                         LEFT JOIN Account acc ON res.AccountId = acc.Id";
         return _connection.Query<ReservationModel>(query).ToList();
     }
-    
+
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 
@@ -68,7 +70,13 @@ public class ReservationAccess
 
     public void DeleteReservationsByUser(long userId)
     {
-        string query = $"DELETE FROM {ReservationTable} WHERE AccountId = @AccountId";
-        _connection.Execute(query, new { AccountId = userId });
+        string deleteGuestChoices = $"DELETE FROM {GuestChoiceTable} WHERE GuestId IN (SELECT guest.Id FROM {GuestTable} guest JOIN {ReservationTable} reservation ON guest.ReservationId = reservation.Id WHERE reservation.AccountId = @AccountId);";
+        _connection.Execute(deleteGuestChoices, new { AccountId = userId });
+
+        string deleteGuests = $"DELETE FROM {GuestTable} WHERE ReservationId IN (SELECT Id FROM {ReservationTable} WHERE AccountId = @AccountId);";
+        _connection.Execute(deleteGuests, new { AccountId = userId });
+
+        string deleteReservations = $"DELETE FROM {ReservationTable} WHERE AccountId = @AccountId";
+        _connection.Execute(deleteReservations, new { AccountId = userId });
     }
 }
