@@ -1,7 +1,5 @@
 using Microsoft.Data.Sqlite;
 using Dapper;
-using System.Collections;
-using SQLitePCL;
 
 public class ReservationAccess
 {
