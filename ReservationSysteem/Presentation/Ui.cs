@@ -12,15 +12,9 @@ public class Ui
         Prompt = prompt;
         Options = options;
         SelectedIndex = 0;
-        CenterConsole();
+
     }
 
-    private void CenterConsole()
-    {
-        Console.WindowWidth = 100;
-        Console.WindowHeight = 30;
-        Console.SetWindowPosition(0, 0);
-    }
 
     public void DisplayOptions()
     {
@@ -53,7 +47,7 @@ public class Ui
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("┃  ┃┃┗┫┃╺┓   ┃  ┃┃┗┫┃╺┓   ┃╻┃┃ ┃");
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("★ ");
+        Console.WriteLine(" ★");
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("  ┗━╸╹╹ ╹┗━┛   ┗━╸╹╹ ╹┗━┛   ┗┻┛┗━┛");
         Console.ForegroundColor = ConsoleColor.Yellow;
