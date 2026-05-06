@@ -2,7 +2,7 @@ public static class StartMenu
 {
     public static void Start()
     {
-        string prompt = "Welcome to Reservation System";
+        string prompt = "A chinese family restaurant reservation system";
         string[] options = { "Account Registration", "Account Login", "Menu's", "Exit" };
         Ui StartMenu = new Ui(prompt, options);
         int selectedIndex = StartMenu.Run();

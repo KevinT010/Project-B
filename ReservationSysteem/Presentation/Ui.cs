@@ -37,6 +37,9 @@ public class Ui
 
         string border = "+" + dashes + "+";
 
+        Console.WriteLine("╻  ╻┏┓╻┏━╸   ╻  ╻┏┓╻┏━╸   ╻ ╻╻ ╻");
+        Console.WriteLine("┃  ┃┃┗┫┃╺┓   ┃  ┃┃┗┫┃╺┓   ┃╻┃┃ ┃");
+        Console.WriteLine("┗━╸╹╹ ╹┗━┛   ┗━╸╹╹ ╹┗━┛   ┗┻┛┗━┛");
         Console.WriteLine(Prompt);
         Console.WriteLine(border);
 
