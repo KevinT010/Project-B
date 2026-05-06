@@ -1,67 +1,88 @@
-using BCrypt.Net;
-
-public class AccountValidationLogic
+public class AccountManagementLogic
 {
     private AccountRegistrationAccess _access = new();
+    private ReservationAccess _reservationAccess = new();
+    private AccountRegistrationLogic _registrationLogic = new();
 
-    public bool FirstNameValidation(string firstName)
+    public AccountManagementLogic()
     {
-        if (firstName.Length < 2 || firstName.Length > 30)
-        {
-            return false;
-        }
-        return true;
     }
 
-    public bool LastNameValidation(string lastName)
+    public bool VerifyPassword(AccountModel account, string currentPassword)
     {
-        if (lastName.Length < 2 || lastName.Length > 30)
-        {
-            return false;
-        }
-        return true;
+        return BCrypt.Net.BCrypt.Verify(currentPassword, account.Password);
     }
 
-    public bool EmailValidation(string email)
+    public bool UpdatePassword(AccountModel account, string newPassword)
     {
-        int atIndex = email.IndexOf("@");
-        int dotIndex = email.LastIndexOf(".");
-        
-        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) == null)
+        if (_registrationLogic.PasswordValidation(newPassword))
         {
+            account.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             return true;
         }
+
         return false;
     }
 
-    public bool PhoneNumberValidation(string phoneNumber)
+    public AccountModel FirstNameValidation(string firstName)
     {
-        if ((phoneNumber.StartsWith("0") || phoneNumber.StartsWith("+") || phoneNumber.StartsWith("+353")) && phoneNumber.Length >= 5 && phoneNumber.Length <= 15)
+        if (!_registrationLogic.FirstNameValidation(firstName))
         {
-            try
-            {
-                Convert.ToInt64(phoneNumber);
-            }
-            catch(FormatException)
-            {
-                return false;
-            }
-            return true;
+            return null;
         }
-        return false;
+
+        return Session.CurrentUser;
     }
 
-    public bool PasswordValidation(string password)
+    public AccountModel LastNameValidation(string lastName)
     {
-        if (password.Length < 8 || password.Length > 20)
+        if (!_registrationLogic.LastNameValidation(lastName))
         {
-            return false;
+            return null;
         }
+
+        return Session.CurrentUser;
+    }
+
+    public AccountModel EmailValidation(string email)
+    {
+        if (!_registrationLogic.EmailValidation(email))
+        {
+            return null;
+        }
+
+        return Session.CurrentUser;
+    }
+
+    public AccountModel PhoneNumberValidation(string phoneNumber)
+    {
+        if (!_registrationLogic.PhoneNumberValidation(phoneNumber))
+        {
+            return null;
+        }
+
+        return Session.CurrentUser;
+    }
+
+    public AccountModel PasswordValidation(string password)
+    {
+        if (!_registrationLogic.PasswordValidation(password))
+        {
+            return null;
+        }
+
+        return Session.CurrentUser;
+    }
+
+    public bool UpdateAccount(AccountModel account)
+    {
+        _access.UpdateAccount(account);
         return true;
+    }
+
+    public void DeleteAccount(long id)
+    {
+        _reservationAccess.DeleteReservationsByUser(id);
+        _access.DeleteAccount((int)id);
     }
 }
-
-
-
-
-
