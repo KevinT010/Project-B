@@ -37,10 +37,14 @@ public class Ui
 
         string border = "+" + dashes + "+";
 
+        Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("╻  ╻┏┓╻┏━╸   ╻  ╻┏┓╻┏━╸   ╻ ╻╻ ╻");
         Console.WriteLine("┃  ┃┃┗┫┃╺┓   ┃  ┃┃┗┫┃╺┓   ┃╻┃┃ ┃");
         Console.WriteLine("┗━╸╹╹ ╹┗━┛   ┗━╸╹╹ ╹┗━┛   ┗┻┛┗━┛");
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(Prompt);
+        Console.ResetColor();
         Console.WriteLine(border);
 
         for (int i = 0; i < Options.Length; i++)
