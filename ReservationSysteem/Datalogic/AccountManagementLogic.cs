@@ -80,9 +80,11 @@ public class AccountManagementLogic
         return true;
     }
 
-    public void DeleteAccount(long id)
+    public bool DeleteAccount(long id)
     {
         _reservationAccess.DeleteReservationsByUser(id);
         _access.DeleteAccount((int)id);
+        Session.CurrentUser = null;
+        return true;
     }
 }

@@ -239,11 +239,18 @@ public class AccountManagement
             accountManagement.DeleteAccount();
         }
 
-        _logic.DeleteAccount(user.Id);
-
-        Session.CurrentUser = null;
-        Console.WriteLine("Account deleted successfully.");
-        Thread.Sleep(2000);
-        StartMenu.Start();
+        if (_logic.DeleteAccount(user.Id))
+        {
+            Console.WriteLine("Account deleted successfully.");
+            Thread.Sleep(2000);
+            StartMenu.Start();
+        }
+        else
+        {
+            Console.WriteLine("Account deletion failed.");
+            Thread.Sleep(2000);
+            AccountManagement accountManagement = new AccountManagement();
+            accountManagement.DeleteAccount();
+        }
     }
 }
