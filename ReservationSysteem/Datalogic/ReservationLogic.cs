@@ -52,7 +52,7 @@ public class ReservationLogic
 
     public int GetKidsInPlayArea(DateTime requestedStart, int durationMinutes = 120)
     {
-        var overlapping = _reservationAccess.GetOverlappingPlayAreaReservations(requestedStart, durationMinutes);
+        var overlapping = _reservationAccess.GetOverlappingKidsPlayAreaReservations(requestedStart, durationMinutes);
         int totalKids = 0;
 
         foreach (var reservation in overlapping)

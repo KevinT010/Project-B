@@ -30,7 +30,7 @@ public class ReservationAccess
         return overlappingReservations;
     }
 
-    public List<ReservationModel> GetOverlappingPlayAreaReservations(DateTime requestedStart, int durationMinutes)
+    public List<ReservationModel> GetOverlappingKidsPlayAreaReservations(DateTime requestedStart, int durationMinutes)
     {
         string query = $"SELECT * FROM {ReservationTable} WHERE KidsPlayArea > 0";
         var playAreaReservations = _connection.Query<ReservationModel>(query).ToList();
