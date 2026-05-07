@@ -38,7 +38,7 @@ public class ReservationLogic
         }
     }
 
-    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
+    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids,int kidsPlayArea, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
         if (overlapping.Count > 0)
@@ -46,7 +46,33 @@ public class ReservationLogic
             return false;
         }
 
-        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes, expired, totalPrice));
+        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes, expired, totalPrice, kidsPlayArea));
+        return true;
+    }
+
+    public int GetKidsInPlayArea(DateTime requestedStart, int durationMinutes = 120)
+    {
+        var overlapping = _reservationAccess.GetOverlappingPlayAreaReservations(requestedStart, durationMinutes);
+        int totalKids = 0;
+
+        foreach (var reservation in overlapping)
+        {
+            totalKids += reservation.KidsPlayArea;
+        }
+
+        return totalKids;
+    }
+
+    public bool CheckPlayAreaCapacity(DateTime requestedStart, int numberOfKids, int durationMinutes = 120)
+    {
+        int currentKidsInPlayArea = GetKidsInPlayArea(requestedStart, durationMinutes);
+        if (currentKidsInPlayArea + numberOfKids > 10)
+        {
+            return false;
+        }
+
+        
+        
         return true;
     }
 

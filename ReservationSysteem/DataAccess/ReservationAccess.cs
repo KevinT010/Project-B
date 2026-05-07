@@ -30,6 +30,28 @@ public class ReservationAccess
         return overlappingReservations;
     }
 
+    public List<ReservationModel> GetOverlappingPlayAreaReservations(DateTime requestedStart, int durationMinutes)
+    {
+        string query = $"SELECT * FROM {ReservationTable} WHERE KidsPlayArea > 0";
+        var playAreaReservations = _connection.Query<ReservationModel>(query).ToList();
+
+        DateTime requestedEnd = requestedStart.AddMinutes(durationMinutes);
+        var overlappingReservations = new List<ReservationModel>();
+
+        foreach (ReservationModel reservation in playAreaReservations)
+        {
+            DateTime existingStart = reservation.DateTime;
+            DateTime existingEnd = reservation.DateTime.AddMinutes(reservation.DurationMinutes);
+
+            if (requestedStart < existingEnd && requestedEnd > existingStart)
+            {
+                overlappingReservations.Add(reservation);
+            }
+        }
+
+        return overlappingReservations;
+    }
+
     public List<ReservationModel> GetByAccountId(long accountId)
     {
         // List with Reservations based on account id
@@ -61,8 +83,8 @@ public class ReservationAccess
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 
-            (AccountId, TableId, DateTime, NumberOfGuests, NumberOfKids, DurationMinutes, Expired, PriceTotal) 
-            VALUES (@AccountId, @TableId, @DateTime, @NumberOfGuests, @NumberOfKids, @DurationMinutes, @Expired, @PriceTotal)";
+            (AccountId, TableId, DateTime, NumberOfGuests, NumberOfKids, DurationMinutes, Expired, PriceTotal, KidsPlayArea) 
+            VALUES (@AccountId, @TableId, @DateTime, @NumberOfGuests, @NumberOfKids, @DurationMinutes, @Expired, @PriceTotal, @KidsPlayArea)";
         _connection.Execute(query, reservation);
     }
 

@@ -97,10 +97,10 @@ public class Reservation
             {
                 if (numberOfGuests > 8)
                     Console.WriteLine("For parties with more than 8 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
-                else if(numberOfGuests < 1)
+                else if (numberOfGuests < 1)
                     Console.WriteLine("You can not make a reservation for less than 1 person\nPress any key to go back.");
                 Console.ReadKey();
-                Console.Write("Enter number of guests: "); 
+                Console.Write("Enter number of guests: ");
                 numberOfGuests = Convert.ToInt32(Console.ReadLine());
             }
 
@@ -111,8 +111,67 @@ public class Reservation
             {
                 Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
                 Console.ReadKey();
-                Console.Write("Enter number of kids: "); 
+                Console.Write("Enter number of kids: ");
                 numberOfKids = Convert.ToInt32(Console.ReadLine());
+            }
+
+            int kidsPlayArea = 0;
+
+            if (numberOfKids > 0)
+            {
+                int currentKidsInPlayArea = reservationLogic.GetKidsInPlayArea(requestedDateTime, 120);
+                int availableSpots = 10 - currentKidsInPlayArea;
+
+                Console.WriteLine("\n--- Kids Play Area Availability ---");
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i < currentKidsInPlayArea)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("[Taken] ");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("[Open]  ");
+                    }
+                    
+                    if (i == 4) 
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                Console.ResetColor();
+                Console.WriteLine($"\n\n({availableSpots} out of 10 spots remaining)");
+                Console.WriteLine("-----------------------------------\n");
+            }
+
+            while (numberOfKids > 0)
+            {
+                Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
+                string playAreaInput = Console.ReadLine().ToLower();
+
+                if (playAreaInput == "yes")
+                {
+                    if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
+                    {
+                        kidsPlayArea = numberOfKids;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
+                        Console.ReadKey();
+                    }
+                }
+                else if (playAreaInput == "no")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                }
             }
 
             // ----------------------------------------------------------------------------------------------------------------------------------
@@ -148,13 +207,13 @@ public class Reservation
 
             if (tableOptions[selectedIndex] == "Cancel")
             {
-               Start(account);
-               return;
+                Start(account);
+                return;
             }
 
             TableModel selectedTable = availableTables[selectedIndex];
 
-            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids);
+            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids, kidsPlayArea);
 
             if (success)
             {
@@ -167,6 +226,7 @@ public class Reservation
                 Console.WriteLine($"   Kids:    {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
                 Console.WriteLine($"   Reward points earned:  +20");
+                Console.WriteLine($"   Kids in play area:  {kidsPlayArea}");
             }
 
             else
@@ -183,8 +243,8 @@ public class Reservation
         Console.WriteLine("You must be logged in to make a reservation first.\nPress any key to go back.");
         Console.ReadKey();
         StartMenu.Start();
-        
-    
+
+
 
     }
 }
