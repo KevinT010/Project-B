@@ -46,12 +46,15 @@ public class AccountManagementLogic
 
     public AccountModel EmailValidation(string email)
     {
-        if (!_registrationLogic.EmailValidation(email))
+        int atIndex = email.IndexOf("@");
+        int dotIndex = email.LastIndexOf(".");
+
+        if (atIndex > 0 && dotIndex > atIndex && _access.GetByEmail(email) == null)
         {
-            return null;
+            return Session.CurrentUser;
         }
 
-        return Session.CurrentUser;
+        return null;
     }
 
     public AccountModel PhoneNumberValidation(string phoneNumber)
