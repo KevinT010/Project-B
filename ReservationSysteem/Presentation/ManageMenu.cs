@@ -89,7 +89,7 @@ public class ManageMenu
         MenuModel selectedMenu = menus[selectedIndex];
 
         Console.Clear();
-        Console.Write($"Enter new menu name or press Enter to keep current name: ");
+        Console.Write($"Enter new menu name or press Enter to keep current name({selectedMenu.MenuName}): ");
         string newName = Console.ReadLine();
 
         if (string.IsNullOrWhiteSpace(newName))
@@ -320,35 +320,36 @@ public class ManageMenu
         MenuModel selectedItem = itemsInMenu[selectedItemIndex];
 
         Console.Clear();
-        Console.Write($"Name: ");
+        Console.WriteLine("Enter new values or press enter to keep current values.");
+        Console.Write($"Name({selectedItem.Name}): ");
         string newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))
         {
             selectedItem.Name = newName;
         }
 
-        Console.Write($"Price: ");
+        Console.Write($"Price({selectedItem.Price:0.00}): ");
         string priceInput = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(priceInput) && double.TryParse(priceInput, out double newPrice) && newPrice >= 0)
         {
             selectedItem.Price = newPrice;
         }
 
-        Console.Write($"Description: ");
+        Console.Write($"Description({selectedItem.Description}): ");
         string newDescription = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newDescription))
         {
             selectedItem.Description = newDescription;
         }
 
-        Console.Write($"Category: ");
+        Console.Write($"Category({selectedItem.FoodCategory}): ");
         string newCategory = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newCategory))
         {
             selectedItem.FoodCategory = newCategory;
         }
 
-        Console.Write($"Allergens: ");
+        Console.Write($"Allergens({selectedItem.Allergens}): ");
         string newAllergens = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newAllergens))
         {
