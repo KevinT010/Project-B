@@ -88,6 +88,24 @@ public class Reservation
                 return;
             }
 
+            OperatingHourLogic operatingHourLogic = new OperatingHourLogic();
+            
+            if (!operatingHourLogic.IsOpen(requestedDateTime))
+            {
+                Console.WriteLine("The restaurant is closed at this time. Please choose a time during opening hours.\nPress any key to go back.");
+                Console.ReadKey();
+                Start(account);
+                return;
+            }
+
+            if (!operatingHourLogic.IsOpen(requestedDateTime.AddMinutes(120)))
+            {
+                Console.WriteLine("Please choose an earlier time.\nPress any key to go back.");
+                Console.ReadKey();
+                Start(account);
+                return;
+            }
+
 
             Console.Write("Enter number of total guests: ");
             int numberOfGuests = Convert.ToInt32(Console.ReadLine());

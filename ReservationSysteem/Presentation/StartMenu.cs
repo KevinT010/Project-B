@@ -3,7 +3,7 @@ public static class StartMenu
     public static void Start()
     {
         string prompt = "A chinese family restaurant reservation system";
-        string[] options = { "Account Registration", "Account Login", "Menu's", "Exit" };
+        string[] options = { "Account Registration", "Account Login", "Menu's", "Operating Hours", "Exit" };
         Ui StartMenu = new Ui(prompt, options);
         int selectedIndex = StartMenu.Run();
 
@@ -22,6 +22,10 @@ public static class StartMenu
                 menu.Start();
                 break;
             case 3:
+                OperatingHour operatingHour = new OperatingHour();
+                operatingHour.Start();
+                break;  
+            case 4:
                 Console.WriteLine("Thank you for using the reservation system");
                 Environment.Exit(0);
                 break;

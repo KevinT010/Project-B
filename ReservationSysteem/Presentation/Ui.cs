@@ -30,14 +30,9 @@ public class Ui
 
         int width = longest + 8;
 
-        string dashes = "";
-
-        for (int i = 0; i < width; i++)
-        {
-            dashes += "-";
-        }
-
-        string border = "+" + dashes + "+";
+        string horizontal = new string('─', width);
+        string topBorder = "╔" + horizontal + "╗";
+        string bottomBorder = "╚" + horizontal + "╝";
 
         
         Console.ForegroundColor = ConsoleColor.Red;
@@ -53,14 +48,14 @@ public class Ui
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(Prompt);
         Console.ResetColor();
-        Console.WriteLine(border);
+        Console.WriteLine(topBorder);
 
         for (int i = 0; i < Options.Length; i++)
         {
             string currentOption = Options[i];
             string prefix = i == SelectedIndex ? "> " : "  ";
-            string line = $"| {prefix}{currentOption}".PadRight(width + 1) + "|";
-
+            string line = $"│ {prefix}{currentOption}".PadRight(width + 1) + "│";
+            
             if (i == SelectedIndex)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -75,7 +70,7 @@ public class Ui
             Console.WriteLine(line);
             Console.ResetColor();
         }
-        Console.WriteLine(border);
+        Console.WriteLine(bottomBorder);
     }
 
     public int Run()
