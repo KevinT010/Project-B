@@ -24,8 +24,12 @@ public static class StartMenu
             case 3:
                 OperatingHour operatingHour = new OperatingHour();
                 operatingHour.Start();
-                break;  
+                break; 
             case 4:
+                AdminAccountManagement adminAccountManagement = new AdminAccountManagement();
+                adminAccountManagement.Start();
+                break; 
+            case 5:
                 Console.WriteLine("Thank you for using the reservation system");
                 Environment.Exit(0);
                 break;

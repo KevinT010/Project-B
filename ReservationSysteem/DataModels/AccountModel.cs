@@ -15,6 +15,8 @@ public class AccountModel
 
     public int Points { get; set; }
 
+    public bool IsAdmin => AccountLevel == 2;
+
     public AccountModel()
     {
     }

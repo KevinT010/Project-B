@@ -10,7 +10,7 @@ public class AdminAccountManagement
 
         if (!string.IsNullOrWhiteSpace(email) && email.Trim().ToLower() == "back")
         {
-            StartMenu.Start();
+            AccountVisibility.VisibilityMenu(Session.CurrentUser);
             return;
         }
 
@@ -44,7 +44,7 @@ public class AdminAccountManagement
                 DeleteAccount(user);
                 break;
             case 2:
-                Start();
+                AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
         }
     }
@@ -55,7 +55,7 @@ public class AdminAccountManagement
         {
             Console.Clear();
             string prompt = $"Edit Account: {user.FirstName} {user.LastName}";
-            string[] options = { "Edit First Name", "Edit Last Name", "Edit Email", "Edit Phone Number", "Save & Back" };
+            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number", "Back" };
             Ui menu = new Ui(prompt, options);
 
             int choice = menu.Run();
@@ -127,17 +127,11 @@ public class AdminAccountManagement
                     break;
 
                 case 4:
-                    if (_logic.UpdateAccount(user))
                     {
-                        Console.WriteLine("Account successfully updated.");
+                        AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                        break;
                     }
-                    else
-                    {
-                        Console.WriteLine("Update failed. Please check your inputs.");
-                    }
-                    Console.ReadKey();
-                    UserMenu(user);
-                    return;
+
             }
         }
     }
