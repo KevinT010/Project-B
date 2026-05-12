@@ -103,7 +103,7 @@ public class AdminAccountManagement
                     }
                     if (_logic.EmailValidation(email) == null)
                     {
-                        Console.WriteLine("Email must contain a '@' and at least one period after it.");
+                        Console.WriteLine("Email must contain a '@' and at least one period after it or already exist.");
                         Console.ReadKey();
                         break;
                     }
