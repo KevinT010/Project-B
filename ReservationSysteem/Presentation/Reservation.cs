@@ -239,11 +239,14 @@ public class Reservation
                 rewardLogic.GiveReservationPoints(Session.CurrentUser);
                 Console.WriteLine($"\n✅ Reservation confirmed!");
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
-                Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm}");
+                Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm} -> {requestedDateTime.AddMinutes(120): HH:MM}");
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
                 Console.WriteLine($"   Kids:    {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
-                Console.WriteLine($"   Reward points earned:  +20");
+                if(account.Points == 20000)
+                    Console.WriteLine($"   You have reached the maximum amount of 20000 points, you have earned 0 from this reservation");
+                else
+                    Console.WriteLine($"   Reward points earned:  +20");
                 Console.WriteLine($"   Kids in play area:  {kidsPlayArea}");
             }
 
@@ -252,6 +255,8 @@ public class Reservation
                 Console.WriteLine("❌ Reservation failed. The table was just taken. Please try again.");
             }
 
+            if(Session.CurrentUser.Points >= 200)
+                Console.WriteLine("\nYou have enough points to claim a voucher!");
             Console.WriteLine("\nPress any key to return.");
             Console.ReadKey();
             AccountVisibility.VisibilityMenu(Session.CurrentUser);

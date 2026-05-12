@@ -14,6 +14,7 @@ public class AccountModel
     public int AccountLevel { get; set; }
 
     public int Points { get; set; }
+    public int DesertVouchers { get; set; }
 
     public bool IsAdmin => AccountLevel == 2;
 
@@ -21,7 +22,7 @@ public class AccountModel
     {
     }
 
-    public AccountModel(string firstName, string lastName, string email, string phoneNumber, string password, int accountLevel, int points)
+    public AccountModel(string firstName, string lastName, string email, string phoneNumber, string password, int accountLevel, int points, int desertVouchers)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -30,6 +31,7 @@ public class AccountModel
         Password = password;
         AccountLevel = accountLevel;
         Points = points;
+        DesertVouchers = desertVouchers;
     }
 
 

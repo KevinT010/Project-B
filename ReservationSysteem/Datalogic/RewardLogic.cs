@@ -6,18 +6,34 @@ public class RewardLogic
     {
         int earnedPoints = (int)priceTotal;
         account.Points += earnedPoints;
+        if (account.Points > 20000)
+        {
+            account.Points = 20000;
+        }
         _access.UpdatePoints(account.Id, account.Points);
     }
 
-    public void SpendPoints(AccountModel account, int points)
+    public void Add_Vouchers(AccountModel account, int amount)
     {
-        account.Points -= points;
+        account.DesertVouchers += amount;
+        account.Points -= amount * 200;
         _access.UpdatePoints(account.Id, account.Points);
     }
 
     public void GiveReservationPoints(AccountModel account)
     {
         account.Points += 20;
+        if (account.Points > 20000)
+        {
+            account.Points = 20000;
+        }
+        _access.UpdatePoints(account.Id, account.Points);
+    }
+    
+    public void Remove_Vouchers(AccountModel account, int amount)
+    {
+        account.DesertVouchers -= amount;
+        account.Points += amount * 200;
         _access.UpdatePoints(account.Id, account.Points);
     }
 }

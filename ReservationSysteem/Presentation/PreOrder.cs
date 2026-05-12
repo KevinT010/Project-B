@@ -8,6 +8,7 @@ public class PreOrder
     private List<GuestChoiceModel> AllSelectedItems = [];
     private PreOrderLogic Logic = new PreOrderLogic();
     private MenuLogic MenuLogic = new MenuLogic();
+    private RewardLogic RewardLogic = new();
     private ViewReservations viewReservations = new();
 
     public void Start(AccountModel account, ReservationModel pickedReservation)
@@ -355,6 +356,7 @@ public class PreOrder
         Logic.InsertGuestChoices(AllSelectedItems, pickedReservation.Id);
         Console.Clear();
         Console.WriteLine("Order placed!");
+        RewardLogic.GivePoints(account, (double)pickedReservation.PriceTotal);
         Console.WriteLine("Press any key");
         Console.ReadKey();
         viewReservations.Start(account);
