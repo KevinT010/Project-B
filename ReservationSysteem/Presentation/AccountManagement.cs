@@ -58,11 +58,11 @@ public class AccountManagement
             string prompt = "Edit Account";
             string[] options =
             {
-                "Edit First Name",
-                "Edit Last Name",
-                "Edit Email",
-                "Edit Phone",
-                "Edit Password",
+                "Edit first name",
+                "Edit last name",
+                "Edit email",
+                "Edit phonenumber",
+                "Edit password",
                 "Save & Back"
             };
 
