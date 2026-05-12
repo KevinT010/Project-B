@@ -55,7 +55,7 @@ public class AdminAccountManagement
         {
             Console.Clear();
             string prompt = $"Edit Account: {user.FirstName} {user.LastName}";
-            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number","Change password", "Back" };
+            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number","Change password", "Save changes", "Back" };
             Ui menu = new Ui(prompt, options);
 
             int choice = menu.Run();
@@ -130,11 +130,14 @@ public class AdminAccountManagement
                     Thread.Sleep(2000);
                     break;
                 case 5:
-                    {
-                        AccountVisibility.VisibilityMenu(Session.CurrentUser);
-                        break;
-                    }
-
+                    _logic.UpdateAccount(user);
+                    Console.WriteLine("Account successfully updated.");
+                    Thread.Sleep(2000);
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    break;
+                case 6:
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    break;
             }
         }
     }
