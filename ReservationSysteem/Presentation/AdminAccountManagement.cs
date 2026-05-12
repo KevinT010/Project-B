@@ -27,7 +27,7 @@ public class AdminAccountManagement
         UserMenu(user);
     }
 
-    private void UserMenu(User user)
+    private void UserMenu(AccountModel user)
     {
         string prompt = $"Managing: {user.FirstName} {user.LastName}";
         string[] options = { "Edit Account", "Delete Account", "Back" };
@@ -49,7 +49,7 @@ public class AdminAccountManagement
         }
     }
 
-    private void EditAccount(User user)
+    private void EditAccount(AccountModel user)
     {
         while (true)
         {
@@ -142,7 +142,7 @@ public class AdminAccountManagement
         }
     }
 
-    private void DeleteAccount(User user)
+    private void DeleteAccount(AccountModel user)
     {
         Console.Clear();
         Console.WriteLine($"Are you sure you want to delete the account of {user.FirstName} {user.LastName}?");

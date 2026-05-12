@@ -91,7 +91,9 @@ public class AccountManagementLogic
         return true;
     }
 
-    public User GetUserByEmail(string email)
+
+    public AccountModel GetUserByEmail(string email)
     {
+        return _access.GetByEmail(email);
     }
 }
