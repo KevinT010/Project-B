@@ -55,7 +55,7 @@ public class AdminAccountManagement
         {
             Console.Clear();
             string prompt = $"Edit Account: {user.FirstName} {user.LastName}";
-            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number", "Back" };
+            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number","Change password", "Back" };
             Ui menu = new Ui(prompt, options);
 
             int choice = menu.Run();
@@ -125,8 +125,11 @@ public class AdminAccountManagement
                     }
                     user.PhoneNumber = phoneNumber;
                     break;
-
-                case 4:
+                case 4: 
+                    Console.WriteLine("A password reset link has been sent to the user's email address.");
+                    Thread.Sleep(2000);
+                    break;
+                case 5:
                     {
                         AccountVisibility.VisibilityMenu(Session.CurrentUser);
                         break;
@@ -141,7 +144,7 @@ public class AdminAccountManagement
         Console.Clear();
         Console.WriteLine($"Are you sure you want to delete the account of {user.FirstName} {user.LastName}?");
 
-        string[] options = { "Confirm Delete", "Back" };
+        string[] options = { "Confirm delete", "Back" };
         Ui menu = new Ui("Delete Account", options);
 
         int choice = menu.Run();
@@ -152,7 +155,7 @@ public class AdminAccountManagement
                 _logic.DeleteAccount(user.Id);
                 Console.WriteLine("Account successfully deleted.");
                 Thread.Sleep(2000);
-                Start();
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
             case 1:
                 UserMenu(user);
