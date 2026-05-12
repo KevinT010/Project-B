@@ -90,4 +90,8 @@ public class AccountManagementLogic
         Session.CurrentUser = null;
         return true;
     }
+
+    public User GetUserByEmail(string email)
+    {
+    }
 }
