@@ -60,7 +60,7 @@ public class AdminAccountManagement
         {
             Console.Clear();
             string prompt = $"Edit Account: {user.FirstName} {user.LastName}";
-            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number", "Back" };
+            string[] options = { "Edit first name", "Edit last name", "Edit email", "Edit phone number","Change password", "Save changes", "Back" };
             Ui menu = new Ui(prompt, options);
 
             int choice = menu.Run();
@@ -108,7 +108,7 @@ public class AdminAccountManagement
                     }
                     if (_logic.EmailValidation(email) == null)
                     {
-                        Console.WriteLine("Email must contain a '@' and at least one period after it.");
+                        Console.WriteLine("Email must contain a '@' and at least one period after it or already exist.");
                         Console.ReadKey();
                         break;
                     }
@@ -130,13 +130,19 @@ public class AdminAccountManagement
                     }
                     user.PhoneNumber = phoneNumber;
                     break;
-
-                case 4:
-                    {
-                        AccountVisibility.VisibilityMenu(Session.CurrentUser);
-                        break;
-                    }
-
+                case 4: 
+                    Console.WriteLine("A password reset link has been sent to the user's email address.");
+                    Thread.Sleep(2000);
+                    break;
+                case 5:
+                    _logic.UpdateAccount(user);
+                    Console.WriteLine("Account successfully updated.");
+                    Thread.Sleep(2000);
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    break;
+                case 6:
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    break;
             }
         }
     }
@@ -146,7 +152,7 @@ public class AdminAccountManagement
         Console.Clear();
         Console.WriteLine($"Are you sure you want to delete the account of {user.FirstName} {user.LastName}?");
 
-        string[] options = { "Confirm Delete", "Back" };
+        string[] options = { "Confirm delete", "Back" };
         Ui menu = new Ui("Delete Account", options);
 
         int choice = menu.Run();
@@ -157,7 +163,7 @@ public class AdminAccountManagement
                 _logic.DeleteAccount(user.Id);
                 Console.WriteLine("Account successfully deleted.");
                 Thread.Sleep(2000);
-                Start();
+                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
             case 1:
                 UserMenu(user);
