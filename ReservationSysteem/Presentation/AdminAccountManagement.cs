@@ -13,7 +13,12 @@ public class AdminAccountManagement
             AccountVisibility.VisibilityMenu(Session.CurrentUser);
             return;
         }
-
+        if(Session.CurrentUser != null && email.Trim().ToLower() == Session.CurrentUser.Email.ToLower())
+        {
+            Console.WriteLine("You cannot manage your own account from this menu.");
+            Thread.Sleep(2000);
+            AccountVisibility.VisibilityMenu(Session.CurrentUser);
+        }
         var user = _logic.GetUserByEmail(email);
 
         if (user == null)
