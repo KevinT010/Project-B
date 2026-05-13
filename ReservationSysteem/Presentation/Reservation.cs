@@ -225,57 +225,33 @@ public class Reservation
             bool playAreaPicked = false;
             while (numberOfKids > 0 && !playAreaPicked)
             {
-                string choicePrompt = $"Do you want to book a spot in the kids play area?";
-                string[] choice_options = { "Yes", "No" };
-                Ui choiceMenu = new Ui(choicePrompt, choice_options);
-                int c_selectedIndex = choiceMenu.Run();
+                Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
+                string playAreaInput = Console.ReadLine().ToLower();
 
-                switch (c_selectedIndex)
+                if (playAreaInput == "yes")
                 {
-                    case 0:
-                        if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
-                        {
-                            kidsPlayArea = numberOfKids;
-                            playAreaPicked = true;
-                            break;
-                        }
-
-                        else
-                        {
-                            Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
-                            Console.ReadKey();
-                        }
+                    if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
+                    {
+                        kidsPlayArea = numberOfKids;
                         break;
-                    case 1:
-                        playAreaPicked = true;
-                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
+                        Console.ReadKey();
+                    }
                 }
-
-                // Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
-                // string playAreaInput = Console.ReadLine().ToLower();
-
-                // if (playAreaInput == "yes")
-                // {
-                //     if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
-                //     {
-                //         kidsPlayArea = numberOfKids;
-                //         break;
-                //     }
-                //     else
-                //     {
-                //         Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
-                //         Console.ReadKey();
-                //     }
-                // }
-                // else if (playAreaInput == "no")
-                // {
-                //     break;
-                // }
-                // else
-                // {
-                //     Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
-                // }
+                else if (playAreaInput == "no")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                }
             }
+
+                
 
             // ----------------------------------------------------------------------------------------------------------------------------------
 
