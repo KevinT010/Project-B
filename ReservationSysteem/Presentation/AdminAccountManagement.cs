@@ -152,7 +152,7 @@ public class AdminAccountManagement
         Console.Clear();
         Console.WriteLine($"Are you sure you want to delete the account of {user.FirstName} {user.LastName}?");
 
-        string[] options = { "Confirm delete", "Back" };
+        string[] options = { "Confirm delete", "Back"};
         Ui menu = new Ui("Delete Account", options);
 
         int choice = menu.Run();

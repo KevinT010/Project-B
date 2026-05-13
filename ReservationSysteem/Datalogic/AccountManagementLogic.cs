@@ -87,7 +87,12 @@ public class AccountManagementLogic
     {
         _reservationAccess.DeleteReservationsByUser(id);
         _access.DeleteAccount((int)id);
-        Session.CurrentUser = null;
+
+        if (Session.CurrentUser != null && Session.CurrentUser.Id == id)
+        {
+            Session.CurrentUser = null;
+        }
+
         return true;
     }
 
