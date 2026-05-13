@@ -26,10 +26,6 @@ public static class StartMenu
                 operatingHour.Start();
                 break; 
             case 4:
-                AdminAccountManagement adminAccountManagement = new AdminAccountManagement();
-                adminAccountManagement.Start();
-                break; 
-            case 5:
                 Console.WriteLine("Thank you for using the reservation system");
                 Environment.Exit(0);
                 break;
