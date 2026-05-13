@@ -107,31 +107,89 @@ public class Reservation
             }
 
 
-            Console.Write("Enter number of total guests: ");
-            int numberOfGuests = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter number of total guests or type 'back' to return to the date selection: ");
+            int numberOfGuests = 0;
 
-            // number of guest check
-            while (numberOfGuests < 1 || numberOfGuests > 8)
+
+            // number of guests check
+            while (true)
             {
-                if (numberOfGuests > 8)
-                    Console.WriteLine("For parties with more than 8 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
-                else if (numberOfGuests < 1)
-                    Console.WriteLine("You can not make a reservation for less than 1 person\nPress any key to go back.");
-                Console.ReadKey();
-                Console.Write("Enter number of guests: ");
-                numberOfGuests = Convert.ToInt32(Console.ReadLine());
+                string input = Console.ReadLine();
+
+                if  (input.ToLower() == "back")
+                {
+                    Console.Clear();
+                    Start(account);
+                    break;
+                }
+
+                if (int.TryParse(input, out numberOfGuests) || numberOfGuests < 1 || numberOfGuests > 8)
+                {
+                    if (numberOfGuests > 8)
+                    {
+                        Console.WriteLine("For parties with more than 8 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
+                    }
+                    else if (numberOfGuests < 1)
+                    {
+                        Console.WriteLine("You can not make a reservation for less than 1 person\nPress any key to go back.");
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    Console.ReadKey();
+                    Console.Clear();
+                    Console.Write("Enter number of total guests or type 'back' to return to the date selection: ");
+                }
+
             }
 
-            Console.Write("Enter number of kids in the party: ");
-            int numberOfKids = Convert.ToInt32(Console.ReadLine());
+            Console.Write($"Enter the number of kids in the party of {numberOfGuests}, or type 'back' to return to the date selection: ");
 
-            while (0 > numberOfKids || numberOfKids > numberOfGuests)
+            int numberOfKids;
+
+            while (true)
             {
-                Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "back")
+                {
+                    Console.Clear();
+                    Start(account);
+                    return;
+                }
+
+                if (int.TryParse(input, out numberOfKids))
+                {
+                    if (numberOfKids >= 0 && numberOfKids <= numberOfGuests)
+                    {
+                        break;
+                    }
+
+                    Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.");
+                }
+
+                else
+                {
+                    Console.WriteLine("Please enter a valid number or type 'back' to return to the date selection");
+                }
+
                 Console.ReadKey();
-                Console.Write("Enter number of kids: ");
-                numberOfKids = Convert.ToInt32(Console.ReadLine());
+                Console.Clear();
+                Console.Write($"Enter the number of kids in the party of {numberOfGuests}, or type 'back' to return to the date selection: ");
             }
+
+            // Console.Write("Enter number of kids in the party: ");
+            // int numberOfKids = Convert.ToInt32(Console.ReadLine());
+
+            // while (0 > numberOfKids || numberOfKids > numberOfGuests)
+            // {
+            //     Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
+            //     Console.ReadKey();
+            //     Console.Write("Enter number of kids: ");
+            //     numberOfKids = Convert.ToInt32(Console.ReadLine());
+            // }
 
             int kidsPlayArea = 0;
 
@@ -164,32 +222,59 @@ public class Reservation
                 Console.WriteLine("-----------------------------------\n");
             }
 
-            while (numberOfKids > 0)
+            bool playAreaPicked = false;
+            while (numberOfKids > 0 && !playAreaPicked)
             {
-                Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
-                string playAreaInput = Console.ReadLine().ToLower();
+                string choicePrompt = $"Do you want to book a spot in the kids play area?";
+                string[] choice_options = { "Yes", "No" };
+                Ui choiceMenu = new Ui(choicePrompt, choice_options);
+                int c_selectedIndex = choiceMenu.Run();
 
-                if (playAreaInput == "yes")
+                switch (c_selectedIndex)
                 {
-                    if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
-                    {
-                        kidsPlayArea = numberOfKids;
+                    case 0:
+                        if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
+                        {
+                            kidsPlayArea = numberOfKids;
+                            playAreaPicked = true;
+                            break;
+                        }
+
+                        else
+                        {
+                            Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
+                            Console.ReadKey();
+                        }
                         break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
-                        Console.ReadKey();
-                    }
+                    case 1:
+                        playAreaPicked = true;
+                        break;
                 }
-                else if (playAreaInput == "no")
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
-                }
+
+                // Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
+                // string playAreaInput = Console.ReadLine().ToLower();
+
+                // if (playAreaInput == "yes")
+                // {
+                //     if (reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
+                //     {
+                //         kidsPlayArea = numberOfKids;
+                //         break;
+                //     }
+                //     else
+                //     {
+                //         Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
+                //         Console.ReadKey();
+                //     }
+                // }
+                // else if (playAreaInput == "no")
+                // {
+                //     break;
+                // }
+                // else
+                // {
+                //     Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
+                // }
             }
 
             // ----------------------------------------------------------------------------------------------------------------------------------
@@ -239,14 +324,14 @@ public class Reservation
                 rewardLogic.GiveReservationPoints(Session.CurrentUser);
                 Console.WriteLine($"\n✅ Reservation confirmed!");
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
-                Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm} -> {requestedDateTime.AddMinutes(120): HH:MM}");
+                Console.WriteLine($"   Date & Time: {requestedDateTime:dd-MM-yyyy HH:mm} -> {requestedDateTime.AddMinutes(120):HH:mm}");
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
-                Console.WriteLine($"   Kids:    {numberOfKids}");
+                Console.WriteLine($"   Kids:      {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
                 if(account.Points == 20000)
-                    Console.WriteLine($"   You have reached the maximum amount of 20000 points, you have earned 0 from this reservation");
+                    Console.WriteLine($"   Reward points: +0 (Maximum point amount reached)");
                 else
-                    Console.WriteLine($"   Reward points earned:  +20");
+                    Console.WriteLine($"   Reward points:  +20");
                 Console.WriteLine($"   Kids in play area:  {kidsPlayArea}");
             }
 

@@ -2,6 +2,7 @@ using System.Reflection;
 
 public class PointShop
 {
+    private RewardLogic rewardLogic = new();
     public void Start(AccountModel account)
     {
         Console.Clear();
@@ -17,11 +18,15 @@ public class PointShop
                 break;
             case 1:
                 if (account.DesertVouchers != 0)
-                    ReturnDesertVoucher(account);
+                    {
+                        ReturnDesertVoucher(account);
+                    }
                 else
-                    Console.WriteLine("You currently don't have any vouchers");
-                    Thread.Sleep(2000);
-                    Start(account);
+                    {
+                        Console.WriteLine("You currently don't have any vouchers");
+                        Thread.Sleep(2000);
+                        Start(account);
+                    }
                 break;
             case 2:
                 AccountVisibility.VisibilityMenu(account);
@@ -39,9 +44,18 @@ public class PointShop
         switch (selectedIndex)
         {
             case 0:
-                Console.WriteLine("How many vouchers would you like to buy?");
-                int Voucher_amount = Convert.ToInt32(Console.ReadLine());
-                BuyVouchers(account, Voucher_amount);
+                if (account.Points >= 200)
+                {
+                    Console.WriteLine("How many vouchers would you like to buy?");
+                    int Voucher_amount = Convert.ToInt32(Console.ReadLine());
+                    BuyVouchers(account, Voucher_amount);
+                }
+                else
+                {
+                    Console.WriteLine("You unfortunately don't have enough points to buy vouchers");
+                    Thread.Sleep(2000);
+                    RedeemDessertVoucher(account);
+                }
                 break;
             case 1:
                 AccountVisibility.VisibilityMenu(account);
@@ -52,20 +66,18 @@ public class PointShop
     private void BuyVouchers(AccountModel account, int amount)
     {
         Console.Clear();
-        if (account.Points < amount * 200)
+        bool success = rewardLogic.Add_Vouchers(account, amount);
+
+        if (!success)
         {
-            Console.WriteLine($"You unfortunately don't have enough points. You need {amount * 200 - account.Points} more points to claim {amount} voucher(s).");
-            Console.WriteLine($"Press any key to return to return");
+            Console.WriteLine($"You don't have enough points. You need {amount * 200 - account.Points} more points.");
             Console.ReadKey();
             RedeemDessertVoucher(account);
             return;
         }
 
-        RewardLogic rewardLogic = new RewardLogic();
-        rewardLogic.Add_Vouchers(account, amount);
-        Console.WriteLine($"✅ {amount} Voucher(s) claimed, enjoy!");
+        Console.WriteLine($"✅ {amount} Voucher(s) claimed!");
         Console.WriteLine($"You currently have: {account.Points} points.");
-        Console.WriteLine("\nPress any key to return...");
         Console.ReadKey();
         AccountVisibility.VisibilityMenu(account);
     }
@@ -95,38 +107,18 @@ public class PointShop
     private void SellVouchers(AccountModel account, int amount)
     {
         Console.Clear();
-        if (account.DesertVouchers < amount)
+        bool success = rewardLogic.Remove_Vouchers(account, amount);
+
+        if (!success)
         {
-            Console.WriteLine($"You unfortunately don't have that many vouchers. You currently have {account.DesertVouchers} vouchers.");
-            Console.WriteLine($"Press any key to return.");
+            Console.WriteLine($"Transaction failed\nYou only have {account.DesertVouchers} vouchers.");
             Console.ReadKey();
             ReturnDesertVoucher(account);
             return;
         }
 
-        if (account.Points + amount * 200 > 20000)
-        {
-            string confirmationPrompt = $"You currently have {account.Points}, returning {amount} of vouchers will put you over the limit of 20000 and thus set your point amount to 20000.";
-            string[] confirmation_options = { $"Yes", "No" };
-            Ui confirmationMenu = new Ui(confirmationPrompt, confirmation_options);
-            int selectedIndex = confirmationMenu.Run();
-
-            switch (selectedIndex)
-            {
-                case 0:
-                    break;
-                case 1:
-                    Console.WriteLine("Transaction canceled");
-                    ReturnDesertVoucher(account);
-                    break;
-            }
-        }
-
-        RewardLogic rewardLogic = new RewardLogic();
-        rewardLogic.Remove_Vouchers(account, amount);
-        Console.WriteLine($"✅ Vouchers returned, your {amount * 200} points have been returned to your account!");
-        Console.WriteLine($"You currently have: {account.Points} points.");
-        Console.WriteLine("\nPress any key to return...");
+        Console.WriteLine($"✅ {amount} Voucher(s) returned, {amount * 200} points added!");
+        Console.WriteLine($"You currently have: {account.DesertVouchers} desert vouchers, and {account.Points} points.");
         Console.ReadKey();
         AccountVisibility.VisibilityMenu(account);
     }

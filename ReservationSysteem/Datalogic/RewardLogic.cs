@@ -13,11 +13,18 @@ public class RewardLogic
         _access.UpdatePoints(account.Id, account.Points);
     }
 
-    public void Add_Vouchers(AccountModel account, int amount)
+    public bool Add_Vouchers(AccountModel account, int amount)
     {
+        int cost = amount * 200;
+        if (account.Points < cost)
+            return false;
+
         account.DesertVouchers += amount;
-        account.Points -= amount * 200;
+        account.Points -= cost;
+
         _access.UpdatePoints(account.Id, account.Points);
+        _access.UpdateVouchers(account.Id, account.DesertVouchers);
+        return true;
     }
 
     public void GiveReservationPoints(AccountModel account)
@@ -30,10 +37,19 @@ public class RewardLogic
         _access.UpdatePoints(account.Id, account.Points);
     }
     
-    public void Remove_Vouchers(AccountModel account, int amount)
+    public bool Remove_Vouchers(AccountModel account, int amount)
     {
+        if (account.DesertVouchers < amount)
+            return false;
+
         account.DesertVouchers -= amount;
         account.Points += amount * 200;
+
+        if (account.Points > 20000)
+            account.Points = 20000;
+
         _access.UpdatePoints(account.Id, account.Points);
+        _access.UpdateVouchers(account.Id, account.DesertVouchers);
+        return true;
     }
 }

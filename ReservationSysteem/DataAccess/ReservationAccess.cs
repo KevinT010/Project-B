@@ -62,15 +62,15 @@ public class ReservationAccess
         return Reservations;
     }
 
-    public List<ReservationModel> GetActiveByAccountId(long accountId)
-    {
-        // List with Reservations based on account id
-        string query = $"SELECT * FROM {ReservationTable} WHERE AccountId = @AccountId";
-        // opens, executes, read etc
-        var Reservations = _connection.Query<ReservationModel>(query, new { AccountId = accountId }).ToList();
+    // public List<ReservationModel> GetActiveByAccountId(long accountId)
+    // {
+    //     // List with Reservations based on account id
+    //     string query = $"SELECT * FROM {ReservationTable} WHERE AccountId = @AccountId";
+    //     // opens, executes, read etc
+    //     var Reservations = _connection.Query<ReservationModel>(query, new { AccountId = accountId }).ToList();
 
-        return Reservations;
-    }
+    //     return Reservations;
+    // }
 
     public List<ReservationModel> GetAllReservations()
     {

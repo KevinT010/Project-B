@@ -34,11 +34,11 @@ public class ReservationLogic
         }
         else
         {
-        return availableTables;
+            return availableTables;
         }
     }
 
-    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids,int kidsPlayArea, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
+    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int kidsPlayArea, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
         if (overlapping.Count > 0)
@@ -66,14 +66,7 @@ public class ReservationLogic
     public bool CheckPlayAreaCapacity(DateTime requestedStart, int numberOfKids, int durationMinutes = 120)
     {
         int currentKidsInPlayArea = GetKidsInPlayArea(requestedStart, durationMinutes);
-        if (currentKidsInPlayArea + numberOfKids > 10)
-        {
-            return false;
-        }
-
-        
-        
-        return true;
+        return currentKidsInPlayArea + numberOfKids <= 10;
     }
 
     public bool IsExpired(ReservationModel reservation)
@@ -102,16 +95,7 @@ public class ReservationLogic
 
     public List<ReservationModel> GetActiveByAccountId(Int64 accountId)
     {
-        List<ReservationModel> activereservations = [];
-        foreach (ReservationModel reservation in GetReservationsByAccountId(accountId))
-        {
-            if (!IsExpired(reservation))
-            {
-                activereservations.Add(reservation);
-            }
-        }
-        return activereservations;
-        
+        return GetActiveReservations(GetReservationsByAccountId(accountId));
     }
 
     public List<ReservationModel> GetAllReservations()
