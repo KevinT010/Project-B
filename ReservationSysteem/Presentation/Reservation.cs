@@ -223,7 +223,7 @@ public class Reservation
             }
 
             bool playAreaPicked = false;
-            while (numberOfKids > 0 && !playAreaPicked)
+            while (numberOfKids > 0 && !playAreaPicked && reservationLogic.CheckPlayAreaCapacity(requestedDateTime, numberOfKids))
             {
                 Console.Write("Do you want to book a spot in the kids play area? (yes/no): ");
                 string playAreaInput = Console.ReadLine().ToLower();
