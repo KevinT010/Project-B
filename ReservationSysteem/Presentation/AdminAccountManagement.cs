@@ -68,7 +68,7 @@ public class AdminAccountManagement
             switch (choice)
             {
                 case 0:
-                    Console.WriteLine("Enter new first name: (or type 'back' to return)");
+                    Console.WriteLine($"Enter new first name({user.FirstName}): (or type 'back' to return)");
                     string firstName = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(firstName) && firstName.Trim().ToLower() == "back")
                     {
@@ -84,7 +84,7 @@ public class AdminAccountManagement
                     break;
 
                 case 1:
-                    Console.WriteLine("Enter new last name: (or type 'back' to return)");
+                    Console.WriteLine($"Enter new last name({user.LastName}): (or type 'back' to return)");
                     string lastName = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(lastName) && lastName.Trim().ToLower() == "back")
                     {
@@ -100,7 +100,7 @@ public class AdminAccountManagement
                     break;
 
                 case 2:
-                    Console.WriteLine("Enter new email: (or type 'back' to return)");
+                    Console.WriteLine($"Enter new email({user.Email}): (or type 'back' to return)");
                     string email = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(email) && email.Trim().ToLower() == "back")
                     {
@@ -116,7 +116,7 @@ public class AdminAccountManagement
                     break;
 
                 case 3:
-                    Console.WriteLine("Enter new phone number: (or type 'back' to return)");
+                    Console.WriteLine($"Enter new phone number({user.PhoneNumber}): (or type 'back' to return)");
                     string phoneNumber = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(phoneNumber) && phoneNumber.Trim().ToLower() == "back")
                     {
@@ -141,7 +141,15 @@ public class AdminAccountManagement
                     AccountVisibility.VisibilityMenu(Session.CurrentUser);
                     break;
                 case 6:
-                    AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    if (_logic.FirstNameValidation(user.FirstName) == null || _logic.LastNameValidation(user.LastName) == null || _logic.EmailValidation(user.Email) == null || _logic.PhoneNumberValidation(user.PhoneNumber) == null)
+                    {
+                        Console.WriteLine("Please save changes before going back to the menu.");
+                        Thread.Sleep(2000);
+                    }
+                    else
+                    {
+                        AccountVisibility.VisibilityMenu(Session.CurrentUser);
+                    }
                     break;
             }
         }
