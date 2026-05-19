@@ -3,9 +3,11 @@ public class AccountRegistration
     public void Start()
     {
         Console.Clear();
-        Console.WriteLine("Account-Registration");
+        Console.WriteLine("Account registration");
 
         var logic = new AccountRegistrationLogic();
+
+
 
         string firstName = string.Empty;
         string lastName = string.Empty;
@@ -13,11 +15,13 @@ public class AccountRegistration
         string phoneNumber = string.Empty;
         string password = string.Empty;
 
+
+
         bool isValid = false;
 
         while (!isValid)
         {
-            Console.WriteLine("Enter your firstname: (or type 'back' to return to the main menu)");
+            Console.WriteLine("Enter your first name: (or type 'back' to return to the main menu)");
             firstName = Console.ReadLine();
 
             if (!string.IsNullOrWhiteSpace(firstName) && firstName.Trim().ToLower() == "back")
@@ -28,7 +32,7 @@ public class AccountRegistration
             isValid = logic.FirstNameValidation(firstName);
             if (!isValid)
             {
-                Console.WriteLine("Firstname must be between 2 and 30 characters.");
+                Console.WriteLine("First name must be between 2 and 30 characters.");
             }
         }
 
@@ -36,7 +40,7 @@ public class AccountRegistration
 
         while (!isValid)
         {
-            Console.WriteLine("Enter your lastname: (or type 'back' to return to the main menu)");
+            Console.WriteLine("Enter your last name: (or type 'back' to return to the main menu)");
             lastName = Console.ReadLine();
 
             if (!string.IsNullOrWhiteSpace(lastName) && lastName.Trim().ToLower() == "back")
@@ -47,7 +51,7 @@ public class AccountRegistration
             isValid = logic.LastNameValidation(lastName);
             if (!isValid)
             {
-                Console.WriteLine("Lastname must be between 2 and 30 characters.");
+                Console.WriteLine("Last name must be between 2 and 30 characters.");
             }
         }
 
@@ -94,7 +98,7 @@ public class AccountRegistration
         while (!isValid)
         {
             Console.WriteLine("Enter your password (password must be between 8 and 20 characters): (or type 'back' to return to the main menu)");
-            password = Console.ReadLine();
+            password = ReadPassword();
 
             if (!string.IsNullOrWhiteSpace(password) && password.Trim().ToLower() == "back")
             {
@@ -118,5 +122,32 @@ public class AccountRegistration
         {
             Console.WriteLine("Account registration failed. Please try again.");
         }
+    }
+
+    private string ReadPassword()
+    {
+        string password = string.Empty;
+        ConsoleKey key;
+
+        do
+        {
+            var keyInfo = Console.ReadKey(intercept: true);
+            key = keyInfo.Key;
+
+            if (key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                Console.Write("\b \b");
+                password = password[0..^1];
+            }
+            else if (!char.IsControl(keyInfo.KeyChar))
+            {
+                Console.Write("*");
+                password += keyInfo.KeyChar;
+            }
+        } 
+        while (key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+        return password;
     }
 }

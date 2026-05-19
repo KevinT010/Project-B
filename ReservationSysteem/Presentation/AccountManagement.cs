@@ -77,7 +77,7 @@ public class AccountManagement
                     bool isValidFirstName = false;
                     while (!isValidFirstName)
                     {
-                        Console.WriteLine("Enter your new firstname: (or type 'back' to return)");
+                        Console.WriteLine("Enter your new first name: (or type 'back' to return)");
                         string firstName = Console.ReadLine();
 
                         if (!string.IsNullOrWhiteSpace(firstName) && firstName.Trim().ToLower() == "back")
@@ -88,7 +88,7 @@ public class AccountManagement
                         isValidFirstName = _logic.FirstNameValidation(firstName) != null;
                         if (!isValidFirstName)
                         {
-                            Console.WriteLine("Firstname must be between 2 and 30 characters.");
+                            Console.WriteLine("First name must be between 2 and 30 characters.");
                         }
                         else
                         {
@@ -101,7 +101,7 @@ public class AccountManagement
                     bool isValidLastName = false;
                     while (!isValidLastName)
                     {
-                        Console.WriteLine("Enter your new lastname: (or type 'back' to return)");
+                        Console.WriteLine("Enter your new last name: (or type 'back' to return)");
                         string lastName = Console.ReadLine();
 
                         if (!string.IsNullOrWhiteSpace(lastName) && lastName.Trim().ToLower() == "back")
@@ -112,7 +112,7 @@ public class AccountManagement
                         isValidLastName = _logic.LastNameValidation(lastName) != null;
                         if (!isValidLastName)
                         {
-                            Console.WriteLine("Lastname must be between 2 and 30 characters.");
+                            Console.WriteLine("Last name must be between 2 and 30 characters.");
                         }
                         else
                         {
@@ -171,7 +171,7 @@ public class AccountManagement
 
                 case 4:
                     Console.WriteLine("Enter your current password: (or type 'back' to return)");
-                    string currentPassword = Console.ReadLine();
+                    string currentPassword = ReadPassword();
 
                     if (string.IsNullOrWhiteSpace(currentPassword) || !_logic.VerifyPassword(user, currentPassword))
                     {
@@ -227,7 +227,7 @@ public class AccountManagement
     {
         Console.Clear();
         Console.WriteLine("Enter your password to confirm deletion:");
-        string password = Console.ReadLine();
+        string password = ReadPassword();
 
         var user = Session.CurrentUser;
 
@@ -253,4 +253,33 @@ public class AccountManagement
             accountManagement.DeleteAccount();
         }
     }
+
+    private string ReadPassword()
+    {
+        string password = string.Empty;
+        ConsoleKey key;
+
+        do
+        {
+            var keyInfo = Console.ReadKey(intercept: true);
+            key = keyInfo.Key;
+
+            if (key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                Console.Write("\b \b");
+                password = password[0..^1];
+            }
+            else if (!char.IsControl(keyInfo.KeyChar))
+            {
+                Console.Write("*");
+                password += keyInfo.KeyChar;
+            }
+        }
+        while (key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+        return password;
+    }
+
+
 }

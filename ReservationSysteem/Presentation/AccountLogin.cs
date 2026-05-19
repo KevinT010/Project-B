@@ -34,7 +34,7 @@ public class AccountLogin
         while (!isValid)
         {
             Console.WriteLine("Enter your password: (or type 'back' to return to the main menu)");
-            password = Console.ReadLine();
+            password = ReadPassword();
 
             if (!string.IsNullOrWhiteSpace(password) && password.Trim().ToLower() == "back")
             {
@@ -76,7 +76,7 @@ public class AccountLogin
             while (!isValid)
             {
                 Console.WriteLine("Enter your password: (or type 'back' to return to the main menu)");
-                password = Console.ReadLine();
+                password = ReadPassword();
 
                 if (!string.IsNullOrWhiteSpace(password) && password.Trim().ToLower() == "back")
                 {
@@ -106,5 +106,32 @@ public class AccountLogin
             Console.WriteLine("Account login failed. Please try again.");
             StartMenu.Start();
         }
+    }
+
+    private string ReadPassword()
+    {
+        string password = string.Empty;
+        ConsoleKey key;
+
+        do
+        {
+            var keyInfo = Console.ReadKey(intercept: true);
+            key = keyInfo.Key;
+
+            if (key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                Console.Write("\b \b");
+                password = password[0..^1];
+            }
+            else if (!char.IsControl(keyInfo.KeyChar))
+            {
+                Console.Write("*");
+                password += keyInfo.KeyChar;
+            }
+        } 
+        while (key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+        return password;
     }
 }
