@@ -89,19 +89,81 @@ public class Reservation
             }
 
             OperatingHourLogic operatingHourLogic = new OperatingHourLogic();
-            
+            var dayInformation = operatingHourLogic.GetByDay(requestedDateTime.ToString());
+
             if (!operatingHourLogic.IsOpen(requestedDateTime))
             {
-                Console.WriteLine("The restaurant is closed at this time. Please choose a time during opening hours.\nPress any key to go back.");
-                Console.ReadKey();
+                if ( dayInformation == null || dayInformation.IsClosed)
+                {
+                    Console.WriteLine($"The restaurant is closed on {requestedDateTime.DayOfWeek}.");
+                    var hours = operatingHourLogic.GetHours();
+                    foreach (var operatingDay in hours)
+                    {
+                        if (operatingDay.IsClosed)
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: Closed");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: {operatingDay.OpeningTime} - {operatingDay.ClosingTime}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"The restaurant is closed at this time. Operating hours for {requestedDateTime.DayOfWeek} are from {dayInformation.OpeningTime} to {dayInformation.ClosingTime}.");
+                    var hours = operatingHourLogic.GetHours();
+                    foreach (var operatingDay in hours)
+                    {
+                        if (operatingDay.IsClosed)
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: Closed");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: {operatingDay.OpeningTime} - {operatingDay.ClosingTime}");
+                        }
+                    }
+                }
+
                 Start(account);
                 return;
             }
 
             if (!operatingHourLogic.IsOpen(requestedDateTime.AddMinutes(120)))
             {
-                Console.WriteLine("Please choose an earlier time.\nPress any key to go back.");
-                Console.ReadKey();
+                if (dayInformation != null && !dayInformation.IsClosed)
+                {
+                    Console.WriteLine($"Reservations last 2 hours. The restaurant closes at {dayInformation.ClosingTime} on {requestedDateTime.DayOfWeek}.\nPlease choose an earlier time.");
+                    var hours = operatingHourLogic.GetHours();
+                    foreach (var operatingDay in hours)
+                    {
+                        if (operatingDay.IsClosed)
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: Closed");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: {operatingDay.OpeningTime} - {operatingDay.ClosingTime}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Please choose an earlier time..");
+                    var hours = operatingHourLogic.GetHours();
+                    foreach (var operatingDay in hours)
+                    {
+                        if (operatingDay.IsClosed)
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: Closed");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{operatingDay.Day}: {operatingDay.OpeningTime} - {operatingDay.ClosingTime}");
+                        }
+                    }
+                }
                 Start(account);
                 return;
             }
@@ -116,7 +178,7 @@ public class Reservation
             {
                 string input = Console.ReadLine();
 
-                if  (input.ToLower() == "back")
+                if (input.ToLower() == "back")
                 {
                     Console.Clear();
                     Start(account);
@@ -211,8 +273,8 @@ public class Reservation
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("[Open]  ");
                     }
-                    
-                    if (i == 4) 
+
+                    if (i == 4)
                     {
                         Console.WriteLine();
                     }
@@ -251,7 +313,7 @@ public class Reservation
                 }
             }
 
-                
+
 
             // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -304,7 +366,7 @@ public class Reservation
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
                 Console.WriteLine($"   Kids:      {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
-                if(account.Points == 20000)
+                if (account.Points == 20000)
                     Console.WriteLine($"   Reward points: +0 (Maximum point amount reached)");
                 else
                     Console.WriteLine($"   Reward points:  +20");
@@ -316,7 +378,7 @@ public class Reservation
                 Console.WriteLine("❌ Reservation failed. The table was just taken. Please try again.");
             }
 
-            if(Session.CurrentUser.Points >= 200)
+            if (Session.CurrentUser.Points >= 200)
                 Console.WriteLine("\nYou have enough points to claim a voucher!");
             Console.WriteLine("\nPress any key to return.");
             Console.ReadKey();
