@@ -1,7 +1,7 @@
 public class AccountManagementLogic
 {
     private AccountRegistrationAccess _access = new();
-    private ReservationAccess _reservationAccess = new();
+    private ReservationLogic _reservationlogic = new();
     private AccountRegistrationLogic _registrationLogic = new();
 
     public AccountManagementLogic()
@@ -85,7 +85,7 @@ public class AccountManagementLogic
 
     public bool DeleteAccount(long id)
     {
-        _reservationAccess.DeleteReservationsByUser(id);
+        _reservationlogic.DeleteReservationsByUser(id);
         _access.DeleteAccount((int)id);
 
         if (Session.CurrentUser != null && Session.CurrentUser.Id == id)

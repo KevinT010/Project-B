@@ -139,4 +139,10 @@ public class ReservationLogic
     {
         return _reservationAccess.GetAllReservations();
     }
+
+    public bool DeleteReservationsByUser(Int64 accountId)
+    {
+        _reservationAccess.DeleteReservationsByUser(accountId);
+        return true;
+    }
 }

@@ -14,7 +14,7 @@ public class AccountManagement
         }
 
         string prompt = "Account Management";
-        string[] options = { "Edit Account", "Delete Account", "Back" };
+        string[] options = { "Point Shop", "Edit Account", "Delete Account", "Back" };
         Ui menu = new Ui(prompt, options);
 
         int choice = menu.Run();
@@ -22,10 +22,13 @@ public class AccountManagement
         switch (choice)
         {
             case 0:
+                PointShop pointshop = new PointShop();
+                pointshop.Start(Session.CurrentUser);
+                break;
+            case 1:
                 EditAccount();
                 break;
-
-            case 1:
+            case 2:
                 string deletePrompt = "Delete Account";
                 string[] deleteOptions = { "Confirm Delete", "Back" };
                 Ui deleteMenu = new Ui(deletePrompt, deleteOptions);
@@ -42,8 +45,7 @@ public class AccountManagement
                         break;
                 }
                 break;
-
-            case 2:
+            case 3:
                 AccountVisibility.VisibilityMenu(Session.CurrentUser);
                 break;
         }

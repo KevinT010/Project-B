@@ -15,7 +15,7 @@ public static class AccountVisibility
     private static void ShowUserMenu()
     {
         string prompt = $"Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}!\nUser dashboard";
-        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management", "Point Shop","Operating Hours", "Logout" };
+        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management","Operating Hours", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
 
@@ -57,14 +57,10 @@ public static class AccountVisibility
                 accountManagement.Start();
                 break;
             case 4:
-                PointShop pointshop = new();
-                pointshop.Start(Session.CurrentUser);
-                break;
-            case 5:
                 OperatingHour operatingHour = new OperatingHour();
                 operatingHour.Start();
                 break;
-            case 6:
+            case 5:
                 Session.Logout();
                 break;
         }

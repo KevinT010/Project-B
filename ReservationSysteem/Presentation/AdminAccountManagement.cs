@@ -23,7 +23,7 @@ public class AdminAccountManagement
 
         if (user == null)
         {
-            Console.WriteLine("No account found with that email address.");
+            Console.WriteLine("No account found with that email address or Email must contain a @ and at least one period(.) after the @.");
             Console.ReadKey();
             Start();
             return;
