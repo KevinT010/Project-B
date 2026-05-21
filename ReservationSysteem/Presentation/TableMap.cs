@@ -33,8 +33,8 @@ public static class TableMap
         Console.WriteLine("|   * O o O o O o *                                        |                                |");
 
         Console.Write("|   * o O o O o O *      ==========================        |          ");
-        Print("T15", available, selected, "Hibachi bar");
-        Console.Write("           \\");
+        Print("T15", available, selected, "Hibachi");
+        Console.Write("               \\");
         Console.WriteLine();
 
         Console.Write("|   *             *      |          ");
