@@ -99,6 +99,11 @@ public class AccountManagementLogic
 
     public AccountModel GetUserByEmail(string email)
     {
+        if(_registrationLogic.EmailValidation(email) == null)
+        {
+            return null;
+        }
+
         return _access.GetByEmail(email);
     }
 }

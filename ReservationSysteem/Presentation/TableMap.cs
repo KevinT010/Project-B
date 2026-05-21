@@ -32,7 +32,9 @@ public static class TableMap
         Console.WriteLine("|   * o O o O o O *      ========   ===============        |     ===========================|");
         Console.WriteLine("|   * O o O o O o *                                        |                                |");
 
-        Console.Write("|   * o O o O o O *      ==========================        |             Dim Sum            \\");
+        Console.Write("|   * o O o O o O *      ==========================        |          ");
+        Print("T15", available, selected, "Hibachi bar");
+        Console.Write("           \\");
         Console.WriteLine();
 
         Console.Write("|   *             *      |          ");
@@ -94,7 +96,7 @@ public static class TableMap
         Console.WriteLine("|   *    AREA     *      |      |   |             |        |     |                          |");
         Console.WriteLine("|   * o O o O o O *      ========   ===============        |     ===========================|");
         Console.WriteLine("|   * O o O o O o *                                        |                                |");
-        Console.WriteLine("|   * o O o O o O *      ==========================        |             Dim Sum            \\");
+        Console.WriteLine("|   * o O o O o O *      ==========================        |             Hibachi            \\");
         Console.WriteLine("|   *             *      |          T3            |        =================================\\");
         Console.WriteLine("|   ~~~~~~~~~~~~~~~      |                        |                                         |");
         Console.WriteLine("|                        ==========================                                         |");
@@ -113,7 +115,7 @@ public static class TableMap
         Console.WriteLine("========================================Entrance=============================================");
     }
 
-    private static void Print(string table, List<int> available, int selected)
+    private static void Print(string table, List<int> available, int selected, string? displayName = null)
     {
         int num = int.Parse(table.Substring(1));
 
@@ -131,7 +133,15 @@ public static class TableMap
             Console.ForegroundColor = ConsoleColor.DarkRed;
         }
 
-        Console.Write(table);
+        if (displayName != null)
+        {
+            Console.Write(displayName);
+        }
+        else
+        {
+            Console.Write(table);
+        }
+
         Console.ResetColor();
     }
 }

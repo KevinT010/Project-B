@@ -10,19 +10,36 @@ public class ReservationLogic
 
         foreach (TableModel table in allTables)
         {
-            bool EnoughSeats = table.Capacity >= numberOfGuests;
-            bool NoOverlap = _reservationAccess.GetOverlappingReservations(table.Id, requestedDateTime, durationMinutes).Count == 0;
+            var overlapping = _reservationAccess.GetOverlappingReservations(table.Id, requestedDateTime, durationMinutes);
 
-            if (EnoughSeats && NoOverlap)
+            if (table.TableNumber == 15)
             {
-                availableTables.Add(table);
+                int currentGuests = 0;
+                foreach (var restGuest in overlapping)
+                {
+                    currentGuests += restGuest.NumberOfGuests;
+                }
+                if (table.Capacity - currentGuests >= numberOfGuests)
+                {
+                    availableTables.Add(table);
+                }
+            }
+            else
+            {
+                bool EnoughSeats = table.Capacity >= numberOfGuests;
+                bool NoOverlap = overlapping.Count == 0;
+
+                if (EnoughSeats && NoOverlap)
+                {
+                    availableTables.Add(table);
+                }
             }
         }
 
         List<TableModel> BestTables = new List<TableModel>();
         foreach (TableModel table in availableTables)
         {
-            if (table.Capacity == numberOfGuests)
+            if (table.Capacity == numberOfGuests && table.TableNumber != 15)
             {
                 BestTables.Add(table);
             }
@@ -30,6 +47,11 @@ public class ReservationLogic
 
         if (BestTables.Count > 0)
         {
+            var hibachiTable = availableTables.FirstOrDefault(table => table.TableNumber == 15);
+            if (hibachiTable != null && !BestTables.Contains(hibachiTable))
+            {
+                BestTables.Add(hibachiTable);
+            }
             return BestTables;
         }
         else
@@ -41,7 +63,22 @@ public class ReservationLogic
     public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int kidsPlayArea, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
-        if (overlapping.Count > 0)
+        var table = _tableLogic.GetAllTables().FirstOrDefault(table => table.Id == tableId);
+
+        if (table != null && table.TableNumber == 15)
+        {
+            int currentGuests = 0;
+            foreach (var resGuest in overlapping)
+            {
+                currentGuests += resGuest.NumberOfGuests;
+            }
+
+            if (currentGuests + numberOfGuests > table.Capacity)
+            {
+                return false;
+            }
+        }
+        else if (overlapping.Count > 0)
         {
             return false;
         }

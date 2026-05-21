@@ -93,7 +93,7 @@ public class Reservation
 
             if (!operatingHourLogic.IsOpen(requestedDateTime))
             {
-                if ( dayInformation == null || dayInformation.IsClosed)
+                if (dayInformation == null || dayInformation.IsClosed)
                 {
                     Console.WriteLine($"The restaurant is closed on {requestedDateTime.DayOfWeek}.");
                     var hours = operatingHourLogic.GetHours();
@@ -185,11 +185,11 @@ public class Reservation
                     break;
                 }
 
-                if (int.TryParse(input, out numberOfGuests) || numberOfGuests < 1 || numberOfGuests > 8)
+                if (int.TryParse(input, out numberOfGuests) || numberOfGuests < 1 || numberOfGuests > 12)
                 {
-                    if (numberOfGuests > 8)
+                    if (numberOfGuests > 12)
                     {
-                        Console.WriteLine("For parties with more than 8 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
+                        Console.WriteLine("For parties with more than 12 persons, please contact the restaurant at: 0682618970\nPress any key to go back.");
                     }
                     else if (numberOfGuests < 1)
                     {
@@ -335,6 +335,12 @@ public class Reservation
             // add & convert available table object to string list  
             foreach (TableModel table in availableTables)
             {
+                if (table.TableNumber == 15)
+                {
+                    tableOptions.Add($"Hibachi Bar (seats {table.Capacity})");
+                    continue;
+                }
+
                 tableOptions.Add($"Table {table.TableNumber} (seats {table.Capacity})");
             }
             tableOptions.Add("Cancel");
