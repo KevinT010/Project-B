@@ -109,4 +109,9 @@ public class MenuAccess
         _connection.Execute(query, new { Id = menuId });
         return true;
     }
+    public List<string> GetAllAllergens()
+    {
+        string query = "SELECT Name FROM Allergens;";
+        return _connection.Query<string>(query).ToList();
+    }
 }

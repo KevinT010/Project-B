@@ -230,10 +230,11 @@ public class ManageMenu
             Console.Write("Category cannot be empty. Enter category: ");
             category = Console.ReadLine() ?? "";
         }
-        Console.WriteLine($"Selected Category: {category}");
 
-        Console.Write("Allergens (use , if you want multiple or leave empty): ");
-        string allergens = Console.ReadLine() ?? "";
+        string[] allergenOptions = { "Milk", "Egg", "Shellfish", "Fish", "Peanuts", "Wheat", "Soy", "Sesame", "Alcohol", "Crustaceans", "Done" };
+        Ui allergenUi = new Ui("Select allergens (Space/Enter to toggle, select Done to finish):", allergenOptions);
+        List<string> selectedAllergens = allergenUi.RunMultiSelect();
+        string allergens = string.Join(",", selectedAllergens);
 
         MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
         Logic.AddMenuItem(newItem, selectedMenuId);
@@ -349,12 +350,19 @@ public class ManageMenu
             selectedItem.FoodCategory = newCategory;
         }
 
-        Console.Write($"Allergens({selectedItem.Allergens}): ");
-        string newAllergens = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newAllergens))
+        string[] allergenOptions = { "Milk", "Egg", "Shellfish", "Fish", "Peanuts", "Wheat", "Soy", "Sesame", "Alcohol", "Crustaceans", "Done" };
+        Ui allergenEditUi = new Ui($"Select allergens (Space/Enter to toggle, Done to finish):", allergenOptions);
+        
+        for (int i = 0; i < allergenOptions.Length; i++)
         {
-            selectedItem.Allergens = newAllergens;
+            if (!string.IsNullOrEmpty(selectedItem.Allergens) && selectedItem.Allergens.Contains(allergenOptions[i]))
+            {
+                allergenEditUi.ToggledOptions[i] = true;
+            }
         }
+
+        List<string> selectedEditAllergens = allergenEditUi.RunMultiSelect();
+        selectedItem.Allergens = string.Join(",", selectedEditAllergens);
 
         Logic.UpdateMenuItem(selectedItem);
 

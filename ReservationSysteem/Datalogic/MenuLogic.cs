@@ -53,4 +53,9 @@ public class MenuLogic
     {
         _access.LinkItemToMenu(menuItemId, menuId);
     }
+    public List<string> GetAllAllergens()
+    {
+        var allergens = _access.GetAllAllergens();
+        return allergens ?? new List<string>();
+    }
 }
