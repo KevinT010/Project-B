@@ -198,7 +198,7 @@ public class ManageMenu
             bool exists = false;
             foreach (var item in Logic.GetAllMenuItems())
             {
-                if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                if (item.Name.ToLower() == name.ToLower())
                 {
                     exists = true;
                     break;
@@ -223,15 +223,22 @@ public class ManageMenu
         Console.Write("Description: ");
         string description = Console.ReadLine() ?? "";
 
-        Console.Write("Category: ");
-        string category = Console.ReadLine() ?? "";
-        while (string.IsNullOrWhiteSpace(category))
-        {
-            Console.Write("Category cannot be empty. Enter category: ");
-            category = Console.ReadLine() ?? "";
-        }
+        string[] categoryOptions = { "Starter", "Main course", "Dessert", "Drinks" };
+        Ui categoryUi = new Ui("Select a Category:", categoryOptions);
+        int categoryIndex = categoryUi.Run();
+        string category = categoryOptions[categoryIndex];
 
-        string[] allergenOptions = { "Milk", "Egg", "Shellfish", "Fish", "Peanuts", "Wheat", "Soy", "Sesame", "Alcohol", "Crustaceans", "Done" };
+        List<string> allergensFromDb = Logic.GetAllAllergens();
+        List<string> allergenList = new List<string>();
+        
+        foreach (string allergen in allergensFromDb)
+        {
+            allergenList.Add(allergen);
+        }
+        allergenList.Add("Done");
+        
+        string[] allergenOptions = allergenList.ToArray();
+        
         Ui allergenUi = new Ui("Select allergens (Space/Enter to toggle, select Done to finish):", allergenOptions);
         List<string> selectedAllergens = allergenUi.RunMultiSelect();
         string allergens = string.Join(",", selectedAllergens);
@@ -322,6 +329,7 @@ public class ManageMenu
 
         Console.Clear();
         Console.WriteLine("Enter new values or press enter to keep current values.");
+        
         Console.Write($"Name({selectedItem.Name}): ");
         string newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))
@@ -343,21 +351,45 @@ public class ManageMenu
             selectedItem.Description = newDescription;
         }
 
-        Console.Write($"Category({selectedItem.FoodCategory}): ");
-        string newCategory = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(newCategory))
+        string[] categoryOptions = { "Starter", "Main course", "Dessert", "Drinks", "Keep current" };
+        Ui categoryEditUi = new Ui($"Select a Category (Current: {selectedItem.FoodCategory}):", categoryOptions);
+        int categoryEditIndex = categoryEditUi.Run();
+        
+        if (categoryOptions[categoryEditIndex] != "Keep current")
         {
-            selectedItem.FoodCategory = newCategory;
+            selectedItem.FoodCategory = categoryOptions[categoryEditIndex];
         }
 
-        string[] allergenOptions = { "Milk", "Egg", "Shellfish", "Fish", "Peanuts", "Wheat", "Soy", "Sesame", "Alcohol", "Crustaceans", "Done" };
-        Ui allergenEditUi = new Ui($"Select allergens (Space/Enter to toggle, Done to finish):", allergenOptions);
+        List<string> allergensFromDbEdit = Logic.GetAllAllergens();
+        List<string> allergenListEdit = new List<string>();
         
-        for (int i = 0; i < allergenOptions.Length; i++)
+        foreach (string allergen in allergensFromDbEdit)
         {
-            if (!string.IsNullOrEmpty(selectedItem.Allergens) && selectedItem.Allergens.Contains(allergenOptions[i]))
+            allergenListEdit.Add(allergen);
+        }
+        allergenListEdit.Add("Done");
+        
+        string[] allergenOptions = allergenListEdit.ToArray();
+        Ui allergenEditUi = new Ui($"Select allergens (Space/Enter to toggle, Done to finish):", allergenOptions);
+
+        if (!string.IsNullOrEmpty(selectedItem.Allergens))
+        {
+            string[] currentAllergens = selectedItem.Allergens.Split(',');
+            for (int i = 0; i < allergenOptions.Length; i++)
             {
-                allergenEditUi.ToggledOptions[i] = true;
+                if (allergenOptions[i] == "Done") 
+                {
+                    break;
+                }
+                
+                foreach (string current in currentAllergens)
+                {
+                    if (current.Trim().ToLower() == allergenOptions[i].ToLower())
+                    {
+                        allergenEditUi.ToggledOptions[i] = true;
+                        break;
+                    }
+                }
             }
         }
 
@@ -379,7 +411,7 @@ public class ManageMenu
         Console.ReadKey();
         Start();
     }
-
+    
     public void DeleteMenuItem()
     {
         Console.Clear();
