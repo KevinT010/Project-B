@@ -72,7 +72,6 @@ public class Reservation
             int minute = Convert.ToInt32(timeParts[1]);
             DateTime requestedDateTime = new DateTime(year, month, day, hour, minute, 0);
 
-            // reservation date check
             if (requestedDateTime < DateTime.Now)
             {
                 Console.WriteLine("You can't make a reservation in the past.\nPress any key to go back.");
