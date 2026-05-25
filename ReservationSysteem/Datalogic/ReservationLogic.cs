@@ -60,7 +60,7 @@ public class ReservationLogic
         }
     }
 
-    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int kidsPlayArea, int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
+    public bool MakeReservation(Int64 accountId, Int64 tableId, DateTime dateTime, int numberOfGuests, int numberOfKids, int kidsPlayArea, string notes = "", int durationMinutes = 120, bool expired = false, double totalPrice = 0.0)
     {
         var overlapping = _reservationAccess.GetOverlappingReservations(tableId, dateTime, durationMinutes);
         var table = _tableLogic.GetAllTables().FirstOrDefault(table => table.Id == tableId);
@@ -83,7 +83,7 @@ public class ReservationLogic
             return false;
         }
 
-        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes, expired, totalPrice, kidsPlayArea));
+        _reservationAccess.InsertReservation(new ReservationModel(accountId, tableId, dateTime, numberOfGuests, numberOfKids, durationMinutes, expired, totalPrice, kidsPlayArea, notes));
         return true;
     }
 

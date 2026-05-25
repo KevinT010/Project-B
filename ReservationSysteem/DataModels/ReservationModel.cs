@@ -11,14 +11,14 @@ public class ReservationModel
     public int DurationMinutes { get; set; }
     public bool Expired { get; set; }
     public double? PriceTotal { get; set; }
-
-    public  int KidsPlayArea { get; set; }
+    public int KidsPlayArea { get; set; }
+    public string Notes { get; set; }
 
     public ReservationModel()
     {
     }
 
-    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 120, bool expired = false, double priceTotal = 0.0, int kidsPlayArea = 0)
+    public ReservationModel(Int64 accountid, Int64 tableId, DateTime datetime, int numberOfGuests, int numberOfKids, int durationMinutes = 120, bool expired = false, double priceTotal = 0.0, int kidsPlayArea = 0, string notes = "")
     {
         AccountId = accountid;
         TableId = tableId;
@@ -29,5 +29,6 @@ public class ReservationModel
         Expired = expired;
         PriceTotal = priceTotal;
         KidsPlayArea = kidsPlayArea;
+        Notes = notes;
     }
 }

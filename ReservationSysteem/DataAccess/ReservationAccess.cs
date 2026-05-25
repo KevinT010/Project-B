@@ -83,8 +83,8 @@ public class ReservationAccess
     public void InsertReservation(ReservationModel reservation)
     {
         string query = $@"INSERT INTO {ReservationTable} 
-            (AccountId, TableId, DateTime, NumberOfGuests, NumberOfKids, DurationMinutes, Expired, PriceTotal, KidsPlayArea) 
-            VALUES (@AccountId, @TableId, @DateTime, @NumberOfGuests, @NumberOfKids, @DurationMinutes, @Expired, @PriceTotal, @KidsPlayArea)";
+            (AccountId, TableId, DateTime, NumberOfGuests, NumberOfKids, DurationMinutes, Expired, PriceTotal, KidsPlayArea, Notes) 
+            VALUES (@AccountId, @TableId, @DateTime, @NumberOfGuests, @NumberOfKids, @DurationMinutes, @Expired, @PriceTotal, @KidsPlayArea, @Notes)";
         _connection.Execute(query, reservation);
     }
 

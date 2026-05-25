@@ -316,6 +316,7 @@ public class Reservation
 
 
             // ----------------------------------------------------------------------------------------------------------------------------------
+            
 
             List<TableModel> availableTables = reservationLogic.GetAvailableTables(requestedDateTime, numberOfGuests);
 
@@ -360,7 +361,11 @@ public class Reservation
 
             TableModel selectedTable = availableTables[selectedIndex];
 
-            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids, kidsPlayArea);
+            Console.Clear();
+            Console.Write("Do you have any notes or special requests or allergens? (Leave empty if none): ");
+            string notes = Console.ReadLine();
+
+            bool success = reservationLogic.MakeReservation(account.Id, selectedTable.Id, requestedDateTime, numberOfGuests, numberOfKids, kidsPlayArea, notes);
 
             if (success)
             {
@@ -377,6 +382,10 @@ public class Reservation
                 else
                     Console.WriteLine($"   Reward points:  +20");
                 Console.WriteLine($"   Kids in play area:  {kidsPlayArea}");
+                if (!string.IsNullOrEmpty(notes))
+                {
+                    Console.WriteLine($"   Notes: {notes}");
+                }
             }
 
             else
