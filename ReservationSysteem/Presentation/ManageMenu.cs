@@ -228,23 +228,44 @@ public class ManageMenu
         int categoryIndex = categoryUi.Run();
         string category = categoryOptions[categoryIndex];
 
-        List<string> allergensFromDb = Logic.GetAllAllergens();
-        List<string> allergenList = new List<string>();
-        
-        foreach (string allergen in allergensFromDb)
-        {
-            allergenList.Add(allergen);
-        }
-        allergenList.Add("Done");
-        
-        string[] allergenOptions = allergenList.ToArray();
-        
-        Ui allergenUi = new Ui("Select allergens (Space/Enter to toggle, select Done to finish):", allergenOptions);
-        List<string> selectedAllergens = allergenUi.RunMultiSelect();
-        string allergens = string.Join(",", selectedAllergens);
+        var allergensFromDb = Logic.GetAllAllergens();
+        List<string> allergenOptionsList = new List<string>();
 
-        MenuModel newItem = new MenuModel("", name, description, price, category, allergens);
-        Logic.AddMenuItem(newItem, selectedMenuId);
+        foreach (var allergen in allergensFromDb)
+        {
+            allergenOptionsList.Add(allergen.Name);
+        }
+        allergenOptionsList.Add("Done");
+
+        Ui allergenUi = new Ui("Select allergens (Space to toggle, 'Done' to finish):", allergenOptionsList.ToArray());
+        List<string> selectedAllergens = allergenUi.MultiSelect();
+
+        if (selectedAllergens.Count == 0)
+        {
+            selectedAllergens.Clear();
+        }
+
+        string allergenName = selectedAllergens.Count > 0 ? string.Join(", ", selectedAllergens) : "None";
+
+        MenuModel newItem = new MenuModel("", name, description, price, category, null);
+        if (allergenName != "None")
+        {
+            newItem.AllergenName = allergenName;
+        }
+
+        List<int> selectedAllergenIds = new();
+        foreach (var selected in selectedAllergens)
+        {
+            foreach (var allergen in allergensFromDb)
+            {
+                if (allergen.Name == selected)
+                {
+                    selectedAllergenIds.Add(allergen.Id);
+                }
+            }
+        }
+
+        Logic.AddMenuItem(newItem, selectedMenuId, selectedAllergenIds);
 
         Console.Clear();
         Console.WriteLine("Menu item added successfully!");
@@ -253,7 +274,7 @@ public class ManageMenu
         Console.WriteLine($"Price:        {price:0.00}");
         Console.WriteLine($"Description: {description}");
         Console.WriteLine($"Category:    {category}");
-        Console.WriteLine($"Allergens:   {allergens}");
+        Console.WriteLine($"Allergens:   {allergenName}");
         Console.WriteLine("-----------------------------");
         Console.WriteLine("Press any key to return...");
         Console.ReadKey();
@@ -329,7 +350,7 @@ public class ManageMenu
 
         Console.Clear();
         Console.WriteLine("Enter new values or press enter to keep current values.");
-        
+
         Console.Write($"Name({selectedItem.Name}): ");
         string newName = Console.ReadLine();
         if (!string.IsNullOrWhiteSpace(newName))
@@ -354,49 +375,44 @@ public class ManageMenu
         string[] categoryOptions = { "Starter", "Main course", "Dessert", "Drinks", "Keep current" };
         Ui categoryEditUi = new Ui($"Select a Category (Current: {selectedItem.FoodCategory}):", categoryOptions);
         int categoryEditIndex = categoryEditUi.Run();
-        
+
         if (categoryOptions[categoryEditIndex] != "Keep current")
         {
             selectedItem.FoodCategory = categoryOptions[categoryEditIndex];
         }
 
-        List<string> allergensFromDbEdit = Logic.GetAllAllergens();
-        List<string> allergenListEdit = new List<string>();
-        
-        foreach (string allergen in allergensFromDbEdit)
-        {
-            allergenListEdit.Add(allergen);
-        }
-        allergenListEdit.Add("Done");
-        
-        string[] allergenOptions = allergenListEdit.ToArray();
-        Ui allergenEditUi = new Ui($"Select allergens (Space/Enter to toggle, Done to finish):", allergenOptions);
+        var allergensFromDbEdit = Logic.GetAllAllergens();
+        List<string> allergenOptionsList = new List<string>();
 
-        if (!string.IsNullOrEmpty(selectedItem.Allergens))
+        foreach (var allergen in allergensFromDbEdit)
         {
-            string[] currentAllergens = selectedItem.Allergens.Split(',');
-            for (int i = 0; i < allergenOptions.Length; i++)
+            allergenOptionsList.Add(allergen.Name);
+        }
+        allergenOptionsList.Add("Keep current");
+        allergenOptionsList.Add("Done");
+
+        Ui allergenEditUi = new Ui($"Select allergens (Current: {selectedItem.AllergenName}). Space to toggle, 'Done' to finish:", allergenOptionsList.ToArray());
+        List<string> selectedAllergens = allergenEditUi.MultiSelect();
+
+        if (selectedAllergens.Count > 0 && !selectedAllergens.Contains("Keep current"))
+        {
+            selectedItem.AllergenId = null;
+            selectedItem.AllergenName = string.Join(", ", selectedAllergens);
+        }
+
+        List<int> selectedAllergenIds = new();
+        foreach (var selected in selectedAllergens)
+        {
+            foreach (var allergen in allergensFromDbEdit)
             {
-                if (allergenOptions[i] == "Done") 
+                if (allergen.Name == selected)
                 {
-                    break;
-                }
-                
-                foreach (string current in currentAllergens)
-                {
-                    if (current.Trim().ToLower() == allergenOptions[i].ToLower())
-                    {
-                        allergenEditUi.ToggledOptions[i] = true;
-                        break;
-                    }
+                    selectedAllergenIds.Add(allergen.Id);
                 }
             }
         }
 
-        List<string> selectedEditAllergens = allergenEditUi.RunMultiSelect();
-        selectedItem.Allergens = string.Join(",", selectedEditAllergens);
-
-        Logic.UpdateMenuItem(selectedItem);
+        Logic.UpdateMenuItem(selectedItem, selectedAllergenIds);
 
         Console.Clear();
         Console.WriteLine("Menu item updated successfully!");
@@ -405,13 +421,12 @@ public class ManageMenu
         Console.WriteLine($"Price:        {selectedItem.Price:0.00}");
         Console.WriteLine($"Description: {selectedItem.Description}");
         Console.WriteLine($"Category:    {selectedItem.FoodCategory}");
-        Console.WriteLine($"Allergens:   {selectedItem.Allergens}");
+        Console.WriteLine($"Allergens:   {selectedItem.AllergenName}");
         Console.WriteLine("-----------------------------");
         Console.WriteLine("Press any key to return...");
         Console.ReadKey();
         Start();
     }
-    
     public void DeleteMenuItem()
     {
         Console.Clear();

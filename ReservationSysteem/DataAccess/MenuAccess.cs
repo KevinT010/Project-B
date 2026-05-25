@@ -7,8 +7,8 @@ public class MenuAccess
 
     public int InsertMenuItem(MenuModel menuItem, int menuId)
     {
-        string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergens) 
-                     VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @Allergens);
+        string query = @"INSERT INTO MenuItem (MenuId, Name, Price, description, foodcategory, allergenid) 
+                     VALUES (@MenuId, @Name, @Price, @Description, @FoodCategory, @AllergenId);
                      SELECT last_insert_rowid();";
 
         return _connection.ExecuteScalar<int>(query, new
@@ -18,16 +18,30 @@ public class MenuAccess
             Price = menuItem.Price,
             Description = menuItem.Description,
             FoodCategory = menuItem.FoodCategory,
-            Allergens = menuItem.Allergens
+            AllergenId = menuItem.AllergenId
         });
     }
 
     public List<MenuModel> GetAllMenuItems()
     {
         string query = @"
-            SELECT MenuItem.*, Menu.MenuName, Menu.IsActive 
+            SELECT 
+                MenuItem.id,
+                MenuItem.MenuId,
+                MenuItem.Name,
+                MenuItem.Price,
+                MenuItem.description,
+                MenuItem.foodcategory,
+                Menu.MenuName, 
+                Menu.IsActive, 
+                IFNULL(GROUP_CONCAT(Allergen.Name, ', '), 'None') AS AllergenName 
             FROM MenuItem
-            LEFT JOIN Menu ON MenuItem.MenuId = Menu.id;";
+            LEFT JOIN Menu ON MenuItem.MenuId = Menu.id
+            LEFT JOIN AllergenOnMenu ON MenuItem.id = AllergenOnMenu.NameId
+            LEFT JOIN Allergen ON AllergenOnMenu.AllergenId = Allergen.id
+            GROUP BY 
+                MenuItem.id, MenuItem.MenuId, MenuItem.Name, MenuItem.Price, 
+                MenuItem.description, MenuItem.foodcategory, Menu.MenuName, Menu.IsActive;";
 
         return _connection.Query<MenuModel>(query).ToList();
     }
@@ -59,7 +73,7 @@ public class MenuAccess
     public void UpdateMenuItem(MenuModel menuItem)
     {
         string query = @"UPDATE MenuItem SET Name = @Name, Price = @Price, description = @Description, 
-                         foodcategory = @FoodCategory, allergens = @Allergens WHERE id = @Id";
+                         foodcategory = @FoodCategory, allergenid = @AllergenId WHERE id = @Id";
         _connection.Execute(query, menuItem);
     }
 
@@ -109,9 +123,24 @@ public class MenuAccess
         _connection.Execute(query, new { Id = menuId });
         return true;
     }
-    public List<string> GetAllAllergens()
+    public List<AllergenModel> GetAllAllergens()
     {
-        string query = "SELECT Name FROM Allergens;";
-        return _connection.Query<string>(query).ToList();
+        string query = "SELECT id as Id, Name FROM Allergen;";
+        return _connection.Query<AllergenModel>(query).ToList();
+    }
+
+    public void LinkAllergensToMenuItem(int menuItemId, List<int> allergenIds)
+    {
+        string deleteQuery = "DELETE FROM AllergenOnMenu WHERE NameId = @MenuItemId";
+        _connection.Execute(deleteQuery, new { MenuItemId = menuItemId });
+
+        if (allergenIds != null && allergenIds.Count > 0)
+        {
+            string insertQuery = "INSERT INTO AllergenOnMenu (NameId, AllergenId) VALUES (@MenuItemId, @AllergenId)";
+            foreach (int allergenId in allergenIds)
+            {
+                _connection.Execute(insertQuery, new { MenuItemId = menuItemId, AllergenId = allergenId });
+            }
+        }
     }
 }

@@ -172,7 +172,7 @@ public class Ui
         return SelectedIndex;
     }
 
-    public List<string> RunMultiSelect()
+    public List<string> MultiSelect()
     {
         ConsoleKey keyPressed;
         do

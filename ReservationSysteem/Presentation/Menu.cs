@@ -174,9 +174,9 @@ public class Menu
                 Console.WriteLine($"Description: {item.Description}");
                 Console.WriteLine($"Price: {item.Price}");
 
-                if (!string.IsNullOrEmpty(item.Allergens))
+                if (!string.IsNullOrEmpty(item.AllergenName))
                 {
-                    string emoji = GetAllergenEmojis(item.Allergens);
+                    string emoji = GetAllergenEmojis(item.AllergenName);
                     Console.WriteLine($"Allergens: {emoji}");
                 }
                 Console.WriteLine("-----------------------------");

@@ -6,20 +6,21 @@ public class MenuModel
     public string Description { get; set; }
     public double Price { get; set; }
     public string FoodCategory { get; set; }
-    public string Allergens { get; set; }
+    public Int64? AllergenId { get; set; }
+    public string AllergenName { get; set; }
     public bool IsActive { get; set; }
 
     public MenuModel()
     {
     }
 
-    public MenuModel(string menuName, string name, string description, double price, string foodCategory, string allergens)
+    public MenuModel(string menuName, string name, string description, double price, string foodCategory, Int64? allergenId)
     {
         MenuName = menuName;
         Name = name;
         Description = description;
         Price = price;
         FoodCategory = foodCategory;
-        Allergens = allergens;
+        AllergenId = allergenId;
     }
 }

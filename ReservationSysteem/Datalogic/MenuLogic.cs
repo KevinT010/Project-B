@@ -6,10 +6,11 @@ public class MenuLogic
     {
     }
 
-    public void AddMenuItem(MenuModel menuItem, int menuId)
+    public void AddMenuItem(MenuModel menuItem, int menuId, List<int> allergenIds)
     {
         int newItemId = _access.InsertMenuItem(menuItem, menuId);
         _access.LinkItemToMenu(newItemId, menuId);
+        _access.LinkAllergensToMenuItem(newItemId, allergenIds);
     }
 
     public List<MenuModel> GetAllMenuItems()
@@ -34,9 +35,10 @@ public class MenuLogic
         _access.UpdateMenu(menuId, newMenuName, isActive);
     }
 
-    public void UpdateMenuItem(MenuModel menuItem)
+    public void UpdateMenuItem(MenuModel menuItem, List<int> allergenIds)
     {
         _access.UpdateMenuItem(menuItem);
+        _access.LinkAllergensToMenuItem((int)menuItem.Id, allergenIds);
     }
 
     public bool DeleteMenuItem(int menuItemId)
@@ -53,9 +55,9 @@ public class MenuLogic
     {
         _access.LinkItemToMenu(menuItemId, menuId);
     }
-    public List<string> GetAllAllergens()
+    public List<AllergenModel> GetAllAllergens()
     {
         var allergens = _access.GetAllAllergens();
-        return allergens ?? new List<string>();
+        return allergens ?? new List<AllergenModel>();
     }
 }
