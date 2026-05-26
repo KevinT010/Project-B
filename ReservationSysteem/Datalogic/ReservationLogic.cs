@@ -145,4 +145,37 @@ public class ReservationLogic
         _reservationAccess.DeleteReservationsByUser(accountId);
         return true;
     }
+
+    public List<DateTime> GetDays()
+    {
+        var allReservations = GetAllReservations();
+        List<DateTime> days = [];
+
+        foreach (ReservationModel reservation in allReservations)
+        {
+            DateTime day = reservation.DateTime.Date;
+            if (!days.Contains(day))
+            {
+                days.Add(day);
+            }
+        }
+
+        days.Sort();
+        return days;
+    }
+    public List<ReservationModel> GetReservationsByDay(DateTime day)
+    {
+        var allReservations = GetAllReservations();
+        List<ReservationModel> reservationsOnDay = [];
+
+        foreach (ReservationModel reservation in allReservations)
+        {
+            if (reservation.DateTime.Date == day)
+            {
+                reservationsOnDay.Add(reservation);
+            }
+        }
+
+        return reservationsOnDay;
+    }
 }

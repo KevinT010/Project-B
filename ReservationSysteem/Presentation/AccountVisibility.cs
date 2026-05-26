@@ -15,7 +15,7 @@ public static class AccountVisibility
     private static void ShowUserMenu()
     {
         string prompt = $"Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}!\nUser dashboard";
-        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management","Operating Hours", "Logout" };
+        string[] options = { "Menu", "Reservations", "Floor-plan", "Account management","Operating Hours", "Reviews", "Logout" };
         Ui userMenu = new Ui(prompt, options);
         int selectedIndex = userMenu.Run();
 
@@ -60,7 +60,11 @@ public static class AccountVisibility
                 OperatingHour operatingHour = new OperatingHour();
                 operatingHour.Start();
                 break;
-            case 5:
+            case 5: 
+                Review review = new Review();
+                review.Start(Session.CurrentUser);
+                break;
+            case 6:
                 Session.Logout();
                 break;
         }
@@ -69,7 +73,7 @@ public static class AccountVisibility
     private static void ShowAdminMenu()
     {
         string prompt = $"Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}!\nAdmin dashboard";
-        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Admin Account Management", "Logout" };
+        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Admin Account Management", "Reviews", "Logout" };
         Ui adminMenu = new Ui(prompt, options);
         int selectedIndex = adminMenu.Run();
 
@@ -99,6 +103,10 @@ public static class AccountVisibility
                 adminAccountManagement.Start();
                 break;
             case 5:
+                Review review = new Review();
+                review.Start(Session.CurrentUser);
+                break;
+            case 6:
                 Console.Clear();
                 Session.Logout();
                 break;
