@@ -26,9 +26,19 @@ public class ReviewLogic
     {
         _access.DeleteReview(reviewId);
     }
+    public bool DeleteReviewByAccount(Int64 accountId)
+    {
+        if(GetByAccountId(accountId).Count == 0)
+        {
+            return false;
+        }
+        _access.DeleteReviewbyaccount(accountId);
+        return true;
+    }
 
     public string GetStars(int rating)
     {
         return new string('★', rating) + new string('☆', 5 - rating);
     }
+
 }

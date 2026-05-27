@@ -32,4 +32,10 @@ public class ReviewAccess
         string query = $"DELETE FROM {ReviewTable} WHERE Id = @Id";
         _connection.Execute(query, new { Id = reviewId });
     }
+
+    public void DeleteReviewbyaccount(Int64 accountId)
+    {
+        string query = $"DELETE FROM {ReviewTable} WHERE AccountId = @AccountId";
+        _connection.Execute(query, new { AccountId = accountId });
+    }
 }
