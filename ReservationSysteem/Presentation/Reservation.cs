@@ -10,6 +10,7 @@ public class Reservation
         {
             Console.OutputEncoding = Encoding.UTF8;
             ReservationLogic reservationLogic = new();
+            RewardLogic rewardLogic = new RewardLogic();
             List<ReservationModel> b = reservationLogic.GetActiveByAccountId(account.Id);
             /*if (b.Count >= 2)
             {
@@ -257,10 +258,10 @@ public class Reservation
             if (numberOfKids > 0)
             {
                 int currentKidsInPlayArea = reservationLogic.GetKidsInPlayArea(requestedDateTime, 120);
-                int availableSpots = 10 - currentKidsInPlayArea;
+                int availableSpots = reservationLogic.MaxMaxPlayAreaCapacity - currentKidsInPlayArea;
 
                 Console.WriteLine("\n--- Kids Play Area Availability ---");
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < reservationLogic.MaxMaxPlayAreaCapacity; i++)
                 {
                     if (i < currentKidsInPlayArea)
                     {
@@ -279,7 +280,7 @@ public class Reservation
                     }
                 }
                 Console.ResetColor();
-                Console.WriteLine($"\n\n({availableSpots} out of 10 spots remaining)");
+                Console.WriteLine($"\n\n({availableSpots} out of {reservationLogic.MaxMaxPlayAreaCapacity} spots remaining)");
                 Console.WriteLine("-----------------------------------\n");
             }
 
@@ -298,7 +299,7 @@ public class Reservation
                     }
                     else
                     {
-                        Console.WriteLine("kids playarea can only contain 10 kids at this time. \nPress any key to go back.");
+                        Console.WriteLine($"kids playarea can only contain {reservationLogic.MaxMaxPlayAreaCapacity} kids at this time. \nPress any key to go back.");
                         Console.ReadKey();
                     }
                 }
@@ -335,7 +336,7 @@ public class Reservation
             // add & convert available table object to string list  
             foreach (TableModel table in availableTables)
             {
-                if (table.TableNumber == 15)
+                if (reservationLogic.CheckHibachiName(table))
                 {
                     tableOptions.Add($"Hibachi Bar (seats {table.Capacity})");
                     continue;
@@ -368,7 +369,6 @@ public class Reservation
 
             if (success)
             {
-                RewardLogic rewardLogic = new RewardLogic();
                 rewardLogic.GiveReservationPoints(Session.CurrentUser);
                 Console.WriteLine($"\n✅ Reservation confirmed!");
                 Console.WriteLine($"   Table:     {selectedTable.TableNumber}");
@@ -376,7 +376,7 @@ public class Reservation
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
                 Console.WriteLine($"   Kids:      {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
-                if (account.Points == 20000)
+                if (rewardLogic.HasReachedMaxPoints(Session.CurrentUser))
                     Console.WriteLine($"   Reward points: +0 (Maximum point amount reached)");
                 else
                     Console.WriteLine($"   Reward points:  +20");
@@ -392,7 +392,7 @@ public class Reservation
                 Console.WriteLine("❌ Reservation failed. The table was just taken. Please try again.");
             }
 
-            if (Session.CurrentUser.Points >= 200)
+            if (rewardLogic.HasReachedMaxPoints(Session.CurrentUser))
                 Console.WriteLine("\nYou have enough points to claim a voucher!");
             Console.WriteLine("\nPress any key to return.");
             Console.ReadKey();

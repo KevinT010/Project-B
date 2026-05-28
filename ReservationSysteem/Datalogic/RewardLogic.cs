@@ -36,7 +36,7 @@ public class RewardLogic
         }
         _access.UpdatePoints(account.Id, account.Points);
     }
-    
+
     public bool Remove_Vouchers(AccountModel account, int amount)
     {
         if (account.DesertVouchers < amount)
@@ -51,5 +51,17 @@ public class RewardLogic
         _access.UpdatePoints(account.Id, account.Points);
         _access.UpdateVouchers(account.Id, account.DesertVouchers);
         return true;
+    }
+
+    public bool HasReachedMaxPoints(AccountModel account)
+    {
+        int maxPoints = 20000;
+        return account.Points >= maxPoints;
+    }
+
+    public bool enoughPoints(AccountModel account, int amount)
+    {
+        int cost = amount * 200;
+        return account.Points >= cost;
     }
 }

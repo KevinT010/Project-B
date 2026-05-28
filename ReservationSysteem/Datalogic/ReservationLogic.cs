@@ -3,6 +3,8 @@ public class ReservationLogic
     private ReservationAccess _reservationAccess = new();
     private TableLogic _tableLogic = new();
 
+    public int MaxMaxPlayAreaCapacity = 10;
+
     public List<TableModel> GetAvailableTables(DateTime requestedDateTime, int numberOfGuests, int durationMinutes = 120)
     {
         var allTables = _tableLogic.GetAllTables();
@@ -103,7 +105,7 @@ public class ReservationLogic
     public bool CheckPlayAreaCapacity(DateTime requestedStart, int numberOfKids, int durationMinutes = 120)
     {
         int currentKidsInPlayArea = GetKidsInPlayArea(requestedStart, durationMinutes);
-        return currentKidsInPlayArea + numberOfKids <= 10;
+        return currentKidsInPlayArea + numberOfKids <= MaxMaxPlayAreaCapacity;
     }
 
     public bool IsExpired(ReservationModel reservation)
@@ -177,5 +179,10 @@ public class ReservationLogic
         }
 
         return reservationsOnDay;
+    }
+
+    public bool CheckHibachiName(TableModel table)
+    {
+        return table.TableNumber == 15;
     }
 }
