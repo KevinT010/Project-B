@@ -108,7 +108,7 @@ public class AdminAccountManagement
                     }
                     if (_logic.EmailValidation(email) == null)
                     {
-                        Console.WriteLine("Email must contain a '@' and at least one period after it or already exist.");
+                        Console.WriteLine("Email must contain a @ and at least one period(.) after the @. or Email is already in use.");
                         Console.ReadKey();
                         break;
                     }
@@ -141,7 +141,7 @@ public class AdminAccountManagement
                     AccountVisibility.VisibilityMenu(Session.CurrentUser);
                     break;
                 case 6:
-                    if (_logic.FirstNameValidation(user.FirstName) == null || _logic.LastNameValidation(user.LastName) == null || _logic.EmailValidation(user.Email) == null || _logic.PhoneNumberValidation(user.PhoneNumber) == null)
+                    if (_logic.FirstNameValidation(user.FirstName) == null || _logic.LastNameValidation(user.LastName) == null ||  _logic.PhoneNumberValidation(user.PhoneNumber) == null || _logic.EmailValidation(user.Email) != null)
                     {
                         Console.WriteLine("Please save changes before going back to the menu.");
                         Thread.Sleep(2000);
