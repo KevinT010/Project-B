@@ -79,27 +79,57 @@ public class MenuAccess
 
     public bool IsItemInReservation(int menuItemId)
     {
-        string query = "SELECT COUNT(1) FROM Guestchoice WHERE MenuItemId = @MenuItemId";
-        return _connection.ExecuteScalar<long>(query, new { MenuItemId = menuItemId }) > 0;
+        string choiceQuery = "SELECT GuestId FROM GuestChoice WHERE MenuItemId = @MenuItemId";
+        var guestIds = _connection.Query<long>(choiceQuery, new { MenuItemId = menuItemId }).ToList();
+
+        foreach (long guestId in guestIds)
+        {
+            string guestQuery = "SELECT ReservationId FROM Guest WHERE Id = @Id";
+            long reservationId = _connection.ExecuteScalar<long>(guestQuery, new { Id = guestId });
+
+            string reservationQuery = "SELECT DateTime FROM Reservation WHERE Id = @Id";
+            DateTime reservationDate = _connection.ExecuteScalar<DateTime>(reservationQuery, new { Id = reservationId });
+
+            if (reservationDate >= DateTime.Now)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool IsMenuInReservation(int menuId)
     {
-        string query = @"SELECT COUNT(1) FROM MenuItem mi
-                     JOIN Guestchoice gc ON mi.id = gc.MenuItemId
-                     WHERE mi.MenuId = @MenuId";
-        return _connection.ExecuteScalar<long>(query, new { MenuId = menuId }) > 0;
+        string itemQuery = "SELECT id FROM MenuItem WHERE MenuId = @MenuId";
+        var itemIds = _connection.Query<int>(itemQuery, new { MenuId = menuId }).ToList();
+
+        foreach (int itemId in itemIds)
+        {
+            if (IsItemInReservation(itemId))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public bool DeleteMenuItem(int menuItemId)
+public bool DeleteMenuItem(int menuItemId)
     {
         if (IsItemInReservation(menuItemId))
         {
             return false;
         }
 
+        string deleteAllergensQuery = "DELETE FROM AllergenOnMenu WHERE NameId = @Id";
+        _connection.Execute(deleteAllergensQuery, new { Id = menuItemId });
+
         string deleteLinkQuery = "DELETE FROM ItemOnMenu WHERE MenuItemId = @Id";
         _connection.Execute(deleteLinkQuery, new { Id = menuItemId });
+
+        string deleteChoicesQuery = "DELETE FROM GuestChoice WHERE MenuItemId = @Id";
+        _connection.Execute(deleteChoicesQuery, new { Id = menuItemId });
 
         string query = "DELETE FROM MenuItem WHERE id = @Id";
         _connection.Execute(query, new { Id = menuItemId });
@@ -111,6 +141,18 @@ public class MenuAccess
         if (IsMenuInReservation(menuId))
         {
             return false;
+        }
+
+        string itemQuery = "SELECT id FROM MenuItem WHERE MenuId = @MenuId";
+        var itemIds = _connection.Query<int>(itemQuery, new { MenuId = menuId }).ToList();
+
+        foreach (int itemId in itemIds)
+        {
+            string deleteChoicesQuery = "DELETE FROM GuestChoice WHERE MenuItemId = @Id";
+            _connection.Execute(deleteChoicesQuery, new { Id = itemId });
+
+            string deleteAllergensQuery = "DELETE FROM AllergenOnMenu WHERE NameId = @Id";
+            _connection.Execute(deleteAllergensQuery, new { Id = itemId });
         }
 
         string deleteLinkQuery = "DELETE FROM ItemOnMenu WHERE MenuId = @Id";
