@@ -1,14 +1,10 @@
-using System.ComponentModel;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
-
 public class PreOrder
 {
-
-    private List<GuestChoiceModel> AllSelectedItems = [];
+    private List<GuestChoiceModel> AllSelectedItems = new();
     private PreOrderLogic Logic = new PreOrderLogic();
     private MenuLogic MenuLogic = new MenuLogic();
-    private ViewReservations viewReservations = new();
+    private RewardLogic RewardLogic = new RewardLogic();
+    private ViewReservations viewReservations = new ViewReservations();
 
     public void Start(AccountModel account, ReservationModel pickedReservation)
     {
@@ -17,78 +13,90 @@ public class PreOrder
 
     public void SelectGuestMenu(AccountModel account, ReservationModel pickedReservation)
     {
-        List<string> guest = [];
+        List<string> guest = new();
 
         for (int i = 1; i <= pickedReservation.NumberOfGuests; i++)
         {
             guest.Add($"Guest: {i}");
         }
+
         guest.Add("View Order");
         guest.Add("Edit Order");
         guest.Add("Confirm Order");
         guest.Add("Back");
 
-        Ui PreOrderMenu = new Ui("Select Guest", guest.ToArray());
-        int SelectedIndex = PreOrderMenu.Run();
+        Ui menu = new Ui("Select Guest", guest.ToArray());
+        int selectedIndex = menu.Run();
 
-        switch (guest[SelectedIndex])
+        string choice = guest[selectedIndex];
+
+        if (choice == "View Order")
         {
-            case "View Order":
-                ViewOrder();
-                SelectGuestMenu(account, pickedReservation);
-                return;
-            case "Edit Order":
-                EditOrder();
-                SelectGuestMenu(account, pickedReservation);
-                return;
-            case "Confirm Order":
-                ConfirmOrder(account, pickedReservation);
-                return;
-            case "Back":
-                viewReservations.Start(account);
-                return;
-            default:
-                int guestNumber = SelectedIndex + 1;
-                SelectAllergens(account, pickedReservation, guestNumber);
-                return;
+            ViewOrder();
+            SelectGuestMenu(account, pickedReservation);
+            return;
         }
+
+        if (choice == "Edit Order")
+        {
+            EditOrder();
+            SelectGuestMenu(account, pickedReservation);
+            return;
+        }
+
+        if (choice == "Confirm Order")
+        {
+            ConfirmOrder(account, pickedReservation);
+            return;
+        }
+
+        if (choice == "Back")
+        {
+            viewReservations.Start(account);
+            return;
+        }
+
+        SelectAllergens(account, pickedReservation, selectedIndex + 1);
     }
 
     public void SelectAllergens(AccountModel account, ReservationModel pickedReservation, int guestNumber)
     {
+        List<string> allergenOptions = new()
+        {
+            "Milk / Dairy",
+            "Egg",
+            "Shellfish",
+            "Fish",
+            "Peanuts / Nuts",
+            "Wheat / Gluten",
+            "Soy",
+            "Sesame",
+            "Alcohol",
+            "None",
+            "Remove item",
+            "Back",
+            "Done"
+        };
 
-        List<string> allergenOptions = ["Milk / Dairy", "Egg", "Shellfish", "Fish", "Peanuts / Nuts", "Wheat / Gluten", "Soy", "Sesame", "Alcohol", "None", "Remove item", "Back", "Done"];
-        List<string> chosenAllergens = [];
-        
+        List<string> chosenAllergens = new();
+
         GuestModel? existingGuest = Logic.GetGuest(pickedReservation.Id, guestNumber);
 
-        // check if guest exist
         if (existingGuest != null)
         {
             Console.Clear();
             Console.WriteLine($"Guest {guestNumber}");
-
-            if (string.IsNullOrEmpty(existingGuest.Allergens))
-            {
-                Console.WriteLine("Allergens: none");
-            }
-            else
-            {
-                Console.WriteLine($"Allergens: {existingGuest.Allergens}");
-            }
-            Console.WriteLine("\nPress any key...");
+            Console.WriteLine(string.IsNullOrEmpty(existingGuest.Allergens) ? "Allergens: none" : $"Allergens: {existingGuest.Allergens}");
             Console.ReadKey();
 
             SelectMenuItem(account, pickedReservation, guestNumber);
             return;
         }
 
-        // does not exitst
         while (true)
         {
             Ui menu = new Ui("Select allergen", allergenOptions.ToArray());
-            int SelectedIndex = menu.Run();
-            string choice = allergenOptions[SelectedIndex];
+            string choice = allergenOptions[menu.Run()];
 
             if (choice == "Back")
             {
@@ -104,24 +112,19 @@ public class PreOrder
 
             if (choice == "Remove item")
             {
-                if (chosenAllergens.Count == 0)
+                if (chosenAllergens.Count > 0)
                 {
-                    continue;
+                    Ui removeMenu = new Ui("Remove allergen", chosenAllergens.ToArray());
+                    chosenAllergens.RemoveAt(removeMenu.Run());
                 }
-
-                Ui removeMenu = new Ui("Remove allergen", chosenAllergens.ToArray());
-                int removeIndex = removeMenu.Run();
-
-                chosenAllergens.RemoveAt(removeIndex);
                 continue;
             }
-
 
             if (choice == "Done")
             {
                 string allergens = string.Join(", ", chosenAllergens);
-
                 Logic.MakeGuest(pickedReservation.Id, guestNumber, allergens);
+
                 SelectMenuItem(account, pickedReservation, guestNumber);
                 return;
             }
@@ -135,32 +138,31 @@ public class PreOrder
 
     public void SelectMenuItem(AccountModel account, ReservationModel pickedReservation, int guestNumber)
     {
-        // Pick menu
         List<MenuModel> allMenus = MenuLogic.GetAllMenus();
-        List<string> menuOptions = [];
+        List<string> menuOptions = new();
 
         foreach (MenuModel menu in allMenus)
         {
             menuOptions.Add(menu.MenuName);
         }
+
         menuOptions.Add("Back");
 
-        Ui MenuList = new Ui("Select menu", menuOptions.ToArray());
-        int menuSelected = MenuList.Run();
+        Ui menuUi = new Ui("Select menu", menuOptions.ToArray());
+        int menuIndex = menuUi.Run();
 
-        if (menuOptions[menuSelected] == "Back")
+        if (menuOptions[menuIndex] == "Back")
         {
             SelectGuestMenu(account, pickedReservation);
             return;
         }
 
-        MenuModel selectedMenu = allMenus[menuSelected];
+        MenuModel selectedMenu = allMenus[menuIndex];
 
-        // Pick category
-        List<MenuModel> allMenuItems = MenuLogic.GetAllMenuItems();
-        List<MenuModel> itemsInMenu = [];
+        List<MenuModel> allItems = MenuLogic.GetAllMenuItems();
+        List<MenuModel> itemsInMenu = new();
 
-        foreach (MenuModel item in allMenuItems)
+        foreach (MenuModel item in allItems)
         {
             if (item.MenuName == selectedMenu.MenuName)
             {
@@ -168,7 +170,7 @@ public class PreOrder
             }
         }
 
-        List<string> categoryOptions = [];
+        List<string> categoryOptions = new();
 
         foreach (MenuModel item in itemsInMenu)
         {
@@ -177,46 +179,44 @@ public class PreOrder
                 categoryOptions.Add(item.FoodCategory);
             }
         }
+
         categoryOptions.Add("Back");
 
-        Ui CategoryList = new Ui("Select category", categoryOptions.ToArray());
-        int selectedCategoryIndex = CategoryList.Run();
+        Ui categoryUi = new Ui("Select category", categoryOptions.ToArray());
+        int categoryIndex = categoryUi.Run();
 
-        if (categoryOptions[selectedCategoryIndex] == "Back")
+        if (categoryOptions[categoryIndex] == "Back")
         {
             SelectGuestMenu(account, pickedReservation);
             return;
         }
 
-        string selectedCategory = categoryOptions[selectedCategoryIndex];
+        string category = categoryOptions[categoryIndex];
 
-        // Pick item
-        List<MenuModel> itemsInCategory = new();
+        List<MenuModel> items = new();
+        List<string> itemOptions = new();
+
         foreach (MenuModel item in itemsInMenu)
         {
-            if (item.FoodCategory == selectedCategory)
+            if (item.FoodCategory == category)
             {
-                itemsInCategory.Add(item);
+                items.Add(item);
+                itemOptions.Add($"{item.Name} - ${item.Price}");
             }
         }
 
-        List<string> itemOptions = new();
-        foreach (MenuModel item in itemsInCategory)
-        {
-            itemOptions.Add($"{item.Name} - ${item.Price}");
-        }
         itemOptions.Add("Back");
 
-        Ui ItemList = new Ui("Select item", itemOptions.ToArray());
-        int selectedItemIndex = ItemList.Run();
+        Ui itemUi = new Ui("Select item", itemOptions.ToArray());
+        int itemIndex = itemUi.Run();
 
-        if (itemOptions[selectedItemIndex] == "Back")
+        if (itemOptions[itemIndex] == "Back")
         {
             SelectGuestMenu(account, pickedReservation);
             return;
         }
 
-        MenuModel selectedItem = itemsInCategory[selectedItemIndex];
+        MenuModel selectedItem = items[itemIndex];
 
         GuestModel? guest = Logic.GetGuest(pickedReservation.Id, guestNumber);
 
@@ -227,28 +227,25 @@ public class PreOrder
             return;
         }
 
-        GuestChoiceModel? existing = null;
+        bool found = false;
 
         foreach (GuestChoiceModel choice in AllSelectedItems)
         {
             if (choice.GuestId == guest.Id && choice.MenuItemId == selectedItem.Id)
             {
-                existing = choice;
+                choice.Quantity++;
+                found = true;
                 break;
             }
         }
-        if (existing != null)
-        {
-            existing.Quantity++;
-        }
-        else
+
+        if (!found)
         {
             AllSelectedItems.Add(new GuestChoiceModel(selectedItem.Id, guest.Id, 1));
         }
 
         Console.Clear();
         Console.WriteLine($"Added: {selectedItem.Name} for Guest {guestNumber}");
-        Console.WriteLine("Press any key");
         Console.ReadKey();
 
         SelectGuestMenu(account, pickedReservation);
@@ -257,12 +254,10 @@ public class PreOrder
     public void ViewOrder()
     {
         Console.Clear();
-        Console.WriteLine("Selected Items");
 
         if (AllSelectedItems.Count == 0)
         {
             Console.WriteLine("No items selected.");
-            Console.WriteLine("Press any key");
             Console.ReadKey();
             return;
         }
@@ -272,6 +267,7 @@ public class PreOrder
         foreach (GuestChoiceModel order in AllSelectedItems)
         {
             GuestModel? guest = Logic.GetGuestById(order.GuestId);
+
             MenuModel? item = null;
 
             foreach (MenuModel i in allItems)
@@ -282,16 +278,17 @@ public class PreOrder
                     break;
                 }
             }
+
             Console.WriteLine($"Guest {guest.GuestNumber} | {item.Name} - ${item.Price} | x{order.Quantity}");
         }
-        Console.WriteLine("Press any key");
+
         Console.ReadKey();
     }
-
 
     public void EditOrder()
     {
         List<MenuModel> allItems = MenuLogic.GetAllMenuItems();
+
         while (true)
         {
             if (AllSelectedItems.Count == 0)
@@ -302,12 +299,13 @@ public class PreOrder
                 return;
             }
 
-            List<string> editOptions = [];
+            List<string> editOptions = new();
 
             foreach (GuestChoiceModel order in AllSelectedItems)
             {
                 GuestModel? guest = Logic.GetGuestById(order.GuestId);
                 MenuModel? item = null;
+
                 foreach (MenuModel i in allItems)
                 {
                     if (i.Id == order.MenuItemId)
@@ -316,19 +314,21 @@ public class PreOrder
                         break;
                     }
                 }
+
                 editOptions.Add($"Guest {guest.GuestNumber} | {item.Name} - ${item.Price} | x{order.Quantity}");
             }
+
             editOptions.Add("Back");
 
-            Ui EditOrderUi = new Ui("Edit Order - Select item to remove", editOptions.ToArray());
-            int selectedIndex = EditOrderUi.Run();
+            Ui menu = new Ui("Edit Order - Select item to remove", editOptions.ToArray());
+            int index = menu.Run();
 
-            if (editOptions[selectedIndex] == "Back")
+            if (editOptions[index] == "Back")
             {
                 return;
             }
 
-            GuestChoiceModel selected = AllSelectedItems[selectedIndex];
+            GuestChoiceModel selected = AllSelectedItems[index];
 
             if (selected.Quantity > 1)
             {
@@ -336,7 +336,7 @@ public class PreOrder
             }
             else
             {
-                AllSelectedItems.RemoveAt(selectedIndex);
+                AllSelectedItems.RemoveAt(index);
                 Console.Clear();
                 Console.WriteLine("Item removed");
                 Console.ReadKey();
@@ -346,18 +346,15 @@ public class PreOrder
 
     public void ConfirmOrder(AccountModel account, ReservationModel pickedReservation)
     {
-
-        // guestChoice table data:
-        // - menuItemId 
-        // - guestId
-        // - quantity 
-
         Logic.InsertGuestChoices(AllSelectedItems, pickedReservation.Id);
+
         Console.Clear();
         Console.WriteLine("Order placed!");
-        Console.WriteLine("Press any key");
-        Console.ReadKey();
-        viewReservations.Start(account);
 
+        RewardLogic.GivePoints(account, (double)pickedReservation.PriceTotal);
+
+        Console.ReadKey();
+
+        viewReservations.Start(account);
     }
 }
