@@ -73,7 +73,7 @@ public static class AccountVisibility
     private static void ShowAdminMenu()
     {
         string prompt = $"Welcome {Session.CurrentUser.FirstName} {Session.CurrentUser.LastName}!\nAdmin dashboard";
-        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Admin Account Management", "Reviews", "Create new Adminaccount", "Logout" };
+        string[] options = { "Show all reservations", "Change menu", "Menu", "Floor-plan", "Admin account management", "Reviews", "Create new adminaccount", "Logout" };
         Ui adminMenu = new Ui(prompt, options);
         int selectedIndex = adminMenu.Run();
 
