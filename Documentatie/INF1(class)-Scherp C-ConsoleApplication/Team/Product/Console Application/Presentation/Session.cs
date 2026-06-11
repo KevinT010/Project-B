@@ -1,0 +1,19 @@
+public static class Session
+{
+    public static AccountModel CurrentUser { get; set; }
+
+    public static void Login(AccountModel account)
+    {
+        CurrentUser = account;
+    }
+
+    public static void Logout()
+    {
+        Console.Clear();
+        CurrentUser = null;
+        Console.WriteLine("You have been logged out.");
+        Thread.Sleep(2000);
+        StartMenu.Start();
+    }
+
+}
