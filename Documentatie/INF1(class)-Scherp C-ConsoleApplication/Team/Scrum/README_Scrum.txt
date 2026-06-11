@@ -1,0 +1,1 @@
+All scrum material must be in documents. A link to online tools/scrumboard/cloud is not sufficient.
