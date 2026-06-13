@@ -160,9 +160,10 @@ public class AdminAccountManagementTest
         AccountModel testUser = new AccountModel("john", "doe", "johndoe@example.com", "1234567890", "password123", 1, 0, 0);
         Session.CurrentUser = testUser;
         long accountId = 999;
-        accountManagementLogic.DeleteAccount(accountId);
+        bool result = accountManagementLogic.DeleteAccount(accountId);
 
         Assert.IsNotNull(Session.CurrentUser);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
