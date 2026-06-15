@@ -376,6 +376,7 @@ public class Reservation
                 Console.WriteLine($"   Adults:    {numberOfGuests - numberOfKids}");
                 Console.WriteLine($"   Kids:      {numberOfKids}");
                 Console.WriteLine($"   Duration:  2 hours");
+                Console.WriteLine("   You can now pre order in reservation view");
                 if (rewardLogic.HasReachedMaxPoints(Session.CurrentUser))
                     Console.WriteLine($"   Reward points: +0 (Maximum point amount reached)");
                 else

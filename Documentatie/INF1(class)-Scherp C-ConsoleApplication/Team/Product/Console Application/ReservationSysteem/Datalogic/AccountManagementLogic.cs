@@ -96,6 +96,11 @@ public class AccountManagementLogic
             Session.CurrentUser = null;
         }
 
+        if(_access.DeleteAccount((int)id) == false)
+        {
+            return false;
+        }
+
         return true;
     }
 

@@ -39,9 +39,16 @@ public class AccountRegistrationAccess
         return account;
     }
 
-    public void DeleteAccount(int id)
+    public bool DeleteAccount(int id)
     {
         string query = $"DELETE FROM {Table} WHERE Id = @Id";
         _connection.Execute(query, new { Id = id });
+
+        if(query == null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
