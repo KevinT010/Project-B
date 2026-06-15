@@ -4,24 +4,12 @@ public class Reservation
 {
     public void Start(AccountModel account)
     {
-
-        // null check
         if (account != null)
         {
             Console.OutputEncoding = Encoding.UTF8;
             ReservationLogic reservationLogic = new();
             RewardLogic rewardLogic = new RewardLogic();
             List<ReservationModel> b = reservationLogic.GetActiveByAccountId(account.Id);
-            /*if (b.Count >= 2)
-            {
-                Console.WriteLine("You currently already have 2 active reservations, returning to the main menu.");
-                Thread.Sleep(2000);
-                AccountVisibility.VisibilityMenu(Session.CurrentUser);
-                return;
-            }
-            */
-
-            // date parsing
             Console.Write("Enter reservation date (dd-MM-yyyy) or 'Cancel' to go back to the main menu: ");
             string date_input = Console.ReadLine();
             if (date_input.ToLower() == "cancel")
@@ -34,7 +22,6 @@ public class Reservation
 
             string[] dateParts = date_input.Split('-');
 
-            // if parts does not equal 3 check
             if (dateParts.Length != 3)
             {
                 Console.WriteLine("Invalid date.\nPress any key to go back.");
@@ -60,7 +47,6 @@ public class Reservation
 
             string[] timeParts = time_input.Split(':');
 
-            // if parts does not equal 2 check
             if (timeParts.Length != 2)
             {
                 Console.WriteLine("Invalid time.\nPress any key to go back.");
@@ -172,8 +158,6 @@ public class Reservation
             Console.Write("Enter number of total guests or type 'back' to return to the date selection: ");
             int numberOfGuests = 0;
 
-
-            // number of guests check
             while (true)
             {
                 string input = Console.ReadLine();
@@ -242,26 +226,15 @@ public class Reservation
                 Console.Write($"Enter the number of kids in the party of {numberOfGuests}, or type 'back' to return to the date selection: ");
             }
 
-            // Console.Write("Enter number of kids in the party: ");
-            // int numberOfKids = Convert.ToInt32(Console.ReadLine());
-
-            // while (0 > numberOfKids || numberOfKids > numberOfGuests)
-            // {
-            //     Console.WriteLine($"Invalid number of kids. The amount must be between 0 and {numberOfGuests}.\nPress any key to go back.");
-            //     Console.ReadKey();
-            //     Console.Write("Enter number of kids: ");
-            //     numberOfKids = Convert.ToInt32(Console.ReadLine());
-            // }
-
             int kidsPlayArea = 0;
 
             if (numberOfKids > 0)
             {
                 int currentKidsInPlayArea = reservationLogic.GetKidsInPlayArea(requestedDateTime, 120);
-                int availableSpots = reservationLogic.MaxMaxPlayAreaCapacity - currentKidsInPlayArea;
+                int availableSpots = reservationLogic.MaxPlayAreaCapacity - currentKidsInPlayArea;
 
                 Console.WriteLine("\n--- Kids Play Area Availability ---");
-                for (int i = 0; i < reservationLogic.MaxMaxPlayAreaCapacity; i++)
+                for (int i = 0; i < reservationLogic.MaxPlayAreaCapacity; i++)
                 {
                     if (i < currentKidsInPlayArea)
                     {
@@ -280,7 +253,7 @@ public class Reservation
                     }
                 }
                 Console.ResetColor();
-                Console.WriteLine($"\n\n({availableSpots} out of {reservationLogic.MaxMaxPlayAreaCapacity} spots remaining)");
+                Console.WriteLine($"\n\n({availableSpots} out of {reservationLogic.MaxPlayAreaCapacity} spots remaining)");
                 Console.WriteLine("-----------------------------------\n");
             }
 
@@ -299,7 +272,7 @@ public class Reservation
                     }
                     else
                     {
-                        Console.WriteLine($"kids playarea can only contain {reservationLogic.MaxMaxPlayAreaCapacity} kids at this time. \nPress any key to go back.");
+                        Console.WriteLine($"kids playarea can only contain {reservationLogic.MaxPlayAreaCapacity} kids at this time. \nPress any key to go back.");
                         Console.ReadKey();
                     }
                 }
@@ -312,15 +285,8 @@ public class Reservation
                     Console.WriteLine("Invalid input. Please enter 'yes' or 'no'.");
                 }
             }
-
-
-
-            // ----------------------------------------------------------------------------------------------------------------------------------
-            
-
             List<TableModel> availableTables = reservationLogic.GetAvailableTables(requestedDateTime, numberOfGuests);
 
-            // null check 
             if (availableTables.Count == 0)
             {
                 Console.WriteLine($"Sorry, there are no available tables at this time for a group of {numberOfGuests}.\nPress any key to go back.");
@@ -332,8 +298,7 @@ public class Reservation
 
 
             List<string> tableOptions = new List<string>();
-
-            // add & convert available table object to string list  
+  
             foreach (TableModel table in availableTables)
             {
                 if (reservationLogic.CheckHibachiName(table))

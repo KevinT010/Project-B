@@ -3,7 +3,7 @@ public class ReservationLogic
     private ReservationAccess _reservationAccess = new();
     private TableLogic _tableLogic = new();
 
-    public int MaxMaxPlayAreaCapacity = 10;
+    public int MaxPlayAreaCapacity = 10;
 
     public List<TableModel> GetAvailableTables(DateTime requestedDateTime, int numberOfGuests, int durationMinutes = 120)
     {
@@ -105,7 +105,7 @@ public class ReservationLogic
     public bool CheckPlayAreaCapacity(DateTime requestedStart, int numberOfKids, int durationMinutes = 120)
     {
         int currentKidsInPlayArea = GetKidsInPlayArea(requestedStart, durationMinutes);
-        return currentKidsInPlayArea + numberOfKids <= MaxMaxPlayAreaCapacity;
+        return currentKidsInPlayArea + numberOfKids <= MaxPlayAreaCapacity;
     }
 
     public bool IsExpired(ReservationModel reservation)
