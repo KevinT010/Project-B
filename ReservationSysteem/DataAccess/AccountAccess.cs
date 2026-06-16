@@ -42,13 +42,17 @@ public class AccountRegistrationAccess
     public bool DeleteAccount(int id)
     {
         string query = $"DELETE FROM {Table} WHERE Id = @Id";
-        _connection.Execute(query, new { Id = id });
+        int rowsAffected = _connection.Execute(query, new { Id = id });
 
-        if(query == null)
+        if (rowsAffected > 0)
         {
-            return false;
+            if (Session.CurrentUser != null && Session.CurrentUser.Id == id)
+            {
+                Session.CurrentUser = null;
+            }
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
