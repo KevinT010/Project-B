@@ -88,7 +88,7 @@ public class AccountManagementLogic
     {
         _reservationlogic.DeleteReservationsByUser(id);
         _reviewlogic.DeleteReviewByAccount((int)id);
-        _access.DeleteAccount((int)id);
+        bool deleteResult = _access.DeleteAccount((int)id);
 
 
         if (Session.CurrentUser != null && Session.CurrentUser.Id == id)
@@ -96,7 +96,7 @@ public class AccountManagementLogic
             Session.CurrentUser = null;
         }
 
-        if(_access.DeleteAccount((int)id) == false)
+        if(deleteResult == false)
         {
             return false;
         }
