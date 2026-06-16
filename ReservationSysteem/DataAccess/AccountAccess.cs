@@ -46,10 +46,6 @@ public class AccountRegistrationAccess
 
         if (rowsAffected > 0)
         {
-            if (Session.CurrentUser != null && Session.CurrentUser.Id == id)
-            {
-                Session.CurrentUser = null;
-            }
             return true;
         }
 
