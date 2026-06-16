@@ -1,2 +1,0 @@
-One excel file for unit tests and system tests (Including a test plan for all high risk user stories)
-One excel file for user acceptance tests (including the test plan for the main reservation flow)

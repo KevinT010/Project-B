@@ -1,1 +1,0 @@
-Put your demonstration video here. It should be maximum 3 minutes. Ensure that it is the video file itself and not a link to an online player (For example Youtube, etc).
